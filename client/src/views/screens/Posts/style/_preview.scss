@@ -1,0 +1,23 @@
+.preview-post {
+	height: 100%;
+	background-color: #fff;
+	padding: 1.6rem;
+	border-radius: 1rem;
+	.title {
+		font-size: 2.2rem;
+		margin-bottom: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid #ccc;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		word-break: break-word;
+	}
+	.image {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}

@@ -1,0 +1,9 @@
+@import '../../../../style//variables';
+
+.list-tag {
+	position: sticky;
+	top: calc($heightHeader + 3.2rem);
+	background-color: #fff;
+	height: 80vh;
+	width: 30rem;
+}

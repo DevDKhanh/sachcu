@@ -1,0 +1,17 @@
+.list-posts {
+	padding: 3rem 0;
+
+	&-header {
+		.title {
+			color: #fff;
+			font-size: 3.2rem;
+		}
+		margin-bottom: 2.6rem;
+	}
+
+	&-show {
+		display: grid;
+		gap: 2rem;
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	}
+}

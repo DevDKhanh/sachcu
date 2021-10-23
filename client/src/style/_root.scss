@@ -1,0 +1,67 @@
+@import './variables';
+
+html {
+	box-sizing: border-box;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	background-color: $colorRoot2;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+input,
+textarea,
+select,
+button {
+	outline: none;
+}
+input {
+	line-height: normal;
+}
+label,
+button {
+	cursor: pointer;
+}
+a {
+	text-decoration: none;
+}
+img {
+	display: block;
+	max-width: 100%;
+}
+.btn {
+	display: inline-block;
+	text-align: center;
+	border: 0;
+	font-size: 1.6rem;
+	padding: 0.8rem 1.6rem;
+	width: auto;
+	cursor: pointer;
+	outline: none;
+	border-radius: 0.8rem;
+
+	&:hover {
+		opacity: 0.8;
+	}
+
+	&--root2 {
+		background-color: $colorRoot2;
+		color: #fff;
+	}
+
+	&--primary {
+		background-color: $colorPrimary;
+		color: #fff;
+	}
+}
+.page-main {
+	margin-top: $heightHeader;
+	min-height: calc(100vh - $heightHeader);
+	padding: 3.2rem;
+}
