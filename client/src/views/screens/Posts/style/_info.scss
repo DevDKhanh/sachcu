@@ -40,16 +40,49 @@
 		}
 	}
 
+	&__contact {
+		margin-bottom: 1rem;
+		.btn-contact-z {
+			color: #fff;
+			font-weight: 600;
+			border-radius: 4rem;
+			background-color: $colorPrimary;
+		}
+	}
+
+	&__text {
+		font-size: 1.6rem;
+		margin-top: 1rem;
+		font-weight: 600;
+		color: $secondaryText;
+		padding: 0;
+		line-height: 1.6rem;
+	}
+
 	&__content {
 		flex: 1;
+		display: flex;
+		align-items: center;
+		border: 2px dotted #ccc;
+		border-radius: 1rem;
 		font-size: 1.6rem;
-		margin-top: 2.2rem;
-		padding: 1.6rem 0;
+		padding: 1rem;
+		margin: 1rem 0;
 		line-height: 2.2rem;
 	}
 
 	&__rating {
 		font-size: 1.6rem;
 		color: $colorDanger;
+		display: flex;
+		align-items: center;
+
+		.btn-rating {
+			margin-left: 1rem;
+			&:hover {
+				cursor: pointer;
+				text-decoration: underline;
+			}
+		}
 	}
 }

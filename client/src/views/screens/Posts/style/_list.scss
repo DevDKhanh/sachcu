@@ -5,5 +5,51 @@
 	top: calc($heightHeader + 3.2rem);
 	background-color: #fff;
 	height: 80vh;
-	width: 30rem;
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	border-radius: 1rem;
+
+	&__title {
+		text-align: center;
+		font-size: 2.2rem;
+		padding: 1rem 0;
+	}
+
+	.card-info + .card-info {
+		margin-top: 1.6rem;
+	}
+
+	.card-info {
+		position: relative;
+		&::before {
+			content: '';
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			box-shadow: inset rgba(0, 0, 0, 0.6) 0px 2px 4px;
+			top: 5px;
+			left: 5px;
+		}
+		&:hover {
+			box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+			color: rgb(0, 99, 94);
+		}
+	}
+
+	.list-group-btn {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.btn-seemore {
+		margin: 0 auto;
+		background-color: rgb(255, 30, 0);
+		color: #fff;
+		font-weight: 600;
+		border-radius: 4rem;
+	}
 }

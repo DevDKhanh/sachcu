@@ -8,7 +8,7 @@ import './style/style.scss';
 
 function CardPost({ data }) {
 	return (
-		<NavLink to="/post/khanh" className="card">
+		<NavLink to={`/post/${data._id}`} className="card">
 			<div className="card-img">
 				<img
 					onError={e => {

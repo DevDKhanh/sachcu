@@ -1,0 +1,80 @@
+@import '../../../../style/variables';
+
+$sizeAvatar: 6rem;
+
+.table-menu {
+	position: fixed;
+	top: 0;
+	right: 0;
+	opacity: 1;
+	min-width: 400px;
+	transition: 0.4s;
+	height: 100vh;
+	background-color: rgb(255, 255, 255);
+	padding: 1rem;
+
+	.btn-close {
+		color: $colorPrimary;
+		font-size: 3.2rem;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	.info-user {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		.avatar {
+			width: $sizeAvatar;
+			height: $sizeAvatar;
+			border-radius: 50%;
+			border: 1px solid #ccc;
+		}
+
+		.actions {
+			margin-left: 1rem;
+			.btn {
+				font-weight: 600;
+				margin-top: 0.5rem;
+			}
+		}
+
+		.text-name {
+			color: #000;
+			text-transform: uppercase;
+			font-weight: 600;
+		}
+	}
+
+	.menu {
+		list-style: none;
+		margin-top: 2rem;
+		padding: 2rem 5rem;
+		&-item {
+			margin-bottom: 2rem;
+		}
+		&-link {
+			font-size: 2rem;
+			display: flex;
+			border-radius: 0.5rem;
+			align-items: center;
+			color: $secondaryText;
+			padding: 1rem 3.2rem;
+			transition: 0.2s;
+			border-bottom: 1px solid #ccc;
+			&:hover {
+				cursor: pointer;
+				background-color: #ccc;
+			}
+			.icon {
+				margin-right: 2rem;
+			}
+		}
+	}
+}
+
+.table-menu.closed {
+	right: -100%;
+	opacity: 0;
+}

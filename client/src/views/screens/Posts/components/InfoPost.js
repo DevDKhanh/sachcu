@@ -20,14 +20,24 @@ function InfoPost() {
 					</div>
 				</div>
 			</div>
+			<div className="info-post__text">Thể loại: Văn học</div>
+			<div className="info-post__text">Tác giả: Duy Khánh</div>
 			<div className="info-post__content">
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-				odio at molestiae iusto corporis hic pariatur aperiam quod porro
-				facilis eius cupiditate repudiandae reprehenderit tempora
-				dolorem exercitationem quia, dignissimos asperiores?
+				Mình đang thừa 1 quyển cần pass lại cho ai cần
+			</div>
+			<div className="info-post__contact">
+				<a
+					className="btn btn-contact-z"
+					target="_blank"
+					rel="noopener noreferrer"
+					href={`https://zalo.me/${'0973551247'}`}
+				>
+					Liên hệ
+				</a>
 			</div>
 			<div className="info-post__rating">
 				<Rating />
+				<span className="btn-rating">Đánh giá</span>
 			</div>
 		</div>
 	);
