@@ -8,9 +8,5 @@
 		"serverDev": "npm run dev --prefix server",
 		"client": "npm run start --prefix client",
 		"dev": "concurrently \"npm run serverDev\" \"npm run client\""
-	},
-	"author": "Duy Khánh",
-	"dependencies": {
-		"express": "^4.17.1"
 	}
 }

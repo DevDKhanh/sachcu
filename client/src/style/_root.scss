@@ -65,3 +65,11 @@ img {
 	min-height: calc(100vh - $heightHeader);
 	padding: 3.2rem;
 }
+
+.group-element {
+	min-width: 100%;
+}
+.input-element {
+	display: block;
+	width: 100%;
+}

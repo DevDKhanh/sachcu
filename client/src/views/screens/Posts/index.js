@@ -3,6 +3,7 @@ import React from 'react';
 import InfoPost from './components/InfoPost';
 import PreviewPost from './components/PreviewPost';
 import Comment from '../../components/Comment';
+import FormComment from '../../components/FormComment';
 import './style/style.scss';
 
 function PostPage() {
@@ -21,6 +22,7 @@ function PostPage() {
 								</div>
 							</div>
 							<div className="comment">
+								<FormComment />
 								<Comment />
 								<Comment />
 								<Comment />
