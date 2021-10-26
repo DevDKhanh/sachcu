@@ -13,43 +13,29 @@ const xss = str => {
 
 class AuthController {
 	async register(req, res, next) {
-		/*Check if the username is in the correct format.*/
 		try {
 			const lengthName = 20;
-			const date = new Date();
-			const yearNow = date.getFullYear();
 
-			const firstName = xss(req.body.firstname, {});
-			const lastName = xss(req.body.lastname, {});
+			const firstName = xss(req.body.firstName, {});
+			const lastName = xss(req.body.lastName, {});
 			const emailUser = xss(req.body.email, {});
-			const passWord = xss(req.body.password, {});
-			const dayOfBirth = xss(req.body.day, {});
-			const monthOfBirth = xss(req.body.month, {});
-			const yearOfBirth = xss(req.body.year, {});
-			const gender = xss(req.body.gender, {});
+			const phoneUser = xss(req.body.phone, {});
+			const passWord = xss(req.body.passWord, {});
 
 			//check email in database
-			const isHadMail = await dbUsers.findOne({ emailUser });
+			const [isHadMail, isHadPhone] = await Promise.all([
+				dbUsers.findOne({ email: emailUser }),
+				dbUsers.findOne({ phone: phoneUser }),
+			]);
+
 			/*status = 0 is failure, status = 1 is successfully, status = -1 is error*/
-			if (
-				firstName &&
-				lastName &&
-				emailUser &&
-				passWord &&
-				dayOfBirth &&
-				monthOfBirth &&
-				yearOfBirth &&
-				gender
-			) {
+			if (firstName && lastName && emailUser && passWord && phoneUser) {
 				if (
 					validator.isEmpty(validator.trim(firstName, '')) ||
 					validator.isEmpty(validator.trim(lastName, '')) ||
 					validator.isEmpty(validator.trim(emailUser, '')) ||
 					validator.isEmpty(validator.trim(passWord, '')) ||
-					validator.isEmpty(validator.trim(dayOfBirth, '')) ||
-					validator.isEmpty(validator.trim(monthOfBirth, '')) ||
-					validator.isEmpty(validator.trim(yearOfBirth, '')) ||
-					validator.isEmpty(validator.trim(gender, ''))
+					validator.isEmpty(validator.trim(phoneUser, ''))
 				) {
 					return res.status(200).json({
 						status: 0,
@@ -67,24 +53,12 @@ class AuthController {
 						});
 					}
 
-					if (yearNow - Number(yearOfBirth) < 5) {
+					if (isHadPhone) {
 						return res.status(200).json({
 							status: 0,
 							code: 200,
-							message: 'Check your date of birth',
-							message_vn:
-								'Kiểm tra lại ngày tháng năm sinh của bạn',
-						});
-					}
-
-					if (yearNow - Number(yearOfBirth) < 13) {
-						return res.status(200).json({
-							status: 0,
-							code: 200,
-							message:
-								'We are unable to register an account for you',
-							message_vn:
-								'Chúng tôi không thể đăng ký tài khoản cho bạn',
+							message: 'The phone number has been used',
+							message_vn: 'Số điện thoại đã được sử dụng',
 						});
 					}
 
@@ -108,7 +82,7 @@ class AuthController {
 						return res.status(200).json({
 							status: 0,
 							code: 200,
-							message: `Minimum password length is 6 characters`,
+							message: `Minimum passWord length is 6 characters`,
 							message_vn: `Mật khẩu tối thiểu 6 kí tự`,
 						});
 					}
@@ -133,22 +107,21 @@ class AuthController {
 							firstName,
 							lastName,
 							email: emailUser,
-							dayOfBirth,
-							monthOfBirth,
-							yearOfBirth,
-							gender,
-							fullName: `${firstName} ${lastName}`,
-							password: derivedKey,
+							phone: phoneUser,
+							passWord: derivedKey,
 						});
 						const saveData = await newUser.save();
 
-						//get id User and remove password
-						const { _id, email } = saveData._doc;
-
 						if (saveData) {
-							const accessToken = jwt.sign(
+							const sendDate = {
+								emailUser,
+								firstName,
+								lastName,
+								phoneUser,
+							};
+							const accessToken = await jwt.sign(
 								{
-									data: { email, id: _id },
+									data: { ...sendDate },
 								},
 								process.env.JWT_SECRET,
 								{ expiresIn: '100y' },
@@ -157,7 +130,7 @@ class AuthController {
 								status: 1,
 								code: 201,
 								message: 'Create successfully!',
-								data: { email, id: _id },
+								data: { ...sendDate },
 								accessToken,
 								message_vn: 'Tạo tài khoản thành công',
 							});
@@ -182,17 +155,11 @@ class AuthController {
 	async login(req, res, next) {
 		try {
 			const emailUser = xss(req.body.email, {});
-			const passWord = xss(req.body.password, {});
-
-			const derivedKey = pbkdf2.pbkdf2Sync(
-				passWord,
-				'salt',
-				1,
-				32,
-				'sha512',
-			);
+			const passWord = xss(req.body.passWord, {});
 
 			if (
+				!emailUser ||
+				!passWord ||
 				validator.isEmpty(validator.trim(emailUser, '')) ||
 				validator.isEmpty(validator.trim(passWord, ''))
 			) {
@@ -205,16 +172,30 @@ class AuthController {
 			}
 
 			//Find user on database
+			const derivedKey = pbkdf2.pbkdf2Sync(
+				passWord,
+				'salt',
+				1,
+				32,
+				'sha512',
+			);
+
 			const dataUser = await dbUsers.findOne({
 				email: emailUser,
-				password: derivedKey,
+				passWord: derivedKey,
 			});
-			const { _id, email } = dataUser._doc;
 
 			if (dataUser) {
-				const accessToken = jwt.sign(
+				const { email, lastName, firstName, phone } = dataUser._doc;
+				const sendDate = {
+					emailUser: email,
+					lastName,
+					firstName,
+					phoneUser: phone,
+				};
+				const accessToken = await jwt.sign(
 					{
-						data: { email, id: _id },
+						data: { ...sendDate },
 					},
 					process.env.JWT_SECRET,
 					{ expiresIn: '100y' },
@@ -224,7 +205,7 @@ class AuthController {
 					code: 201,
 					message: 'Login success',
 					message_vn: 'Đăng nhập thành công',
-					data: { email, id: _id },
+					data: { ...sendDate },
 					accessToken,
 				});
 			} else {
@@ -254,8 +235,7 @@ class AuthController {
 			const data = await jwt.verify(token, process.env.JWT_SECRET);
 			if (data) {
 				const user = data.data;
-				const isUser = await dbUsers.findOne({ email: user.email });
-
+				const isUser = await dbUsers.findOne({ email: user.emailUser });
 				if (isUser) {
 					return res.status(200).json({
 						status: 1,

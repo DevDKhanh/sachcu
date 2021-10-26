@@ -1,21 +1,24 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-// import { ProtectedRoute } from '../utils/Protected';
 
+import { ProtectedRoute } from '../utils/Protected';
 import LoginPage from '../views/screens/Auth/LoginPage';
 import RegisterPage from '../views/screens/Auth/RegisterPage';
 import HomePage from '../views/screens/Home';
 import PostPage from '../views/screens/Posts';
 
 function Routers() {
+	const { isLogged } = useSelector(state => state.user);
+
 	return (
 		<Switch>
-			<Route exact path="/login">
+			<ProtectedRoute path="/login" redirect="/" dependency={isLogged}>
 				<LoginPage />
-			</Route>
-			<Route exact path="/register">
+			</ProtectedRoute>
+			<ProtectedRoute path="/register" redirect="/" dependency={isLogged}>
 				<RegisterPage />
-			</Route>
+			</ProtectedRoute>
 			<Route exact path="/post/:id">
 				<PostPage />
 			</Route>

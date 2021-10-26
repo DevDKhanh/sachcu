@@ -4,8 +4,8 @@ import PlaceHolderUser from '../../../../assets/images/user-placeholder-image.jp
 import BellNotify from '../../BellNotify';
 import TabMenu from '../../TabMenu';
 
-function MeControl() {
-	const [showMenu, setShowMenu] = useState(true);
+function MeControl({ user }) {
+	const [showMenu, setShowMenu] = useState(false);
 
 	return (
 		<React.Fragment>
@@ -26,7 +26,7 @@ function MeControl() {
 					</div>
 				</div>
 			</div>
-			<TabMenu isShow={showMenu} onClose={setShowMenu} />
+			<TabMenu isShow={showMenu} onClose={setShowMenu} user={user} />
 		</React.Fragment>
 	);
 }

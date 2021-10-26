@@ -6,6 +6,9 @@ html {
 	font-size: 10px;
 	background-color: $colorRoot2;
 }
+body {
+	font-size: 1.5rem;
+}
 * {
 	margin: 0;
 	padding: 0;
@@ -34,6 +37,10 @@ a {
 img {
 	display: block;
 	max-width: 100%;
+}
+.Toastify {
+	font-size: 1.6rem;
+	text-shadow: 0 0 1px $secondaryText;
 }
 .btn {
 	display: inline-block;
@@ -73,9 +80,11 @@ img {
 }
 .overlay {
 	position: fixed;
+	z-index: 10000;
 	width: 100%;
+	font-size: 1.4rem;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.3);
+	background-color: rgba(0, 0, 0, 0.2);
 	top: 0;
 	left: 0;
 }

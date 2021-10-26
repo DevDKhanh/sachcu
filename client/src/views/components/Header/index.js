@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import './style/style.scss';
 
@@ -9,17 +10,18 @@ import Control from './components/Control';
 import MeControl from './components/MeControl';
 
 function Header() {
+	const { isLogged, infoUser } = useSelector(state => state.user);
 	return (
 		<header>
 			<nav className="grid wide">
 				<div className="nav">
 					<Logo />
 					<Navigation />
-					<ProtectedComponent dependency={false}>
+					<ProtectedComponent dependency={!isLogged}>
 						<Control />
 					</ProtectedComponent>
-					<ProtectedComponent dependency={true}>
-						<MeControl />
+					<ProtectedComponent dependency={isLogged}>
+						<MeControl user={infoUser} />
 					</ProtectedComponent>
 				</div>
 			</nav>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 
 import PlaceHolderImg from '../../../assets/images/placeholder-image.png';
 import Rating from '../Rating';
@@ -8,7 +7,7 @@ import './style/style.scss';
 
 function CardPost({ data }) {
 	return (
-		<NavLink to={`/post/${data._id}`} className="card">
+		<div className="card">
 			<div className="card-img">
 				<img
 					onError={e => {
@@ -23,7 +22,7 @@ function CardPost({ data }) {
 			<div className="card-rating">
 				<Rating />
 			</div>
-		</NavLink>
+		</div>
 	);
 }
 

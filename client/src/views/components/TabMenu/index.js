@@ -1,16 +1,25 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { MdDoubleArrow } from 'react-icons/md';
 import { BsFilePost } from 'react-icons/bs';
 import { IoNewspaper } from 'react-icons/io5';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { RiProfileLine } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 
+import * as typeUser from '../../../actions/typeUser';
 import { ProtectedComponent } from '../../../utils/Protected';
 import PlaceHolderUser from '../../../assets/images/user-placeholder-image.jpg';
 import './style/style.scss';
 
-function TabMenu({ isShow, onClose }) {
+function TabMenu({ isShow, onClose, user }) {
+	const dispatch = useDispatch();
+	const handleLogout = () => {
+		dispatch({ type: typeUser.USER_LOGOUT });
+		toast.info('Đăng xuất thành công!');
+	};
+
 	return (
 		<React.Fragment>
 			<ProtectedComponent dependency={isShow}>
@@ -29,11 +38,11 @@ function TabMenu({ isShow, onClose }) {
 									e.target.src = PlaceHolderUser;
 								}}
 								src=""
-								alt="duy khanh"
+								alt={`${user.firstName} ${user.lastName}`}
 							/>
 						</div>
 						<div className="actions">
-							<h4 className="text-name">Duy Khánh</h4>
+							<h4 className="text-name">{`${user.firstName} ${user.lastName}`}</h4>
 							<button className="btn btn--o-primary">
 								Đăng tin
 							</button>
@@ -64,7 +73,7 @@ function TabMenu({ isShow, onClose }) {
 								<p>Tất cả bài viết</p>
 							</NavLink>
 						</li>
-						<li className="menu-item">
+						<li className="menu-item" onClick={handleLogout}>
 							<NavLink className="menu-link" to="/">
 								<span className="icon">
 									<AiOutlineLogout />
