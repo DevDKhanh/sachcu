@@ -14,7 +14,7 @@ function Navigation() {
 	];
 
 	return (
-		<div className="nav-bar">
+		<div className="nav-bar" role="navigation">
 			<ul className="navigation">
 				{list.map(item => (
 					<li key={item.title} className="item">

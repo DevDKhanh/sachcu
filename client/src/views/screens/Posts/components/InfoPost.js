@@ -23,7 +23,7 @@ function InfoPost() {
 			<div className="info-post__text">Thể loại: Văn học</div>
 			<div className="info-post__text">Tác giả: Duy Khánh</div>
 			<div className="info-post__content">
-				Mình đang thừa 1 quyển cần pass lại cho ai cần
+				<p>Mình đang thừa 1 quyển cần pass lại cho ai cần</p>
 			</div>
 			<div className="info-post__contact">
 				<a

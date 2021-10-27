@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 export function ProtectedRoute({ path, redirect, dependency, children }) {
 	return (
 		<Route exact path={path}>
-			{dependency ? <Redirect to={{ pathname: redirect }} /> : children}
+			{dependency ? children : <Redirect to={{ pathname: redirect }} />}
 		</Route>
 	);
 }

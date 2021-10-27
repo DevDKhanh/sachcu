@@ -26,7 +26,7 @@ function MeControl({ user }) {
 					</div>
 				</div>
 			</div>
-			<TabMenu isShow={showMenu} onClose={setShowMenu} user={user} />
+			<TabMenu isShow={showMenu} onShow={setShowMenu} user={user} />
 		</React.Fragment>
 	);
 }

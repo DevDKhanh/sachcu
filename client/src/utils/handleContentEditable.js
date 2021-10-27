@@ -15,9 +15,5 @@ export const trimSpaces = string => {
 
 export const disableNewlines = event => {
 	const keyCode = event.keyCode || event.which;
-
-	if (keyCode === 13) {
-		event.returnValue = false;
-		if (event.preventDefault) event.preventDefault();
-	}
+	keyCode === 13 && event.preventDefault();
 };

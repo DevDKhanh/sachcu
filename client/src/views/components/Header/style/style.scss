@@ -17,12 +17,11 @@ header {
 	justify-content: space-between;
 	align-items: center;
 
-	a {
-		color: #ffffff;
-	}
-
 	&-logo {
 		font-size: 3rem;
+		a {
+			color: #ffffff;
+		}
 	}
 
 	&-bar {

@@ -7,21 +7,33 @@ import LoginPage from '../views/screens/Auth/LoginPage';
 import RegisterPage from '../views/screens/Auth/RegisterPage';
 import HomePage from '../views/screens/Home';
 import PostPage from '../views/screens/Posts';
+import MeAddPost from '../views/screens/Me/MeAddPost';
 
 function Routers() {
 	const { isLogged } = useSelector(state => state.user);
 
 	return (
 		<Switch>
-			<ProtectedRoute path="/login" redirect="/" dependency={isLogged}>
-				<LoginPage />
-			</ProtectedRoute>
-			<ProtectedRoute path="/register" redirect="/" dependency={isLogged}>
-				<RegisterPage />
-			</ProtectedRoute>
 			<Route exact path="/post/:id">
 				<PostPage />
 			</Route>
+			<ProtectedRoute
+				path="/me/add-post"
+				redirect="/login"
+				dependency={isLogged}
+			>
+				<MeAddPost />
+			</ProtectedRoute>
+			<ProtectedRoute path="/login" redirect="/" dependency={!isLogged}>
+				<LoginPage />
+			</ProtectedRoute>
+			<ProtectedRoute
+				path="/register"
+				redirect="/"
+				dependency={!isLogged}
+			>
+				<RegisterPage />
+			</ProtectedRoute>
 			<Route exact path="/">
 				<HomePage />
 			</Route>

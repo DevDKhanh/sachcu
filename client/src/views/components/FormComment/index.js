@@ -36,7 +36,7 @@ function FormComment() {
 
 	return (
 		<React.Fragment>
-			<h1 className="title">Bình luận</h1>
+			<h2 className="title">Bình luận</h2>
 			<div className="form-comment">
 				<div className="avatar">
 					<img
@@ -46,7 +46,7 @@ function FormComment() {
 				</div>
 				<form onSubmit={handleSubMit}>
 					<div className="group-form">
-						<div className="group-element" aria-multiline>
+						<div className="group-element">
 							<ContentEditable
 								html={comment}
 								onChange={handleChange}

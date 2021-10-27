@@ -13,7 +13,7 @@ import { ProtectedComponent } from '../../../utils/Protected';
 import PlaceHolderUser from '../../../assets/images/user-placeholder-image.jpg';
 import './style/style.scss';
 
-function TabMenu({ isShow, onClose, user }) {
+function TabMenu({ isShow, onShow, user }) {
 	const dispatch = useDispatch();
 	const handleLogout = () => {
 		dispatch({ type: typeUser.USER_LOGOUT });
@@ -23,11 +23,11 @@ function TabMenu({ isShow, onClose, user }) {
 	return (
 		<React.Fragment>
 			<ProtectedComponent dependency={isShow}>
-				<div className="overlay" onClick={() => onClose(false)}></div>
+				<div className="overlay" onClick={() => onShow(false)}></div>
 			</ProtectedComponent>
-			<div className={`table-menu ${!isShow && 'closed'}`}>
+			<div role="menubar" className={`table-menu ${!isShow && 'closed'}`}>
 				<div className="table-menu__header">
-					<span className="btn-close" onClick={() => onClose(false)}>
+					<span className="btn-close" onClick={() => onShow(false)}>
 						<MdDoubleArrow />
 					</span>
 					<div className="info-user">
@@ -43,14 +43,23 @@ function TabMenu({ isShow, onClose, user }) {
 						</div>
 						<div className="actions">
 							<h4 className="text-name">{`${user.firstName} ${user.lastName}`}</h4>
-							<button className="btn btn--o-primary">
+							<NavLink
+								to="/me/add-post"
+								role="button"
+								className="btn btn--o-primary"
+								onClick={() => onShow(false)}
+							>
 								Đăng tin
-							</button>
+							</NavLink>
 						</div>
 					</div>
 					<ul className="menu">
 						<li className="menu-item">
-							<NavLink className="menu-link" to="/">
+							<NavLink
+								className="menu-link"
+								to="/me/my-post"
+								onClick={() => onShow(false)}
+							>
 								<span className="icon">
 									<BsFilePost />
 								</span>
@@ -58,7 +67,11 @@ function TabMenu({ isShow, onClose, user }) {
 							</NavLink>
 						</li>
 						<li className="menu-item">
-							<NavLink className="menu-link" to="/">
+							<NavLink
+								className="menu-link"
+								to="/new-post"
+								onClick={() => onShow(false)}
+							>
 								<span className="icon">
 									<IoNewspaper />
 								</span>
@@ -66,15 +79,23 @@ function TabMenu({ isShow, onClose, user }) {
 							</NavLink>
 						</li>
 						<li className="menu-item">
-							<NavLink className="menu-link" to="/">
+							<NavLink
+								className="menu-link"
+								to="/all-post"
+								onClick={() => onShow(false)}
+							>
 								<span className="icon">
 									<RiProfileLine />
 								</span>
 								<p>Tất cả bài viết</p>
 							</NavLink>
 						</li>
-						<li className="menu-item" onClick={handleLogout}>
-							<NavLink className="menu-link" to="/">
+						<li className="menu-item">
+							<NavLink
+								className="menu-link"
+								to="/"
+								onClick={handleLogout}
+							>
 								<span className="icon">
 									<AiOutlineLogout />
 								</span>
