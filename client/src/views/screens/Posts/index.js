@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
+import postAPI from '../../../api/postAPI';
 import InfoPost from './components/InfoPost';
 import PreviewPost from './components/PreviewPost';
 import Comment from '../../components/Comment';
@@ -8,6 +12,10 @@ import CardInfo from '../../components/CardPost/components/CardInfo';
 import './style/style.scss';
 
 function PostPage() {
+	const history = useHistory();
+	const { slug } = useParams();
+	const [post, setPost] = useState({});
+
 	const mock = [
 		{
 			_id: 1,
@@ -27,6 +35,25 @@ function PostPage() {
 		},
 	];
 
+	useLayoutEffect(() => {
+		(async () => {
+			try {
+				const res = await postAPI.getPost(slug);
+				if (res.status === 1) {
+					setPost(res.data);
+				} else {
+					toast.info('Không tìm thấy bài viết');
+					history.push('/');
+				}
+			} catch (err) {
+				toast.error('Đã xảy ra lỗi');
+				history.push('/');
+			}
+		})();
+
+		return () => setPost({});
+	}, [slug, history]);
+
 	return (
 		<div className="page-main">
 			<div className="grid wide">
@@ -35,10 +62,13 @@ function PostPage() {
 						<div className="col l-9">
 							<div className="row">
 								<div className="col l-7">
-									<InfoPost />
+									<InfoPost post={post} />
 								</div>
 								<div className="col l-5">
-									<PreviewPost />
+									<PreviewPost
+										title={post.title}
+										img={post.image}
+									/>
 								</div>
 							</div>
 							<div className="comment">

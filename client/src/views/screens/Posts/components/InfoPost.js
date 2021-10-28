@@ -1,36 +1,85 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsClockHistory } from 'react-icons/bs';
 
+import PlaceHolderUser from '../../../../assets/images/user-placeholder-image.jpg';
+import usersAPI from '../../../../api/usersAPI';
+import { convertTime } from '../../../../utils/convertTime';
+import listCategory from '../../../../constant/listCategory';
 import Rating from '../../../components/Rating';
 
-function InfoPost() {
+function InfoPost({ post }) {
+	const [category, setCategory] = useState({});
+	const [timePost, setTimePost] = useState();
+	const [user, setUser] = useState({});
+
+	useEffect(() => {
+		if (post.category) {
+			setCategory(
+				...listCategory.filter(item => item.value === post.category),
+			);
+		}
+		return () => setCategory({});
+	}, [post.category]);
+
+	useEffect(() => {
+		let timeoutId;
+		if (post.createdAt) {
+			const time = new Date(post.createdAt);
+			timeoutId = setInterval(() => {
+				setTimePost(convertTime(time));
+			}, 100);
+		}
+		return () => clearTimeout(timeoutId);
+	}, [post.createdAt]);
+
+	useEffect(() => {
+		if (post.email) {
+			(async () => {
+				try {
+					const res = await usersAPI.getContact(post.email);
+					if (res.status === 1) {
+						setUser(res.data);
+					}
+				} catch (err) {}
+			})();
+		}
+
+		return () => setUser({});
+	}, [post.email]);
+
 	return (
 		<div className="info-post">
 			<div className="info-post__user">
 				<div className="avatar">
 					<img
-						src="https://scontent.fhan3-4.fna.fbcdn.net/v/t1.6435-9/169121906_1673758642825329_1633927339019676240_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=rrevtIymj6QAX_xoVTn&_nc_ht=scontent.fhan3-4.fna&oh=f60ee5853c8c2af7bd7378fd29d5f358&oe=61983826"
+						onError={e => {
+							e.target.onerror = null;
+							e.target.src = PlaceHolderUser;
+						}}
+						src=""
 						alt="avatar"
 					/>
 				</div>
 				<div className="text">
-					<div className="name-user">Duy Khánh</div>
+					<div className="name-user">{`${user.lastName || ''} ${
+						user.firstName || ''
+					}`}</div>
 					<div className="time">
-						<BsClockHistory /> 11 phút trước
+						<BsClockHistory /> {timePost}
 					</div>
 				</div>
 			</div>
-			<div className="info-post__text">Thể loại: Văn học</div>
-			<div className="info-post__text">Tác giả: Duy Khánh</div>
+			<div className="info-post__text">Thể loại: {category?.text}</div>
+			<div className="info-post__text">Tác giả: {post.author}</div>
 			<div className="info-post__content">
-				<p>Mình đang thừa 1 quyển cần pass lại cho ai cần</p>
+				<p>{post.content}</p>
 			</div>
 			<div className="info-post__contact">
 				<a
 					className="btn btn-contact-z"
 					target="_blank"
 					rel="noopener noreferrer"
-					href={`https://zalo.me/${'0973551247'}`}
+					href={`https://zalo.me/${user?.phone}`}
 				>
 					Liên hệ
 				</a>

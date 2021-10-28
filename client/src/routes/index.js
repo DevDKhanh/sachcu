@@ -14,7 +14,7 @@ function Routers() {
 
 	return (
 		<Switch>
-			<Route exact path="/post/:id">
+			<Route exact path="/post/:slug">
 				<PostPage />
 			</Route>
 			<ProtectedRoute

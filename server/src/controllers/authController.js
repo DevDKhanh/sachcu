@@ -148,7 +148,11 @@ class AuthController {
 				});
 			}
 		} catch (err) {
-			return res.status(500);
+			return res.status(500).json({
+				status: 0,
+				code: 500,
+				message: 'Error',
+			});
 		}
 	}
 
@@ -217,7 +221,11 @@ class AuthController {
 				});
 			}
 		} catch (err) {
-			return res.status(500);
+			return res.status(500).json({
+				status: 0,
+				code: 500,
+				message: 'Error',
+			});
 		}
 	}
 
