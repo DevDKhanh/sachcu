@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 import ContentEditable from 'react-contenteditable';
 import './style/style.scss';
@@ -75,4 +75,4 @@ function FormComment() {
 	);
 }
 
-export default FormComment;
+export default memo(FormComment);

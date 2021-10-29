@@ -16,9 +16,37 @@
 		opacity: 0.8;
 	}
 
+	&--round {
+		border-radius: 4rem;
+	}
+
+	&--no-drop {
+		cursor: no-drop;
+		background-color: #ccc;
+		color: #fff;
+		&:hover {
+			opacity: 1;
+		}
+	}
+
 	&--root2 {
 		background-color: $colorRoot2;
 		color: #fff;
+	}
+
+	&--secondary {
+		background-color: $colorSecondary;
+		color: #fff;
+	}
+
+	&--o-secondary {
+		border: 2px solid $colorSecondary;
+		color: $colorSecondary;
+		background-color: #fff;
+		&:hover {
+			background-color: $colorSecondary;
+			color: #fff;
+		}
 	}
 
 	&--primary {

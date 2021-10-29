@@ -18,7 +18,6 @@ class MeController {
 		try {
 			const token = req.headers['authorization'].split(' ')[1];
 			const user = await jwt.verify(token, process.env.JWT_SECRET);
-
 			const { title, content, author, category } = req.body;
 			const fileImage = req.file;
 
@@ -59,7 +58,7 @@ class MeController {
 					fileImage.path,
 				);
 				const newPost = new dbPosts({
-					email: user.data.emailUser,
+					idUser: user.data.idUser,
 					title: xss(title, {}),
 					content: xss(content, {}),
 					author: xss(author, {}),

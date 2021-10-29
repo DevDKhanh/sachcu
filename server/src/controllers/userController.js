@@ -7,9 +7,9 @@ const jwt = require('jsonwebtoken');
 class PostController {
 	async getContact(req, res, next) {
 		try {
-			const { email } = req.query;
-			if (email) {
-				const user = await dbUsers.findOne({ email: email });
+			const { idUser } = req.query;
+			if (idUser) {
+				const user = await dbUsers.findOne({ _id: idUser });
 				if (user) {
 					const { lastName, firstName, phone } = user._doc;
 					return res.status(200).json({

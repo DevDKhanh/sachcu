@@ -13,10 +13,10 @@ export const convertTime = date => {
 
 	if (sec < 60) {
 		dataNumber = 'Vừa xong';
-	} else if (min < 60) {
-		dataNumber = `${min} phút trước`;
+	} else if (min < 59) {
+		dataNumber = `${min - 1} phút trước`;
 	} else if (hour < 24) {
-		dataNumber = `${hour} giờ trước`;
+		dataNumber = `${hour - 1} giờ trước`;
 	} else {
 		dataNumber = `${dayPost}, tháng ${monthPost}, ${yearPost}`;
 	}

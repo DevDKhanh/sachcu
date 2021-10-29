@@ -114,7 +114,7 @@ class AuthController {
 
 						if (saveData) {
 							const sendDate = {
-								emailUser,
+								idUser: saveData._doc._id,
 								firstName,
 								lastName,
 								phoneUser,
@@ -190,9 +190,9 @@ class AuthController {
 			});
 
 			if (dataUser) {
-				const { email, lastName, firstName, phone } = dataUser._doc;
+				const { _id, lastName, firstName, phone } = dataUser._doc;
 				const sendDate = {
-					emailUser: email,
+					idUser: _id,
 					lastName,
 					firstName,
 					phoneUser: phone,
@@ -243,7 +243,7 @@ class AuthController {
 			const data = await jwt.verify(token, process.env.JWT_SECRET);
 			if (data) {
 				const user = data.data;
-				const isUser = await dbUsers.findOne({ email: user.emailUser });
+				const isUser = await dbUsers.findOne({ _id: user.idUser });
 				if (isUser) {
 					return res.status(200).json({
 						status: 1,

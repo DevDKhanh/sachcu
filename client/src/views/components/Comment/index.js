@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 // import { BsFlagFill } from 'react-icons/bs';
 
 import './style/style.scss';
@@ -34,4 +34,4 @@ function Comment() {
 	);
 }
 
-export default Comment;
+export default memo(Comment);

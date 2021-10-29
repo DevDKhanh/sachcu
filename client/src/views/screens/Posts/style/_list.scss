@@ -10,6 +10,18 @@
 	flex-direction: column;
 	border-radius: 1rem;
 
+	.msg {
+		text-align: center;
+		font-size: 2rem;
+		max-width: 80%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0 auto;
+		color: $hideText;
+	}
+
 	&__title {
 		text-align: center;
 		font-size: 2.2rem;

@@ -6,6 +6,7 @@ import { ProtectedRoute } from '../utils/Protected';
 import LoginPage from '../views/screens/Auth/LoginPage';
 import RegisterPage from '../views/screens/Auth/RegisterPage';
 import HomePage from '../views/screens/Home';
+import CategoryPage from '../views/screens/Category';
 import PostPage from '../views/screens/Posts';
 import MeAddPost from '../views/screens/Me/MeAddPost';
 
@@ -14,6 +15,9 @@ function Routers() {
 
 	return (
 		<Switch>
+			<Route exact path="/category/:role">
+				<CategoryPage />
+			</Route>
 			<Route exact path="/post/:slug">
 				<PostPage />
 			</Route>

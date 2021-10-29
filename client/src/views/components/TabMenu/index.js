@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { MdDoubleArrow } from 'react-icons/md';
@@ -109,4 +109,4 @@ function TabMenu({ isShow, onShow, user }) {
 	);
 }
 
-export default TabMenu;
+export default memo(TabMenu);

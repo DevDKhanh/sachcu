@@ -1,7 +1,7 @@
-import React from 'react';
+import { memo } from 'react';
 
 import PlaceHolderImg from '../../../assets/images/placeholder-image.png';
-import Rating from '../Rating';
+import Rating from '../Rating/Rating';
 import CardInfo from './components/CardInfo';
 import './style/style.scss';
 
@@ -14,16 +14,16 @@ function CardPost({ data }) {
 						e.target.onerror = null;
 						e.target.src = PlaceHolderImg;
 					}}
-					src={data.img}
+					src={data.image}
 					alt="img-post"
 				/>
 			</div>
 			<CardInfo data={data} />
 			<div className="card-rating">
-				<Rating />
+				<Rating star={3} />
 			</div>
 		</div>
 	);
 }
 
-export default CardPost;
+export default memo(CardPost);

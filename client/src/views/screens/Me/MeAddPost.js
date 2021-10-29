@@ -85,6 +85,7 @@ function MeAddPost() {
 						toast.error(res.message_vn);
 					}
 				} catch (err) {
+					console.log(err);
 					toast.error('Thử lại sau ít phút');
 					setLoading(false);
 				}

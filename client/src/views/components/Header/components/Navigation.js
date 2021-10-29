@@ -4,12 +4,12 @@ import { NavLink } from 'react-router-dom';
 function Navigation() {
 	const list = [
 		{
-			to: '/',
-			title: 'Thể loại',
+			to: '/me/add-post',
+			title: 'Đăng tin',
 		},
 		{
-			to: '/',
-			title: 'Mới nhất',
+			to: '/me/my-post',
+			title: 'Tin của tôi',
 		},
 	];
 
