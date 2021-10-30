@@ -91,6 +91,7 @@ function MeAddPost() {
 				}
 			})();
 		} else {
+			setLoading(false);
 			toast.warn('Nhập và lựa chọn đầy đủ các mục');
 		}
 	};

@@ -12,7 +12,7 @@ class CommentController {
 			if (slug) {
 				const dataComments = await dbComments
 					.find({ slug })
-					.limit(limit || 3)
+					.limit(Number(limit) || 3)
 					.sort({ createdAt: -1 });
 
 				if (dataComments) {
