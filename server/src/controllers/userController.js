@@ -11,11 +11,12 @@ class PostController {
 			if (idUser) {
 				const user = await dbUsers.findOne({ _id: idUser });
 				if (user) {
-					const { lastName, firstName, phone } = user._doc;
+					const { lastName, firstName, phone, _id, avatar } =
+						user._doc;
 					return res.status(200).json({
 						status: 1,
 						code: 200,
-						data: { lastName, firstName, phone },
+						data: { lastName, firstName, phone, id: _id, avatar },
 					});
 				} else {
 					return res.status(400).json({

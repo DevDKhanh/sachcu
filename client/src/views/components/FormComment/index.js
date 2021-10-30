@@ -1,10 +1,15 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useContext, useEffect, memo } from 'react';
 
+import {
+	trimSpaces,
+	pasteAsPlainText,
+} from '../../../utils/handleContentEditable';
+import { SocketContext } from '../../../context/socket';
 import ContentEditable from 'react-contenteditable';
 import './style/style.scss';
 
-function FormComment() {
-	const textPlaceHolder = 'Viết bình luận của bạn';
+function FormComment({ placeholder, slug }) {
+	const socket = useContext(SocketContext);
 	const [comment, setComment] = useState('');
 	const [submit, setSubMit] = useState(false);
 
@@ -26,13 +31,33 @@ function FormComment() {
 		setComment(content.trim());
 	};
 
+	useEffect(() => setComment(''), [slug]);
+
 	useEffect(() => {
-		if (submit && comment.trim() !== '') {
-			console.log(comment);
+		if (submit) {
+			if (trimSpaces(comment).trim() !== '') {
+				socket.emit('comment:create', {
+					slug,
+					comment: trimSpaces(comment),
+				});
+			} else {
+				setSubMit(false);
+			}
+		}
+		return () => socket.off('comment:create');
+	}, [submit, comment, socket, slug]);
+
+	useEffect(() => {
+		socket.on('comment:successCreate', data => {
+			console.log(data);
 			setComment('');
 			setSubMit(false);
-		}
-	}, [submit, comment]);
+		});
+
+		return () => {
+			socket.off('comment:successCreate');
+		};
+	}, [socket]);
 
 	return (
 		<React.Fragment>
@@ -50,12 +75,13 @@ function FormComment() {
 							<ContentEditable
 								html={comment}
 								onChange={handleChange}
+								onPaste={pasteAsPlainText}
 								onKeyPress={handleEnter}
 								tagName="div"
 								role="textbox"
 								aria-multiline={true}
 								className="input-element content-i-comment"
-								placeholder={textPlaceHolder}
+								placeholder={placeholder}
 							/>
 						</div>
 					</div>
@@ -63,7 +89,7 @@ function FormComment() {
 						<button
 							type="submit"
 							className={`${
-								comment.trim() !== '' && 'active'
+								trimSpaces(comment).trim() !== '' && 'active'
 							} btn`}
 						>
 							Bình luận

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
 
 import * as typeUser from '../../../actions/typeUser';
@@ -11,12 +11,10 @@ import './style/style.scss';
 
 function LoginPage() {
 	const dispatch = useDispatch();
-	const history = useHistory();
 	const [dataForm, setDataForm] = useState({});
 	const [loading, setLoading] = useState(false);
 
 	const handleChange = e => {
-		console.log(history);
 		const key = e.target.name;
 		const value = e.target.value;
 		setDataForm(prev => ({ ...prev, [key]: value }));

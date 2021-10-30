@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getItemStorage } from '../utils/localStorage';
+import { API_URL } from '../constant/config';
 import queryString from 'query-string';
 
 const axiosClient = axios.create({
@@ -7,7 +8,7 @@ const axiosClient = axios.create({
 		'content-type': 'application/json',
 		Authorization: `Bearer ${getItemStorage('accessToken')}`,
 	},
-	baseURL: 'http://localhost:6060/api/v1',
+	baseURL: API_URL,
 	paramsSerializer: params => queryString.stringify(params),
 });
 

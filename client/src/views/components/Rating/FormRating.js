@@ -29,7 +29,7 @@ function FormRating({ onClose, idUser, slug }) {
 						toast.success(res.message_vn);
 						onClose(false);
 					} else {
-						toast.warn(res.message_vn);
+						toast.info(res.message_vn);
 						onClose(false);
 					}
 				} catch (err) {

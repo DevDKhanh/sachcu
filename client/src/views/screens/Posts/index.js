@@ -1,21 +1,34 @@
-import React, { useLayoutEffect, useEffect, useState } from 'react';
+import React, { useLayoutEffect, useEffect, useContext, useState } from 'react';
 import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import { SocketContext } from '../../../context/socket';
+import commentsAPI from '../../../api/commentsAPI';
 import postAPI from '../../../api/postAPI';
 import ListSuggest from './components/ListSuggest';
 import InfoPost from './components/InfoPost';
 import PreviewPost from './components/PreviewPost';
-import Comment from '../../components/Comment';
+import ListComment from '../../components/ListComment';
 import FormComment from '../../components/FormComment';
 import './style/style.scss';
 
 function PostPage() {
+	const socket = useContext(SocketContext);
 	const history = useHistory();
+	const [comments, setComments] = useState([]);
 	const { slug } = useParams();
 	const [post, setPost] = useState({});
 	const [posts, setPosts] = useState([]);
+
+	//===== < handle connect room >=====
+	useEffect(() => {
+		socket.emit('room:join', { slug });
+		return () => {
+			socket.off('room:join');
+			socket.emit('room:leave', { slug });
+		};
+	}, [socket, slug]);
 
 	//=====< get posts suggest >=====
 	useEffect(() => {
@@ -42,12 +55,19 @@ function PostPage() {
 		window.scroll(0, 0);
 		(async () => {
 			try {
-				const res = await postAPI.getPost(slug);
-				if (res.status === 1) {
-					setPost(res.data);
+				const [resPost, resComment] = await Promise.all([
+					postAPI.getPost(slug),
+					commentsAPI.getCommentOfPage(slug),
+				]);
+				if (resPost.status === 1) {
+					setPost(resPost.data);
 				} else {
 					toast.info('Không tìm thấy bài viết');
 					history.push('/');
+				}
+
+				if (resComment.data) {
+					setComments([...resComment.data]);
 				}
 			} catch (err) {
 				toast.error('Đã xảy ra lỗi');
@@ -55,7 +75,10 @@ function PostPage() {
 			}
 		})();
 
-		return () => setPost({});
+		return () => {
+			setComments([]);
+			setPost({});
+		};
 	}, [slug, history]);
 
 	return (
@@ -76,10 +99,11 @@ function PostPage() {
 								</div>
 							</div>
 							<div className="comment">
-								<FormComment />
-								<Comment />
-								<Comment />
-								<Comment />
+								<FormComment
+									slug={slug}
+									placeholder="Viết bình luận của bạn"
+								/>
+								<ListComment comments={comments} />
 							</div>
 						</div>
 						<div className="col l-3">
