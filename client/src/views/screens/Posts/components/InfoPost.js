@@ -3,7 +3,7 @@ import { BsClockHistory } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 
 import LoadingPlaceHolder from '../../../components/Effect/LoadingPlaceHolder';
-import PlaceHolderUser from '../../../../assets/images/user-placeholder-image.jpg';
+import AvatarImg from '../../../components/AvatarImg';
 import usersAPI from '../../../../api/usersAPI';
 import postAPI from '../../../../api/postAPI';
 import { convertTime } from '../../../../utils/convertTime';
@@ -19,7 +19,6 @@ function InfoPost({ post }) {
 	const [timePost, setTimePost] = useState();
 	const [showFormRating, setShowFormRating] = useState(false);
 	const [user, setUser] = useState({});
-	const [loadImg, setLoadImg] = useState(true);
 
 	useEffect(() => {
 		if (post.category) {
@@ -79,18 +78,7 @@ function InfoPost({ post }) {
 		<React.Fragment>
 			<div className="info-post">
 				<div className="info-post__user">
-					<div className="avatar">
-						<img
-							onError={e => {
-								e.target.onerror = null;
-								e.target.src = PlaceHolderUser;
-							}}
-							onLoad={() => setLoadImg(false)}
-							src={user.avatar || ''}
-							alt="avatar"
-						/>
-						<LoadingPlaceHolder dependency={loadImg} />
-					</div>
+					<AvatarImg avatar={user.avatar} />
 					<div className="text">
 						<div className="name-user">
 							<LoadingPlaceHolder
@@ -115,7 +103,7 @@ function InfoPost({ post }) {
 					<LoadingPlaceHolder dependency={!post.author} />
 				</div>
 				<div className="info-post__content">
-					<p>{post.content}</p>
+					<p className="text">{post.content}</p>
 					<LoadingPlaceHolder dependency={!post.content} />
 				</div>
 				<div className="info-post__contact">

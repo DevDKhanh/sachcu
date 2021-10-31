@@ -2,7 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 module.exports = (io, socket) => {
-	const joinRoom = async ({ slug }) => {
+	const joinRoom = async ({ slug, isReply, limit }) => {
 		const token = socket.handshake.auth.token;
 		const user = await jwt.verify(token, process.env.JWT_SECRET);
 		if (user) {

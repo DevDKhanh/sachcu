@@ -12,7 +12,7 @@ const transporter = nodeMailer.createTransport({
 	},
 });
 
-export const sendMail = (to, subject, pass) => {
+module.exports.sendMail = (to, subject, pass) => {
 	const options = {
 		from: adminEmail,
 		to: to,
@@ -22,7 +22,7 @@ export const sendMail = (to, subject, pass) => {
 	return transporter.sendMail(options);
 };
 
-export const sendMailVerify = (to, subject, token, domain) => {
+module.exports.sendMailVerify = (to, subject, token, domain) => {
 	const options = {
 		from: adminEmail,
 		to: to,
@@ -32,7 +32,7 @@ export const sendMailVerify = (to, subject, token, domain) => {
 	return transporter.sendMail(options);
 };
 
-export const sendMailForgotPass = (to, subject, number) => {
+module.exports.sendMailForgotPass = (to, subject, number) => {
 	const options = {
 		from: adminEmail,
 		to: to,

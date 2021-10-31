@@ -6,8 +6,6 @@ const starReviewSchame = new Schema(
 		idUser: {
 			type: String,
 			default: null,
-			min: 4,
-			max: 255,
 			required: true,
 		},
 		slug: {

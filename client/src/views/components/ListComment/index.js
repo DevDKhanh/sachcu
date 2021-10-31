@@ -10,12 +10,15 @@ function ListComment({ comments }) {
 			<div className="list-comments">
 				<ProtectedComponent dependency={comments.length > 0}>
 					{comments.map(comment => (
-						<Comment
-							key={comment._id}
-							idUser={comment.idUser}
-							time={comment.createdAt}
-							content={comment.comment}
-						/>
+						<div key={comment._id} className="comment-item-group">
+							<Comment
+								idUser={comment.idUser}
+								time={comment.createdAt}
+								content={comment.comment}
+								slug={comment.slug}
+								id={comment._id}
+							/>
+						</div>
 					))}
 				</ProtectedComponent>
 				<ProtectedComponent dependency={comments.length <= 0}>

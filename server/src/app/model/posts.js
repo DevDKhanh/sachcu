@@ -8,8 +8,6 @@ const postSchame = new Schema(
 		idUser: {
 			type: String,
 			default: null,
-			min: 4,
-			max: 255,
 			required: true,
 		},
 		title: { type: String, default: null, max: 55, required: true },

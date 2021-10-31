@@ -2,18 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { BsClockHistory } from 'react-icons/bs';
 
-import LoadingPlaceHolder from '../../Effect/LoadingPlaceHolder';
-import { convertTime } from '../../../../utils/convertTime';
 import usersAPI from '../../../../api/usersAPI';
 import Title from './Title';
+import AvatarImg from '../../AvatarImg';
+import LoadingPlaceHolder from '../../Effect/LoadingPlaceHolder';
 import listCategory from '../../../../constant/listCategory';
-import PlaceHolderUser from '../../../../assets/images/user-placeholder-image.jpg';
+import { convertTime } from '../../../../utils/convertTime';
 
 function CardInfo({ data }) {
 	const [category, setCategory] = useState({});
 	const [timePost, setTimePost] = useState();
 	const [user, setUser] = useState({});
-	const [load, setLoad] = useState(true);
 
 	useEffect(() => {
 		if (data.category) {
@@ -67,18 +66,7 @@ function CardInfo({ data }) {
 				<LoadingPlaceHolder dependency={!data.author} />
 			</p>
 			<div className="card-info__user">
-				<div className="avatar">
-					<img
-						onError={e => {
-							e.target.onerror = null;
-							e.target.src = PlaceHolderUser;
-						}}
-						onLoad={() => setLoad(false)}
-						src={user.avatar || ''}
-						alt={`avatar`}
-					/>
-					<LoadingPlaceHolder dependency={load} />
-				</div>
+				<AvatarImg avatar={user.avatar} />
 				<p className="name-user">
 					{user.firstName}
 					<LoadingPlaceHolder dependency={!user.firstName} />

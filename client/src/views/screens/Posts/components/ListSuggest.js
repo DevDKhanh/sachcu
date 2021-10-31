@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { ProtectedComponent } from '../../../../utils/Protected';
 import CardInfo from '../../../components/CardPost/components/CardInfo';
 
-function ListSuggest({ count, posts, category, title }) {
+function ListSuggest({ count = null, posts = null, category, title }) {
 	return (
 		<div className="list-tag">
 			<h3 className="list-tag__title">{title}</h3>

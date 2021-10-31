@@ -1,17 +1,13 @@
 @import '../../../../style/variables';
 
-.comment {
-	&-item + &-item {
-		margin-top: 1.6rem;
-	}
-
-	&-context {
+.comment-item {
+	.comment-context {
 		display: flex;
 		.avatar {
 			position: relative;
 			display: inline-block;
-			width: 45px;
-			height: 45px;
+			width: 4.5rem;
+			height: 4.5rem;
 			border-radius: 50%;
 			overflow: hidden;
 
@@ -21,93 +17,25 @@
 				object-fit: cover;
 			}
 		}
+	}
 
-		.content {
-			flex: 1;
-			max-width: 600px;
-			margin-left: 1.6rem;
+	.comment--reply {
+		border-left: 1px solid $colorDanger;
+		padding-left: 1.6rem;
 
-			&-group {
-				position: relative;
-				padding: 1rem 2rem;
-				z-index: 2;
-				border-radius: 0.5rem;
-				background-color: #ffffff;
-				border: 2px dotted #ccc;
-				&::after {
-					content: '';
-					position: absolute;
-					width: 20px;
-					height: 20px;
-					border: 2px dotted #ccc;
-					top: 10px;
-					left: -10px;
-					z-index: 1;
-					transform: rotate(45deg);
-					border-radius: 0.3rem;
-				}
-				&::before {
-					content: '';
-					position: absolute;
-					width: 19px;
-					height: 19px;
-					background-color: #fff;
-					top: 10px;
-					left: -7px;
-					z-index: 2;
-					transform: rotate(45deg);
-				}
-			}
-
-			.name-user {
-				position: relative;
-				border-radius: 4rem;
-				overflow: hidden;
-				max-width: max-content;
-				font-size: 1.5rem;
-				font-weight: 600;
-				display: inline-block;
-			}
-
-			.text-content {
-				font-size: 1.5rem;
-				color: #2b2b2b;
-				line-height: 2rem;
-				padding: 1rem 0;
-				position: relative;
-				border-radius: 4rem;
-				overflow: hidden;
-			}
-
-			.control {
-				padding: 1rem 0;
-				.btn-reply {
-					color: $colorDanger;
-					font-size: 1.4rem;
-					&:hover {
-						cursor: pointer;
-						text-decoration: underline;
-					}
-				}
-				.text {
-					position: relative;
-					padding-left: 1rem;
-					margin-left: 0.8rem;
-					color: #7e7e7e;
-					font-size: 1.4rem;
-					&::after {
-						position: absolute;
-						content: '';
-						width: 5px;
-						height: 5px;
-						background-color: #7e7e7e;
-						left: 0;
-						top: 50%;
-						border-radius: 50%;
-						transform: translateY(-50%);
-					}
-				}
-			}
+		.avatar {
+			width: 3.5rem;
+			height: 3.5rem;
 		}
+	}
+
+	.btn-see-reply {
+		border: none;
+		outline: none;
+		font-size: 1.5rem;
+		background-color: transparent;
+		margin-bottom: 0.5rem;
+		color: $secondaryText;
+		text-shadow: 0 0 1px $secondaryText;
 	}
 }

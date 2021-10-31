@@ -81,6 +81,16 @@ function PostPage() {
 		};
 	}, [slug, history]);
 
+	useEffect(() => {
+		socket.on('comment:successCreate', data => {
+			setComments(prev => [data, ...prev]);
+		});
+
+		return () => {
+			socket.off('comment:successCreate');
+		};
+	}, [socket, slug]);
+
 	return (
 		<div className="page-main">
 			<div className="grid wide">
@@ -102,7 +112,6 @@ function PostPage() {
 								<FormComment
 									slug={slug}
 									placeholder="Viết bình luận của bạn"
-									onSetComments={setComments}
 								/>
 								<ListComment comments={comments} />
 							</div>

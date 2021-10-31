@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import PlaceHolderUser from '../../../../assets/images/user-placeholder-image.jpg';
+import AvatarImg from '../../AvatarImg';
 import BellNotify from '../../BellNotify';
 import TabMenu from '../../TabMenu';
 
@@ -14,16 +14,7 @@ function MeControl({ user }) {
 					<BellNotify />
 				</div>
 				<div className="item" onClick={() => setShowMenu(true)}>
-					<div className="avatar">
-						<img
-							onError={e => {
-								e.target.onerror = null;
-								e.target.src = PlaceHolderUser;
-							}}
-							src=""
-							alt=""
-						/>
-					</div>
+					<AvatarImg avatar={user.avatar || ''} />
 				</div>
 			</div>
 			<TabMenu isShow={showMenu} onShow={setShowMenu} user={user} />

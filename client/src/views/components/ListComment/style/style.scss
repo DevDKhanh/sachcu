@@ -5,4 +5,8 @@
 		color: rgb(156, 156, 156);
 		font-weight: 600;
 	}
+
+	.comment-item-group + .comment-item-group {
+		margin-top: 1.6rem;
+	}
 }

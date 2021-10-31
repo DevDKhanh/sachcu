@@ -2,6 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const registerCommentHandlers = require('./commentHandler');
+const registerCommentReplyHandlers = require('./commentReplyHandler');
 const registerRoomHandlers = require('./roomHandler');
 
 module.exports.start = io => {
@@ -14,6 +15,7 @@ module.exports.start = io => {
 				socket.join(socket.idUser);
 				registerCommentHandlers(io, socket);
 				registerRoomHandlers(io, socket);
+				registerCommentReplyHandlers(io, socket);
 			}
 		} catch (err) {
 			socket.emit('error');

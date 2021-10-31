@@ -6,9 +6,18 @@ import {
 } from '../../../utils/handleContentEditable';
 import { SocketContext } from '../../../context/socket';
 import ContentEditable from 'react-contenteditable';
+import AvatarImg from '../AvatarImg';
 import './style/style.scss';
 
-function FormComment({ placeholder, slug, onSetComments }) {
+function FormComment({
+	placeholder,
+	id,
+	slug,
+	onClose,
+	isReply,
+	textSubmit = 'Bình luận',
+	title = 'Bình luận',
+}) {
 	const socket = useContext(SocketContext);
 	const [comment, setComment] = useState('');
 	const [submit, setSubMit] = useState(false);
@@ -36,10 +45,18 @@ function FormComment({ placeholder, slug, onSetComments }) {
 	useEffect(() => {
 		if (submit) {
 			if (trimSpaces(comment).trim() !== '') {
-				socket.emit('comment:create', {
-					slug,
-					comment: trimSpaces(comment),
-				});
+				if (isReply) {
+					socket.emit('commentReply:create', {
+						idComment: id,
+						slug,
+						comment: trimSpaces(comment),
+					});
+				} else {
+					socket.emit('comment:create', {
+						slug,
+						comment: trimSpaces(comment),
+					});
+				}
 				setComment('');
 				setSubMit(false);
 			} else {
@@ -47,27 +64,12 @@ function FormComment({ placeholder, slug, onSetComments }) {
 			}
 		}
 		return () => socket.off('comment:create');
-	}, [submit, comment, socket, slug]);
-
-	useEffect(() => {
-		socket.on('comment:successCreate', data => {
-			onSetComments(prev => [data, ...prev]);
-		});
-
-		return () => {
-			socket.off('comment:successCreate');
-		};
-	}, [socket, onSetComments]);
+	}, [submit, comment, socket, slug, id, isReply]);
 	return (
 		<React.Fragment>
-			<h2 className="title">Bình luận</h2>
-			<div className="form-comment">
-				<div className="avatar">
-					<img
-						src="https://scontent.fhan3-4.fna.fbcdn.net/v/t1.6435-9/169121906_1673758642825329_1633927339019676240_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=rrevtIymj6QAX_xoVTn&_nc_ht=scontent.fhan3-4.fna&oh=f60ee5853c8c2af7bd7378fd29d5f358&oe=61983826"
-						alt="avatar-me"
-					/>
-				</div>
+			{!isReply && <h2 className="title">{title}</h2>}
+			<div className={`form-comment ${isReply && 'form--reply'}`}>
+				<AvatarImg avatar="" />
 				<form onSubmit={handleSubMit}>
 					<div className="group-form">
 						<div className="group-element">
@@ -85,13 +87,24 @@ function FormComment({ placeholder, slug, onSetComments }) {
 						</div>
 					</div>
 					<div className="group-btn">
+						{onClose && (
+							<div
+								onClick={() => onClose(false)}
+								className="btn btn--round btn--secondary"
+							>
+								Hủy
+							</div>
+						)}
+
 						<button
 							type="submit"
-							className={`${
-								trimSpaces(comment).trim() !== '' && 'active'
-							} btn`}
+							className={`btn ${
+								trimSpaces(comment).trim() !== ''
+									? 'unactive'
+									: 'active'
+							}`}
 						>
-							Bình luận
+							{textSubmit}
 						</button>
 					</div>
 				</form>

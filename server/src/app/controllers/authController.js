@@ -119,6 +119,7 @@ class AuthController {
 								firstName,
 								lastName,
 								phoneUser,
+								avatar: saveData._doc.avatar,
 							};
 							const accessToken = await jwt.sign(
 								{
@@ -192,12 +193,14 @@ class AuthController {
 			});
 
 			if (dataUser) {
-				const { _id, lastName, firstName, phone } = dataUser._doc;
+				const { _id, lastName, firstName, phone, avatar } =
+					dataUser._doc;
 				const sendDate = {
 					idUser: _id,
 					lastName,
 					firstName,
 					phoneUser: phone,
+					avatar,
 				};
 				const accessToken = await jwt.sign(
 					{

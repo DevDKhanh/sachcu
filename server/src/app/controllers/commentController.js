@@ -2,6 +2,7 @@ require('dotenv').config();
 const dbUsers = require('../model/users');
 const dbPosts = require('../model/posts');
 const dbComments = require('../model/comments');
+const dbReplyComments = require('../model/replyComment');
 
 const jwt = require('jsonwebtoken');
 const sanitizer = require('sanitizer');
@@ -14,18 +15,35 @@ class CommentController {
 	//[GET] /api/v1/comments/page?slug=...&limit=...
 	async getCommentOfPage(req, res, next) {
 		try {
-			const { slug, limit } = req.query;
+			const { slug, limit, isReply } = req.query;
 			if (slug) {
-				const dataComments = await dbComments
-					.find({ slug })
-					.limit(Number(limit) || 3)
-					.sort({ createdAt: -1 });
+				let dataComments;
+				let countComments;
+
+				if (isReply == 'true') {
+					countComments = await dbReplyComments.countDocuments({
+						idComment: slug,
+					});
+					dataComments = await dbReplyComments
+						.find({ idComment: slug })
+						.limit(Number(limit) || 3)
+						.sort({ createdAt: -1 });
+				} else {
+					countComments = await dbComments.countDocuments({
+						idComment: slug,
+					});
+					dataComments = await dbComments
+						.find({ slug })
+						.limit(Number(limit) || 3)
+						.sort({ createdAt: -1 });
+				}
 
 				if (dataComments) {
 					return res.status(200).json({
-						status: 0,
+						status: 1,
 						code: 200,
 						data: dataComments,
+						countComments,
 					});
 				} else {
 					return res.status(200).json({
