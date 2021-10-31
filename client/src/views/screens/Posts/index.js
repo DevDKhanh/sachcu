@@ -102,6 +102,7 @@ function PostPage() {
 								<FormComment
 									slug={slug}
 									placeholder="Viết bình luận của bạn"
+									onSetComments={setComments}
 								/>
 								<ListComment comments={comments} />
 							</div>

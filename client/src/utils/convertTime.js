@@ -11,11 +11,11 @@ export const convertTime = date => {
 	const min = Math.ceil((nowTime - dataNumber) / 1000 / 60);
 	const hour = Math.ceil((nowTime - dataNumber) / 1000 / 60 / 60);
 
-	if (sec < 60) {
+	if (sec < 61) {
 		dataNumber = 'Vừa xong';
-	} else if (min < 59) {
+	} else if (min < 61) {
 		dataNumber = `${min - 1} phút trước`;
-	} else if (hour < 24) {
+	} else if (hour < 25) {
 		dataNumber = `${hour - 1} giờ trước`;
 	} else {
 		dataNumber = `${dayPost}, tháng ${monthPost}, ${yearPost}`;

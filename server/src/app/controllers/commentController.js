@@ -1,11 +1,17 @@
 require('dotenv').config();
-const dbUsers = require('./model/users');
-const dbPosts = require('./model/posts');
-const dbComments = require('./model/comments');
+const dbUsers = require('../model/users');
+const dbPosts = require('../model/posts');
+const dbComments = require('../model/comments');
 
 const jwt = require('jsonwebtoken');
+const sanitizer = require('sanitizer');
 
+//Check xss
+const xss = str => {
+	return sanitizer.sanitize(sanitizer.escape(str));
+};
 class CommentController {
+	//[GET] /api/v1/comments/page?slug=...&limit=...
 	async getCommentOfPage(req, res, next) {
 		try {
 			const { slug, limit } = req.query;

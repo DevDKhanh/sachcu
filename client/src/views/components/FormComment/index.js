@@ -8,7 +8,7 @@ import { SocketContext } from '../../../context/socket';
 import ContentEditable from 'react-contenteditable';
 import './style/style.scss';
 
-function FormComment({ placeholder, slug }) {
+function FormComment({ placeholder, slug, onSetComments }) {
 	const socket = useContext(SocketContext);
 	const [comment, setComment] = useState('');
 	const [submit, setSubMit] = useState(false);
@@ -40,6 +40,8 @@ function FormComment({ placeholder, slug }) {
 					slug,
 					comment: trimSpaces(comment),
 				});
+				setComment('');
+				setSubMit(false);
 			} else {
 				setSubMit(false);
 			}
@@ -49,16 +51,13 @@ function FormComment({ placeholder, slug }) {
 
 	useEffect(() => {
 		socket.on('comment:successCreate', data => {
-			console.log(data);
-			setComment('');
-			setSubMit(false);
+			onSetComments(prev => [data, ...prev]);
 		});
 
 		return () => {
 			socket.off('comment:successCreate');
 		};
-	}, [socket]);
-
+	}, [socket, onSetComments]);
 	return (
 		<React.Fragment>
 			<h2 className="title">Bình luận</h2>

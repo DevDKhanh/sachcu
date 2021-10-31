@@ -8,6 +8,7 @@
 	&-context {
 		display: flex;
 		.avatar {
+			position: relative;
 			display: inline-block;
 			width: 45px;
 			height: 45px;
@@ -59,6 +60,10 @@
 			}
 
 			.name-user {
+				position: relative;
+				border-radius: 4rem;
+				overflow: hidden;
+				max-width: max-content;
 				font-size: 1.5rem;
 				font-weight: 600;
 				display: inline-block;
@@ -69,6 +74,9 @@
 				color: #2b2b2b;
 				line-height: 2rem;
 				padding: 1rem 0;
+				position: relative;
+				border-radius: 4rem;
+				overflow: hidden;
 			}
 
 			.control {

@@ -5,6 +5,10 @@
 	margin-bottom: 2rem;
 	color: $secondaryText;
 
+	.card-img {
+		position: relative;
+	}
+
 	&:hover {
 		.card-img {
 			margin-bottom: -1rem;
@@ -43,7 +47,11 @@
 		transition: 0.3s;
 
 		&__title {
+			position: relative;
+			margin: 0 auto;
+			border-radius: 1rem;
 			margin-bottom: 1rem;
+			min-height: 3rem;
 			max-width: 90%;
 			text-transform: uppercase;
 			text-align: center;
@@ -60,6 +68,11 @@
 			display: flex;
 			align-items: center;
 			margin-top: 1rem;
+
+			.name-user {
+				min-height: 2rem;
+				min-width: 7rem;
+			}
 		}
 
 		.avatar {
@@ -78,6 +91,8 @@
 		}
 
 		p {
+			position: relative;
+			border-radius: 1rem;
 			line-height: 2.4rem;
 			display: -webkit-box;
 			-webkit-line-clamp: 1;
@@ -85,6 +100,10 @@
 			overflow: hidden;
 			text-overflow: ellipsis;
 			word-break: break-word;
+		}
+
+		p + p {
+			margin-top: 0.2rem;
 		}
 	}
 

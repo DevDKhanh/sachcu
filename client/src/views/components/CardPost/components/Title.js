@@ -1,11 +1,11 @@
-import React from 'react';
+import LoadingPlaceHolder from '../../Effect/LoadingPlaceHolder';
 
 function Title({ children }) {
 	return (
-		<h4
-			dangerouslySetInnerHTML={{ __html: children }}
-			className="card-info__title"
-		></h4>
+		<h4 className="card-info__title">
+			{children}
+			<LoadingPlaceHolder dependency={!children} />
+		</h4>
 	);
 }
 

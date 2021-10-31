@@ -2,7 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const sanitizer = require('sanitizer');
 
-const dbComments = require('../controllers/model/comments');
+const dbComments = require('../model/comments');
 
 //Check xss
 const xss = str => {
@@ -19,7 +19,7 @@ module.exports = (io, socket) => {
 					const newComment = new dbComments({
 						idUser: socket.idUser,
 						slug,
-						comment,
+						comment: xss(comment),
 					});
 					const saveComment = await newComment.save();
 					if (saveComment) {

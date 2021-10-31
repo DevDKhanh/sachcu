@@ -1,8 +1,8 @@
 require('dotenv').config();
-const dbUsers = require('./model/users');
-const dbPosts = require('./model/posts');
+const dbUsers = require('../model/users');
+const dbPosts = require('../model/posts');
 
-const cloudinary = require('../utils/cloudinary');
+const cloudinary = require('../../utils/cloudinary');
 const validator = require('validator');
 const pbkdf2 = require('pbkdf2');
 const jwt = require('jsonwebtoken');
@@ -14,6 +14,7 @@ const xss = str => {
 };
 
 class MeController {
+	//[POST] /api/v1/me/post
 	async meAddPost(req, res, next) {
 		try {
 			const token = req.headers['authorization'].split(' ')[1];
@@ -59,10 +60,10 @@ class MeController {
 				);
 				const newPost = new dbPosts({
 					idUser: user.data.idUser,
-					title: xss(title, {}),
-					content: xss(content, {}),
-					author: xss(author, {}),
-					category: xss(category, {}),
+					title: xss(title),
+					content: xss(content),
+					author: xss(author),
+					category: xss(category),
 					image: saveImg.secure_url,
 					idImage: saveImg.public_id,
 				});

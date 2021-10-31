@@ -1,6 +1,7 @@
 import { useState, useEffect, memo } from 'react';
 // import { BsFlagFill } from 'react-icons/bs';
 
+import LoadingPlaceHolder from '../Effect/LoadingPlaceHolder';
 import { convertTime } from '../../../utils/convertTime';
 import usersAPI from '../../../api/usersAPI';
 import PlaceHolderUser from '../../../assets/images/user-placeholder-image.jpg';
@@ -9,6 +10,7 @@ import './style/style.scss';
 function Comment({ content, idUser, time }) {
 	const [timeComent, setTimeComent] = useState();
 	const [user, setUser] = useState({});
+	const [loadImg, setLoadImg] = useState(true);
 
 	useEffect(() => {
 		let timeoutId;
@@ -45,17 +47,22 @@ function Comment({ content, idUser, time }) {
 							e.target.onerror = null;
 							e.target.src = PlaceHolderUser;
 						}}
+						onLoad={() => setLoadImg(false)}
 						src={user.avatar}
 						alt="avatar"
 					/>
+					<LoadingPlaceHolder dependency={loadImg} />
 				</div>
 				<div className="content">
 					<div className="content-group">
-						<div className="name-user">{`${user.lastName} ${user.firstName}`}</div>
-						<div
-							dangerouslySetInnerHTML={{ __html: content }}
-							className="text-content"
-						></div>
+						<div className="name-user">
+							<LoadingPlaceHolder dependency={!user.lastName} />
+							{`${user.lastName} ${user.firstName}`}
+						</div>
+						<div className="text-content">
+							{content}
+							<LoadingPlaceHolder dependency={!content} />
+						</div>
 					</div>
 					<div className="control">
 						<span className="btn-reply">Trả lời</span>

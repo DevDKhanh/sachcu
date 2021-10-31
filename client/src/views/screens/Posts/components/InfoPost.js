@@ -1,6 +1,8 @@
-import React, { useEffect, useLayoutEffect, useState, memo } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { BsClockHistory } from 'react-icons/bs';
+import { useSelector } from 'react-redux';
 
+import LoadingPlaceHolder from '../../../components/Effect/LoadingPlaceHolder';
 import PlaceHolderUser from '../../../../assets/images/user-placeholder-image.jpg';
 import usersAPI from '../../../../api/usersAPI';
 import postAPI from '../../../../api/postAPI';
@@ -11,11 +13,13 @@ import FormRating from '../../../components/Rating/FormRating';
 import { ProtectedComponent } from '../../../../utils/Protected';
 
 function InfoPost({ post }) {
+	const { infoUser } = useSelector(state => state.user);
 	const [category, setCategory] = useState({});
 	const [star, setStar] = useState();
 	const [timePost, setTimePost] = useState();
 	const [showFormRating, setShowFormRating] = useState(false);
 	const [user, setUser] = useState({});
+	const [loadImg, setLoadImg] = useState(true);
 
 	useEffect(() => {
 		if (post.category) {
@@ -37,7 +41,7 @@ function InfoPost({ post }) {
 		return () => clearTimeout(timeoutId);
 	}, [post.createdAt]);
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (post.idUser && post.slug) {
 			(async () => {
 				try {
@@ -66,7 +70,9 @@ function InfoPost({ post }) {
 			})();
 		}
 
-		return () => setUser({});
+		return () => {
+			setUser({});
+		};
 	}, [post.idUser, post.slug]);
 
 	return (
@@ -79,25 +85,38 @@ function InfoPost({ post }) {
 								e.target.onerror = null;
 								e.target.src = PlaceHolderUser;
 							}}
-							src=""
+							onLoad={() => setLoadImg(false)}
+							src={user.avatar || ''}
 							alt="avatar"
 						/>
+						<LoadingPlaceHolder dependency={loadImg} />
 					</div>
 					<div className="text">
-						<div className="name-user">{`${user.lastName || ''} ${
-							user.firstName || ''
-						}`}</div>
+						<div className="name-user">
+							<LoadingPlaceHolder
+								dependency={!user.lastName || !timePost}
+							/>
+							{`${user.lastName || ''} ${user.firstName || ''}`}
+						</div>
 						<div className="time">
+							<LoadingPlaceHolder
+								dependency={!user.lastName || !timePost}
+							/>
 							<BsClockHistory /> {timePost}
 						</div>
 					</div>
 				</div>
 				<div className="info-post__text">
 					Thể loại: {category?.text}
+					<LoadingPlaceHolder dependency={!category?.text} />
 				</div>
-				<div className="info-post__text">Tác giả: {post.author}</div>
+				<div className="info-post__text">
+					Tác giả: {post.author}
+					<LoadingPlaceHolder dependency={!post.author} />
+				</div>
 				<div className="info-post__content">
 					<p>{post.content}</p>
+					<LoadingPlaceHolder dependency={!post.content} />
 				</div>
 				<div className="info-post__contact">
 					<a
@@ -124,7 +143,7 @@ function InfoPost({ post }) {
 			<ProtectedComponent dependency={showFormRating}>
 				<FormRating
 					onClose={setShowFormRating}
-					idUser={post.idUser}
+					idUser={infoUser.idUser}
 					slug={post.slug}
 				/>
 			</ProtectedComponent>

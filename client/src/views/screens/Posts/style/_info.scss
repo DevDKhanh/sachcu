@@ -31,11 +31,25 @@
 			margin-left: 2rem;
 			line-height: 3rem;
 			.name-user {
+				position: relative;
+				overflow: hidden;
+				border-radius: 4rem;
 				font-size: 1.8rem;
 				text-shadow: 0 0 1px #1d1d1d;
+				min-height: 2rem;
+				min-width: 70px;
+				max-width: max-content;
 			}
 			.time {
+				margin-top: 0.5rem;
+				position: relative;
+				overflow: hidden;
+				border-radius: 4rem;
 				font-size: 1.5rem;
+				line-height: 2rem;
+				min-height: 1.5rem;
+				min-width: 100px;
+				max-width: max-content;
 			}
 		}
 	}
@@ -51,6 +65,11 @@
 	}
 
 	&__text {
+		position: relative;
+		overflow: hidden;
+		border-radius: 4rem;
+		min-width: 180px;
+		max-width: max-content;
 		font-size: 1.6rem;
 		margin-top: 1rem;
 		font-weight: 600;
@@ -63,11 +82,14 @@
 		flex: 1;
 		display: flex;
 		border: 2px dotted #ccc;
-		border-radius: 1rem;
 		font-size: 1.6rem;
 		padding: 1rem;
 		margin: 1rem 0;
 		line-height: 2.2rem;
+		position: relative;
+		overflow: hidden;
+		min-height: 5rem;
+		border-radius: 1rem;
 	}
 
 	&__rating {

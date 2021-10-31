@@ -14,7 +14,7 @@ const io = require('socket.io')(server, {
 		allowedHeaders: ['authorization'],
 	},
 });
-const socketIO = require('./socket');
+const socketIO = require('./app/socket');
 
 const db = require('./config/db');
 const cors = require('./config/cors');

@@ -1,5 +1,5 @@
 require('dotenv').config();
-const dbUsers = require('./model/users');
+const dbUsers = require('../model/users');
 
 const validator = require('validator');
 const pbkdf2 = require('pbkdf2');
@@ -12,6 +12,7 @@ const xss = str => {
 };
 
 class AuthController {
+	//[POST] /api/v1/auth/register
 	async register(req, res, next) {
 		try {
 			const lengthName = 20;
@@ -156,6 +157,7 @@ class AuthController {
 		}
 	}
 
+	//[POST] /api/v1/auth/login
 	async login(req, res, next) {
 		try {
 			const emailUser = xss(req.body.email, {});
@@ -229,6 +231,7 @@ class AuthController {
 		}
 	}
 
+	//[GET] /api/v1/auth/current-user
 	async currentUser(req, res, next) {
 		try {
 			const token = req.headers['authorization'].split(' ')[1];

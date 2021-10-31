@@ -1,10 +1,11 @@
 require('dotenv').config();
-const dbUsers = require('./model/users');
-const dbPosts = require('./model/posts');
+const dbUsers = require('../model/users');
+const dbPosts = require('../model/posts');
 
 const jwt = require('jsonwebtoken');
 
 class PostController {
+	//[GET] /api/v1/users/user/contact?idUser=...
 	async getContact(req, res, next) {
 		try {
 			const { idUser } = req.query;

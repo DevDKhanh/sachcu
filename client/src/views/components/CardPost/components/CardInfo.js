@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { BsClockHistory } from 'react-icons/bs';
 
+import LoadingPlaceHolder from '../../Effect/LoadingPlaceHolder';
 import { convertTime } from '../../../../utils/convertTime';
 import usersAPI from '../../../../api/usersAPI';
 import Title from './Title';
@@ -12,6 +13,7 @@ function CardInfo({ data }) {
 	const [category, setCategory] = useState({});
 	const [timePost, setTimePost] = useState();
 	const [user, setUser] = useState({});
+	const [load, setLoad] = useState(true);
 
 	useEffect(() => {
 		if (data.category) {
@@ -54,9 +56,16 @@ function CardInfo({ data }) {
 			<p className="card-info__time">
 				<BsClockHistory />
 				&nbsp; {timePost}
+				<LoadingPlaceHolder dependency={!timePost} />
 			</p>
-			<p className="card-info__text">Thể loại: {category?.text}</p>
-			<p className="card-info__text">Tác giả: {data.author}</p>
+			<p className="card-info__text">
+				Thể loại: {category?.text}
+				<LoadingPlaceHolder dependency={!category?.text} />
+			</p>
+			<p className="card-info__text">
+				Tác giả: {data.author}
+				<LoadingPlaceHolder dependency={!data.author} />
+			</p>
 			<div className="card-info__user">
 				<div className="avatar">
 					<img
@@ -64,11 +73,16 @@ function CardInfo({ data }) {
 							e.target.onerror = null;
 							e.target.src = PlaceHolderUser;
 						}}
+						onLoad={() => setLoad(false)}
 						src={user.avatar || ''}
 						alt={`avatar`}
 					/>
+					<LoadingPlaceHolder dependency={load} />
 				</div>
-				<p>{user.firstName}</p>
+				<p className="name-user">
+					{user.firstName}
+					<LoadingPlaceHolder dependency={!user.firstName} />
+				</p>
 			</div>
 		</NavLink>
 	);

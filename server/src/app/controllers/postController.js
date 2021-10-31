@@ -1,12 +1,18 @@
 require('dotenv').config();
-const dbUsers = require('./model/users');
-const dbPosts = require('./model/posts');
-const dbStarReviews = require('./model/starReviews');
+const dbUsers = require('../model/users');
+const dbPosts = require('../model/posts');
+const dbStarReviews = require('../model/starReviews');
 
 const jwt = require('jsonwebtoken');
+const sanitizer = require('sanitizer');
+
+//Check xss
+const xss = str => {
+	return sanitizer.sanitize(sanitizer.escape(str));
+};
 
 class PostController {
-	//get an post
+	//[GET] /api/v1/posts/post?slug=...
 	async getPost(req, res, next) {
 		try {
 			const { slug } = req.query;
@@ -41,7 +47,7 @@ class PostController {
 		}
 	}
 
-	//get multiple  post
+	//[GET] /api/v1/posts?category=...&limit=...
 	async getPosts(req, res, next) {
 		try {
 			const { category, limit } = req.query;
@@ -81,7 +87,7 @@ class PostController {
 		}
 	}
 
-	//create reviews
+	//[POST] /api/v1/posts/reviews
 	async postReviews(req, res, next) {
 		try {
 			const { star, idUser, slug } = req.body;
@@ -160,6 +166,7 @@ class PostController {
 		}
 	}
 
+	//[GET] /api/v1/posts/reviews?slug=...
 	async getStarReviews(req, res, next) {
 		try {
 			const { slug } = req.query;
