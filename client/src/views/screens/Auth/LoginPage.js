@@ -14,12 +14,14 @@ function LoginPage() {
 	const [dataForm, setDataForm] = useState({});
 	const [loading, setLoading] = useState(false);
 
+	/********** update state date form **********/
 	const handleChange = e => {
 		const key = e.target.name;
 		const value = e.target.value;
 		setDataForm(prev => ({ ...prev, [key]: value }));
 	};
 
+	/********** submit form login **********/
 	const handleSubmit = e => {
 		e.preventDefault();
 		setLoading(true);
@@ -28,6 +30,7 @@ function LoginPage() {
 				const res = await useAPI.login(dataForm);
 				setLoading(false);
 				if (res.status === 1) {
+					/********** update state user login **********/
 					dispatch({
 						type: typeUser.USER_LOGIN,
 						payload: {

@@ -14,6 +14,7 @@ function FormRating({ onClose, idUser, slug }) {
 		setStar(numStar);
 	};
 
+	/********** update rating for post**********/
 	const handleSubmitRating = () => {
 		if (star > 0 && star <= 5) {
 			setItSubmit(true);

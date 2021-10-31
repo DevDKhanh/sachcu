@@ -16,6 +16,7 @@ function Comment({ content, idUser, time, isReply = false, slug, id }) {
 	const [showReply, setShowReply] = useState(false);
 	const [user, setUser] = useState({});
 
+	/********** time create post **********/
 	useEffect(() => {
 		let timeoutId;
 		if (time) {
@@ -27,6 +28,7 @@ function Comment({ content, idUser, time, isReply = false, slug, id }) {
 		return () => clearTimeout(timeoutId);
 	}, [time]);
 
+	/********** get user info from id **********/
 	useEffect(() => {
 		if (idUser) {
 			(async () => {

@@ -13,12 +13,14 @@ function RegisterPage() {
 	const [dataForm, setDataForm] = useState({});
 	const [loading, setLoading] = useState(false);
 
+	/********** update state data form **********/
 	const handleChange = e => {
 		const key = e.target.name;
 		const value = e.target.value;
 		setDataForm(prev => ({ ...prev, [key]: value }));
 	};
 
+	/********** submit form register **********/
 	const handleSubmit = e => {
 		e.preventDefault();
 		setLoading(true);
@@ -27,6 +29,7 @@ function RegisterPage() {
 				const res = await authAPI.register(dataForm);
 				setLoading(false);
 				if (res.status === 1) {
+					/********** update state user login then create user successfully **********/
 					dispatch({
 						type: typeUser.USER_REGISTER,
 						payload: {

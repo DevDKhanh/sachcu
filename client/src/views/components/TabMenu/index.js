@@ -9,12 +9,15 @@ import { RiProfileLine } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
 import * as typeUser from '../../../actions/typeUser';
+import AvatarImg from '../AvatarImg';
 import { ProtectedComponent } from '../../../utils/Protected';
 import PlaceHolderUser from '../../../assets/images/user-placeholder-image.jpg';
 import './style/style.scss';
 
 function TabMenu({ isShow, onShow, user }) {
 	const dispatch = useDispatch();
+
+	/********** Logout user **********/
 	const handleLogout = () => {
 		dispatch({ type: typeUser.USER_LOGOUT });
 		toast.info('Đăng xuất thành công!');
@@ -31,16 +34,7 @@ function TabMenu({ isShow, onShow, user }) {
 						<MdDoubleArrow />
 					</span>
 					<div className="info-user">
-						<div className="avatar">
-							<img
-								onError={e => {
-									e.target.onerror = null;
-									e.target.src = PlaceHolderUser;
-								}}
-								src=""
-								alt={`${user.firstName} ${user.lastName}`}
-							/>
-						</div>
+						<AvatarImg avatar={user.avatar} />
 						<div className="actions">
 							<h4 className="text-name">{`${user.firstName} ${user.lastName}`}</h4>
 							<NavLink

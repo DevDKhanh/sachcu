@@ -22,11 +22,13 @@ function FormComment({
 	const [comment, setComment] = useState('');
 	const [submit, setSubMit] = useState(false);
 
+	/********** compartment form submit with event default **********/
 	const handleSubMit = e => {
 		e.preventDefault();
 		setSubMit(true);
 	};
 
+	/********** compartment create new line then Press Enter **********/
 	const handleEnter = e => {
 		const keyCode = e.which || e.keyCode;
 		if (keyCode === 13) {
@@ -35,11 +37,13 @@ function FormComment({
 		keyCode === 13 && e.preventDefault();
 	};
 
+	/********** update State comment then input onChange **********/
 	const handleChange = e => {
 		const content = e.target.value;
 		setComment(content.trim());
 	};
 
+	/********** clear content input then slug change **********/
 	useEffect(() => setComment(''), [slug]);
 
 	useEffect(() => {

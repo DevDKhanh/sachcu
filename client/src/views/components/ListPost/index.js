@@ -14,6 +14,7 @@ function ListPost({
 }) {
 	const [posts, setPosts] = useState([]);
 
+	/********** get all post **********/
 	useEffect(() => {
 		(async () => {
 			const res = await postAPI.getPosts(category, litmit);

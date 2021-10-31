@@ -3,16 +3,10 @@ import React, { useState, useEffect } from 'react';
 import FormComment from '../../FormComment/index';
 import '../style/commentControl.scss';
 
-function CommentControl({
-	isReply,
-	timeComment,
-	id,
-	slug,
-	onSetShowReply,
-	onSetCommentsReply,
-}) {
+function CommentControl({ isReply, timeComment, id, slug, onSetShowReply }) {
 	const [showForm, setShowForm] = useState(false);
 
+	/********** show comment reply then form comment reply show **********/
 	useEffect(() => {
 		if (showForm) {
 			onSetShowReply(true);

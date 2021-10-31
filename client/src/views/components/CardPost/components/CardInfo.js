@@ -14,6 +14,7 @@ function CardInfo({ data }) {
 	const [timePost, setTimePost] = useState();
 	const [user, setUser] = useState({});
 
+	/********** get text category **********/
 	useEffect(() => {
 		if (data.category) {
 			setCategory(
@@ -23,6 +24,7 @@ function CardInfo({ data }) {
 		return () => setCategory({});
 	}, [data.category]);
 
+	/********** time create Post **********/
 	useEffect(() => {
 		let timeoutId;
 		if (data.createdAt) {
@@ -34,6 +36,7 @@ function CardInfo({ data }) {
 		return () => clearTimeout(timeoutId);
 	}, [data.createdAt]);
 
+	/********** get user info from id **********/
 	useEffect(() => {
 		if (data.idUser) {
 			(async () => {
