@@ -16,6 +16,27 @@
 	animation: loadingPlaceHolder2 1s linear infinite alternate;
 }
 
+.effect-loading-data {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+
+	.text {
+		font-weight: 600;
+		color: rgb(114, 114, 114);
+	}
+
+	.icon {
+		margin-right: 1rem;
+		width: 45px;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+}
+
 //**********Key frame*************
 
 @keyframes loadingPlaceHolder1 {

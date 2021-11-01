@@ -4,7 +4,7 @@
 	position: sticky;
 	top: calc($heightHeader + 3.2rem);
 	background-color: #fff;
-	height: 80vh;
+	min-height: 80vh;
 	padding: 0.5rem;
 	display: flex;
 	flex-direction: column;

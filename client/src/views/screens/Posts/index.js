@@ -10,7 +10,9 @@ import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import LoadingData from '../../components/Effect/LoadingData';
 import { SocketContext } from '../../../context/socket';
+import { ProtectedComponent } from '../../../utils/Protected';
 import commentsAPI from '../../../api/commentsAPI';
 import postAPI from '../../../api/postAPI';
 import ListSuggest from './components/ListSuggest';
@@ -24,9 +26,10 @@ function PostPage() {
 	const socket = useContext(SocketContext);
 	const history = useHistory();
 	const { slug } = useParams();
-	const [disabledLoadComment, setDisabledLoadComment] = useState(false);
-	/********** pagecomment is number comment's page ... default is 1 -> start page 1**********/
-	const [pageComment, setPageComment] = useState(1);
+	const [disabledLoadComment, setDisabledLoadComment] = useState(true);
+	const [isLoad, setIsLoad] = useState(true);
+	const [isLoadMore, setIsLoadMore] = useState(false);
+	const [pageComment, setPageComment] = useState(1); // pagecomment is number comment's page ... default is 1 -> start page 1
 	const [comments, setComments] = useState([]);
 	const [post, setPost] = useState({});
 	const [posts, setPosts] = useState([]);
@@ -46,7 +49,8 @@ function PostPage() {
 		setComments([]);
 		setPageComment(1);
 		setPosts([]);
-		setDisabledLoadComment(false);
+		setIsLoad(true);
+		setDisabledLoadComment(true);
 	}, [slug]);
 
 	/********** get posts suggest **********/
@@ -79,9 +83,13 @@ function PostPage() {
 					pageComment,
 				);
 				if (resComment.data) {
+					setIsLoadMore(false);
+					setIsLoad(false);
 					setComments(prev => [...prev, ...resComment.data]);
 					if (pageComment * limit >= resComment.countComments) {
 						setDisabledLoadComment(true);
+					} else {
+						setDisabledLoadComment(false);
 					}
 				}
 			} catch (err) {}
@@ -122,8 +130,11 @@ function PostPage() {
 	}, [socket, slug]);
 
 	const handleLoadMoreComment = useCallback(() => {
-		!disabledLoadComment && setPageComment(prev => prev + 1);
-	}, [disabledLoadComment]);
+		if (!disabledLoadComment) {
+			setIsLoadMore(true);
+			!isLoadMore && setPageComment(prev => prev + 1);
+		}
+	}, [disabledLoadComment, isLoadMore]);
 
 	return (
 		<div className="page-main">
@@ -147,19 +158,35 @@ function PostPage() {
 									slug={slug}
 									placeholder="Viết bình luận của bạn"
 								/>
-								<ListComment comments={comments} />
-								{!disabledLoadComment && (
+								<LoadingData
+									isLoad={isLoad}
+									text="Đang tải bình luận..."
+								/>
+								<ProtectedComponent dependency={!isLoad}>
+									<ListComment comments={comments} />
+								</ProtectedComponent>
+								<ProtectedComponent
+									dependency={!disabledLoadComment}
+								>
 									<div
 										role="button"
 										onClick={handleLoadMoreComment}
 										className="btn--load-more-comment"
 									>
-										Tải thêm bình luận{' '}
-										<span className="icon">
-											<RiArrowDropDownLine />
-										</span>
+										<ProtectedComponent
+											dependency={!isLoadMore}
+										>
+											Tải thêm bình luận{' '}
+											<span className="icon">
+												<RiArrowDropDownLine />
+											</span>
+										</ProtectedComponent>
+										<LoadingData
+											isLoad={isLoadMore}
+											text="Tải thêm bình luận..."
+										/>
 									</div>
-								)}
+								</ProtectedComponent>
 							</div>
 						</div>
 						<div className="col l-3">

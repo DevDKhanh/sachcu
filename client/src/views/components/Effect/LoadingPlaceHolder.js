@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './style/style.scss';
+
 function LoadingPlaceHolder({
 	styleLoading = '1',
 	className = '',
