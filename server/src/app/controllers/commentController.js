@@ -15,7 +15,8 @@ class CommentController {
 	//[GET] /api/v1/comments/page?slug=...&limit=...
 	async getCommentOfPage(req, res, next) {
 		try {
-			const { slug, limit, isReply } = req.query;
+			const { slug, limit, isReply, page } = req.query;
+			const numberLimit = Number(limit) || 3;
 			if (slug) {
 				let dataComments;
 				let countComments;
@@ -26,15 +27,17 @@ class CommentController {
 					});
 					dataComments = await dbReplyComments
 						.find({ idComment: slug })
-						.limit(Number(limit) || 3)
+						.skip(page * numberLimit - numberLimit)
+						.limit(numberLimit)
 						.sort({ createdAt: -1 });
 				} else {
 					countComments = await dbComments.countDocuments({
-						idComment: slug,
+						slug,
 					});
 					dataComments = await dbComments
 						.find({ slug })
-						.limit(Number(limit) || 3)
+						.skip(page * numberLimit - numberLimit)
+						.limit(numberLimit)
 						.sort({ createdAt: -1 });
 				}
 

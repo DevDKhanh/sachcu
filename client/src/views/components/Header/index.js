@@ -16,7 +16,9 @@ function Header() {
 			<nav className="grid wide">
 				<div className="nav">
 					<Logo />
-					<Navigation />
+					<ProtectedComponent dependency={isLogged}>
+						<Navigation />
+					</ProtectedComponent>
 					<ProtectedComponent dependency={!isLogged}>
 						<Control />
 					</ProtectedComponent>

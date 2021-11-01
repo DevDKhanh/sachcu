@@ -4,7 +4,7 @@ function HomePage() {
 	return (
 		<div className="page-main">
 			<div className="grid wide">
-				<ListPost title="Mới nhất" litmit={4} />
+				<ListPost title="Mới nhất" limit={4} />
 				<ListPost title="Công nghệ thông tin" category="cntt" />
 				<ListPost title="Sách văn" category="van" />
 				<ListPost title="Sách Toán" category="toan" />

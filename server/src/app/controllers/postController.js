@@ -50,19 +50,27 @@ class PostController {
 	//[GET] /api/v1/posts?category=...&limit=...
 	async getPosts(req, res, next) {
 		try {
-			const { category, limit } = req.query;
+			const { category, limit, page } = req.query;
+			const numberLimit = Number(limit) || 4;
 			let posts;
+			let countPost;
 
 			if (category === 'all') {
 				posts = await dbPosts
 					.find()
-					.limit(Number(limit))
+					.skip(page * numberLimit - numberLimit)
+					.limit(numberLimit)
 					.sort({ createdAt: -1 });
+				countPost = await dbPosts.countDocuments();
 			} else if (category) {
 				posts = await dbPosts
 					.find({ category: category })
-					.limit(Number(limit))
+					.skip(page * numberLimit - numberLimit)
+					.limit(numberLimit)
 					.sort({ createdAt: -1 });
+				countPost = await dbPosts.countDocuments({
+					category: category,
+				});
 			}
 
 			if (posts) {
@@ -70,6 +78,7 @@ class PostController {
 					status: 1,
 					code: 200,
 					data: [...posts],
+					countPost,
 				});
 			} else {
 				return res.status(200).json({

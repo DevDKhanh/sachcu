@@ -1,4 +1,11 @@
-import React, { useLayoutEffect, useEffect, useContext, useState } from 'react';
+import React, {
+	useLayoutEffect,
+	useEffect,
+	useContext,
+	useState,
+	useCallback,
+} from 'react';
+import { RiArrowDropDownLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -16,12 +23,15 @@ import './style/style.scss';
 function PostPage() {
 	const socket = useContext(SocketContext);
 	const history = useHistory();
-	const [comments, setComments] = useState([]);
 	const { slug } = useParams();
+	const [disabledLoadComment, setDisabledLoadComment] = useState(false);
+	/********** pagecomment is number comment's page ... default is 1 -> start page 1**********/
+	const [pageComment, setPageComment] = useState(1);
+	const [comments, setComments] = useState([]);
 	const [post, setPost] = useState({});
 	const [posts, setPosts] = useState([]);
 
-	//===== < handle connect room >=====
+	/********** handle connect room  **********/
 	useEffect(() => {
 		socket.emit('room:join', { slug });
 		return () => {
@@ -30,7 +40,16 @@ function PostPage() {
 		};
 	}, [socket, slug]);
 
-	//=====< get posts suggest >=====
+	useEffect(() => {
+		window.scroll(0, 0);
+		/********** reset state when slug change **********/
+		setComments([]);
+		setPageComment(1);
+		setPosts([]);
+		setDisabledLoadComment(false);
+	}, [slug]);
+
+	/********** get posts suggest **********/
 	useEffect(() => {
 		(async () => {
 			const res = await postAPI.getPosts(post.category, 3);
@@ -46,28 +65,39 @@ function PostPage() {
 				setPosts(filter);
 			}
 		})();
-
-		return () => setPosts([]);
 	}, [post.category, post._id]);
 
-	//=====< get data this post >=====
+	/********** Call api get comment **********/
 	useLayoutEffect(() => {
-		window.scroll(0, 0);
 		(async () => {
 			try {
-				const [resPost, resComment] = await Promise.all([
-					postAPI.getPost(slug),
-					commentsAPI.getCommentOfPage(slug),
-				]);
+				const limit = 3;
+				const resComment = await commentsAPI.getCommentOfPage(
+					slug,
+					limit,
+					false,
+					pageComment,
+				);
+				if (resComment.data) {
+					setComments(prev => [...prev, ...resComment.data]);
+					if (pageComment * limit >= resComment.countComments) {
+						setDisabledLoadComment(true);
+					}
+				}
+			} catch (err) {}
+		})();
+	}, [slug, pageComment]);
+
+	/********** get this post data **********/
+	useLayoutEffect(() => {
+		(async () => {
+			try {
+				const resPost = await postAPI.getPost(slug);
 				if (resPost.status === 1) {
 					setPost(resPost.data);
 				} else {
 					toast.info('Không tìm thấy bài viết');
 					history.push('/');
-				}
-
-				if (resComment.data) {
-					setComments([...resComment.data]);
 				}
 			} catch (err) {
 				toast.error('Đã xảy ra lỗi');
@@ -76,11 +106,11 @@ function PostPage() {
 		})();
 
 		return () => {
-			setComments([]);
 			setPost({});
 		};
 	}, [slug, history]);
 
+	/********** Update comments when there are new comments **********/
 	useEffect(() => {
 		socket.on('comment:successCreate', data => {
 			setComments(prev => [data, ...prev]);
@@ -90,6 +120,10 @@ function PostPage() {
 			socket.off('comment:successCreate');
 		};
 	}, [socket, slug]);
+
+	const handleLoadMoreComment = useCallback(() => {
+		!disabledLoadComment && setPageComment(prev => prev + 1);
+	}, [disabledLoadComment]);
 
 	return (
 		<div className="page-main">
@@ -114,11 +148,22 @@ function PostPage() {
 									placeholder="Viết bình luận của bạn"
 								/>
 								<ListComment comments={comments} />
+								{!disabledLoadComment && (
+									<div
+										role="button"
+										onClick={handleLoadMoreComment}
+										className="btn--load-more-comment"
+									>
+										Tải thêm bình luận{' '}
+										<span className="icon">
+											<RiArrowDropDownLine />
+										</span>
+									</div>
+								)}
 							</div>
 						</div>
 						<div className="col l-3">
 							<ListSuggest
-								count={posts.length}
 								posts={posts}
 								category={post.category}
 								title="Gợi ý"

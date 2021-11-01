@@ -28,7 +28,7 @@ function CommentReply({
 	useEffect(() => {
 		//=====< Get data comment reply >=====
 		(async () => {
-			const res = await commentsAPI.getCommentOfPage(id, 100, true);
+			const res = await commentsAPI.getCommentOfPage(id, 50, true, 1);
 			if (res.data) {
 				setCountComment(res.countComments);
 				onSetCommentsReply([...res.data]);

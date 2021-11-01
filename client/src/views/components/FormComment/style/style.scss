@@ -1,5 +1,9 @@
 @import '../../../../style/variables';
 
+h2.title {
+	display: block;
+	margin-bottom: 1rem;
+}
 .form-comment {
 	display: flex;
 	align-items: center;

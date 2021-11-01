@@ -7,8 +7,8 @@ const meAPI = {
 		const url = `${routeName}/post?slug=${slug}`;
 		return axiosClient.get(url);
 	},
-	getPosts: (category, limit = 8) => {
-		const url = `${routeName}?category=${category}&limit=${limit}`;
+	getPosts: (category, limit = 8, page = 1) => {
+		const url = `${routeName}?category=${category}&limit=${limit}&page=${page}`;
 		return axiosClient.get(url);
 	},
 	postReviews: data => {

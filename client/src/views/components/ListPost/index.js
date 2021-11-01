@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState, useRef, memo } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { ProtectedComponent } from '../../../utils/Protected';
@@ -9,26 +9,55 @@ import './style/style.scss';
 function ListPost({
 	title = 'Danh sách bài đăng',
 	category = 'all',
-	litmit = 8,
+	limit = 8,
+	page = 1,
 	seemore = true,
 }) {
 	const [posts, setPosts] = useState([]);
+	const [numberPage, setNumberPage] = useState(Number(page));
+	const [disabledLoad, setDisabledLoad] = useState(false);
+	const listRef = useRef();
 
 	/********** get all post **********/
 	useEffect(() => {
 		(async () => {
-			const res = await postAPI.getPosts(category, litmit);
+			const res = await postAPI.getPosts(category, limit, numberPage);
 			if (res.data) {
-				setPosts(res.data);
+				setPosts(prev => [...prev, ...res.data]);
+				if (limit * numberPage >= res.countPost) {
+					setDisabledLoad(true);
+				}
 			}
 		})();
+	}, [category, limit, numberPage]);
 
-		return () => setPosts([]);
-	}, [category, litmit]);
+	useEffect(() => {
+		if (!seemore) {
+			const handleScroll = () => {
+				const screenHeight = window.innerHeight;
+				const scrollTop = window.scrollY;
+				const documentHeight = listRef.current?.clientHeight;
+
+				if (scrollTop + screenHeight > documentHeight - 150) {
+					!disabledLoad && nextPage();
+				}
+			};
+
+			const nextPage = () => {
+				setNumberPage(prev => prev + 1);
+			};
+
+			window.addEventListener('scroll', handleScroll);
+
+			return () => {
+				window.removeEventListener('scroll', handleScroll);
+			};
+		}
+	}, [seemore, disabledLoad]);
 
 	return (
 		<ProtectedComponent dependency={posts.length > 0}>
-			<div className="list-posts">
+			<div className="list-posts" ref={listRef}>
 				<div className="list-posts-header">
 					<div className="title">{title}</div>
 					{seemore && (

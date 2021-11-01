@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import * as typeUser from '../../../actions/typeUser';
 import AvatarImg from '../AvatarImg';
 import { ProtectedComponent } from '../../../utils/Protected';
-import PlaceHolderUser from '../../../assets/images/user-placeholder-image.jpg';
 import './style/style.scss';
 
 function TabMenu({ isShow, onShow, user }) {

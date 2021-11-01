@@ -21,7 +21,7 @@ function CategoryPage() {
 				<ListPost
 					title={category ? `Sách ${category.text}` : 'Mới nhất'}
 					category={role}
-					litmit={8}
+					limit={4}
 					seemore={false}
 				/>
 			</div>

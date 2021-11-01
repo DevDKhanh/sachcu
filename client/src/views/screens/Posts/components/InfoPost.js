@@ -13,7 +13,7 @@ import FormRating from '../../../components/Rating/FormRating';
 import { ProtectedComponent } from '../../../../utils/Protected';
 
 function InfoPost({ post }) {
-	const { infoUser } = useSelector(state => state.user);
+	const { infoUser, isLogged } = useSelector(state => state.user);
 	const [category, setCategory] = useState({});
 	const [star, setStar] = useState();
 	const [timePost, setTimePost] = useState();
@@ -106,29 +106,33 @@ function InfoPost({ post }) {
 					<p className="text">{post.content}</p>
 					<LoadingPlaceHolder dependency={!post.content} />
 				</div>
-				<div className="info-post__contact">
-					<a
-						className="btn btn-contact-z"
-						target="_blank"
-						rel="noopener noreferrer"
-						href={`https://zalo.me/${user?.phone}`}
-					>
-						Liên hệ
-					</a>
-				</div>
+				<ProtectedComponent dependency={isLogged}>
+					<div className="info-post__contact">
+						<a
+							className="btn btn-contact-z"
+							target="_blank"
+							rel="noopener noreferrer"
+							href={`https://zalo.me/${user?.phone}`}
+						>
+							Liên hệ
+						</a>
+					</div>
+				</ProtectedComponent>
 				<div className="info-post__rating">
 					<ProtectedComponent dependency={star}>
 						<Rating star={star} />
-						<span
-							className="btn-rating"
-							onClick={() => setShowFormRating(true)}
-						>
-							Đánh giá
-						</span>
+						<ProtectedComponent dependency={isLogged}>
+							<span
+								className="btn-rating"
+								onClick={() => setShowFormRating(true)}
+							>
+								Đánh giá
+							</span>
+						</ProtectedComponent>
 					</ProtectedComponent>
 				</div>
 			</div>
-			<ProtectedComponent dependency={showFormRating}>
+			<ProtectedComponent dependency={showFormRating && isLogged}>
 				<FormRating
 					onClose={setShowFormRating}
 					idUser={infoUser.idUser}
