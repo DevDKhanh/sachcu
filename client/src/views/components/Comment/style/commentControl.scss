@@ -2,6 +2,8 @@
 
 .comment-item {
 	.control {
+		display: flex;
+		align-items: center;
 		padding-top: 0.3rem;
 		padding-bottom: 1rem;
 		.btn-reply {
@@ -29,6 +31,29 @@
 				border-radius: 50%;
 				transform: translateY(-50%);
 			}
+		}
+
+		.btn--actions {
+			font-size: 2.2rem;
+			padding-left: 0.5rem;
+			transition: 0.2s;
+			opacity: 0;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			&::after {
+				display: none;
+			}
+			&:hover {
+				color: #000;
+				cursor: pointer;
+			}
+		}
+	}
+
+	&:hover {
+		.btn--actions {
+			opacity: 1;
 		}
 	}
 }

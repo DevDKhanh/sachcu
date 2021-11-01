@@ -25,7 +25,7 @@ axiosClient.interceptors.response.use(
 		return response;
 	},
 	error => {
-		throw error;
+		if (!axios.isCancel(error)) throw error;
 	},
 );
 

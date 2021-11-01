@@ -1,7 +1,9 @@
-import React, { useState, memo } from 'react';
+import { useState, memo } from 'react';
 
-import LoadingPlaceHolder from '../../../components/Effect/LoadingPlaceHolder';
-import PlaceHolderImg from '../../../../assets/images/placeholder-image.png';
+import LoadingPlaceHolder from '../Effect/LoadingPlaceHolder';
+import PlaceHolderImg from '../../../assets/images/placeholder-image.png';
+
+import './style/style.scss';
 
 function PreviewPost({ title, img = '' }) {
 	const [loadImg, setLoadImg] = useState(true);

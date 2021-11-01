@@ -4,7 +4,7 @@ import LoadingPlaceHolder from '../Effect/LoadingPlaceHolder';
 
 import './style/style.scss';
 
-function AvatarImg({ avatar, alt = 'avatar', className = '' }) {
+function AvatarImg({ avatar = '', alt = 'avatar', className = '' }) {
 	const [loadImg, setLoadImg] = useState(true);
 	return (
 		<div className={`avatar ${className}`}>

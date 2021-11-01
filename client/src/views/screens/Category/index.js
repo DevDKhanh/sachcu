@@ -8,7 +8,6 @@ function CategoryPage() {
 	const { role } = useParams();
 
 	useLayoutEffect(() => {
-		window.scroll(0, 0);
 		if (role) {
 			setCategory(...listCategory.filter(item => item.value === role));
 		}

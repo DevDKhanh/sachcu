@@ -3,12 +3,14 @@ import { BsStarFill } from 'react-icons/bs';
 import LoadingOverlay from 'react-loading-overlay';
 import { toast } from 'react-toastify';
 
+import { useCancelToken } from '../../../hooks';
 import postAPI from '../../../api/postAPI';
 import './style/style.scss';
 
 function FormRating({ onClose, idUser, slug }) {
 	const [star, setStar] = useState(0);
 	const [isSubmit, setItSubmit] = useState(false);
+	const { newCancelToken } = useCancelToken();
 
 	const handleSelectStar = numStar => {
 		setStar(numStar);
@@ -25,7 +27,10 @@ function FormRating({ onClose, idUser, slug }) {
 						idUser,
 						slug,
 					};
-					const res = await postAPI.postReviews(data);
+					const res = await postAPI.postReviews(
+						data,
+						newCancelToken(),
+					);
 					if (res.status === 1) {
 						toast.success(res.message_vn);
 						onClose(false);

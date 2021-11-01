@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { BsClockHistory } from 'react-icons/bs';
 
+import { useCancelToken } from '../../../../hooks';
 import usersAPI from '../../../../api/usersAPI';
 import Title from './Title';
 import AvatarImg from '../../AvatarImg';
@@ -10,6 +11,7 @@ import listCategory from '../../../../constant/listCategory';
 import { convertTime } from '../../../../utils/convertTime';
 
 function CardInfo({ data }) {
+	const { newCancelToken } = useCancelToken();
 	const [category, setCategory] = useState({});
 	const [timePost, setTimePost] = useState();
 	const [user, setUser] = useState({});
@@ -41,7 +43,11 @@ function CardInfo({ data }) {
 		if (data.idUser) {
 			(async () => {
 				try {
-					const res = await usersAPI.getContact(data.idUser);
+					/********** call api **********/
+					const res = await usersAPI.getContact(
+						data.idUser,
+						newCancelToken(),
+					);
 					if (res.status === 1) {
 						setUser(res.data);
 					}
@@ -49,8 +55,10 @@ function CardInfo({ data }) {
 			})();
 		}
 
-		return () => setUser({});
-	}, [data.idUser]);
+		return () => {
+			setUser({});
+		};
+	}, [data.idUser, newCancelToken]);
 
 	return (
 		<NavLink to={`/post/${data.slug}`} className="card-info">

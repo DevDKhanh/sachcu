@@ -3,7 +3,6 @@ const dbUsers = require('../model/users');
 const dbPosts = require('../model/posts');
 const dbComments = require('../model/comments');
 const dbReplyComments = require('../model/replyComment');
-const delay = require('delay');
 
 const jwt = require('jsonwebtoken');
 const sanitizer = require('sanitizer');
@@ -21,9 +20,6 @@ class CommentController {
 			if (slug) {
 				let dataComments;
 				let countComments;
-
-				await delay(3000);
-
 				if (isReply == 'true') {
 					countComments = await dbReplyComments.countDocuments({
 						idComment: slug,

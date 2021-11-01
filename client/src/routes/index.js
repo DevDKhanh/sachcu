@@ -8,7 +8,8 @@ import RegisterPage from '../views/screens/Auth/RegisterPage';
 import HomePage from '../views/screens/Home';
 import CategoryPage from '../views/screens/Category';
 import PostPage from '../views/screens/Posts';
-import MeAddPost from '../views/screens/Me/MeAddPost';
+import AddPostPage from '../views/screens/Me/AddPostPage';
+import MyPostPage from '../views/screens/Me/MyPostPage';
 
 function Routers() {
 	const { isLogged } = useSelector(state => state.user);
@@ -26,7 +27,14 @@ function Routers() {
 				redirect="/login"
 				dependency={isLogged}
 			>
-				<MeAddPost />
+				<AddPostPage />
+			</ProtectedRoute>
+			<ProtectedRoute
+				path="/me/my-post"
+				redirect="/login"
+				dependency={isLogged}
+			>
+				<MyPostPage />
 			</ProtectedRoute>
 			<ProtectedRoute path="/login" redirect="/" dependency={!isLogged}>
 				<LoginPage />

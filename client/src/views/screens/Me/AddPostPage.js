@@ -4,6 +4,7 @@ import { FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import LoadingOverlay from 'react-loading-overlay';
 
+import { useCancelToken } from '../../../hooks';
 import meAPI from '../../../api/meAPI';
 import listCategory from '../../../constant/listCategory';
 import InputText from './components/InputText';
@@ -16,7 +17,8 @@ import {
 } from '../../../utils/handleContentEditable';
 import './style/style.scss';
 
-function MeAddPost() {
+function AddPostPage() {
+	const { newCancelToken } = useCancelToken();
 	const history = useHistory();
 	const [loading, setLoading] = useState(false);
 	const [preview, setPreview] = useState(null);
@@ -76,7 +78,7 @@ function MeAddPost() {
 			formData.append('category', category);
 			(async () => {
 				try {
-					const res = await meAPI.addPost(formData);
+					const res = await meAPI.addPost(formData, newCancelToken());
 					setLoading(false);
 					if (res.status === 1) {
 						history.push(`/post/${res.slug}`);
@@ -192,4 +194,4 @@ function MeAddPost() {
 	);
 }
 
-export default MeAddPost;
+export default AddPostPage;

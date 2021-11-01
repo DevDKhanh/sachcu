@@ -3,9 +3,9 @@ import axiosClient from '.';
 const routeName = '/users';
 
 const usersAPI = {
-	getContact: idUser => {
+	getContact: (idUser, tokenAxios) => {
 		const url = `${routeName}/user/contact?idUser=${idUser}`;
-		return axiosClient.get(url);
+		return axiosClient.get(url, { cancelToken: tokenAxios });
 	},
 };
 

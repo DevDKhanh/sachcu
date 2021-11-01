@@ -3,13 +3,13 @@ import axiosClient from '.';
 const routeName = '/auth';
 
 const authAPI = {
-	register: data => {
+	register: (data, tokenAxios) => {
 		const url = `${routeName}/register`;
-		return axiosClient.post(url, { ...data });
+		return axiosClient.post(url, { ...data }, { cancelToken: tokenAxios });
 	},
-	login: data => {
+	login: (data, tokenAxios) => {
 		const url = `${routeName}/login`;
-		return axiosClient.post(url, { ...data });
+		return axiosClient.post(url, { ...data }, { cancelToken: tokenAxios });
 	},
 	currentUser: () => {
 		const url = `${routeName}/current-user`;

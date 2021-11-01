@@ -1,8 +1,10 @@
 import React, { memo } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { ProtectedComponent } from '../../../../utils/Protected';
-import CardInfo from '../../../components/CardPost/components/CardInfo';
+import { ProtectedComponent } from '../../../utils/Protected';
+import CardInfo from '../CardPost/components/CardInfo';
+
+import './style/style.scss';
 
 function ListSuggest({ posts = null, category, title }) {
 	return (

@@ -10,22 +10,24 @@ import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import LoadingData from '../../components/Effect/LoadingData';
+import { useCancelToken } from '../../../hooks';
 import { SocketContext } from '../../../context/socket';
 import { ProtectedComponent } from '../../../utils/Protected';
+import LoadingData from '../../components/Effect/LoadingData';
 import commentsAPI from '../../../api/commentsAPI';
 import postAPI from '../../../api/postAPI';
-import ListSuggest from './components/ListSuggest';
-import InfoPost from './components/InfoPost';
-import PreviewPost from './components/PreviewPost';
+import ListSuggest from '../../components/ListSuggest';
+import InfoPost from '../../components/InfoPost';
+import PreviewPost from '../../components/PreviewPost';
 import ListComment from '../../components/ListComment';
 import FormComment from '../../components/FormComment';
 import './style/style.scss';
 
 function PostPage() {
-	const socket = useContext(SocketContext);
 	const history = useHistory();
+	const socket = useContext(SocketContext);
 	const { slug } = useParams();
+	const { newCancelToken } = useCancelToken();
 	const [disabledLoadComment, setDisabledLoadComment] = useState(true);
 	const [isLoad, setIsLoad] = useState(true);
 	const [isLoadMore, setIsLoadMore] = useState(false);
@@ -43,9 +45,8 @@ function PostPage() {
 		};
 	}, [socket, slug]);
 
+	/********** reset state when slug change **********/
 	useEffect(() => {
-		window.scroll(0, 0);
-		/********** reset state when slug change **********/
 		setComments([]);
 		setPageComment(1);
 		setPosts([]);
@@ -56,9 +57,16 @@ function PostPage() {
 	/********** get posts suggest **********/
 	useEffect(() => {
 		(async () => {
-			const res = await postAPI.getPosts(post.category, 3);
-			if (res.data) {
+			const res = await postAPI.getPosts(
+				post.category,
+				3,
+				1,
+				newCancelToken(),
+			);
+			if (res && res.data) {
 				let count = 0;
+
+				//=====< Filter get 2 post >=====
 				const filter = [...res.data].filter(value => {
 					if (value._id !== post._id && count < 2) {
 						count++;
@@ -69,7 +77,7 @@ function PostPage() {
 				setPosts(filter);
 			}
 		})();
-	}, [post.category, post._id]);
+	}, [post.category, post._id, newCancelToken]);
 
 	/********** Call api get comment **********/
 	useLayoutEffect(() => {
@@ -81,6 +89,7 @@ function PostPage() {
 					limit,
 					false,
 					pageComment,
+					newCancelToken(),
 				);
 				if (resComment.data) {
 					setIsLoadMore(false);
@@ -94,7 +103,7 @@ function PostPage() {
 				}
 			} catch (err) {}
 		})();
-	}, [slug, pageComment]);
+	}, [slug, pageComment, newCancelToken]);
 
 	/********** get this post data **********/
 	useLayoutEffect(() => {
@@ -130,9 +139,9 @@ function PostPage() {
 	}, [socket, slug]);
 
 	const handleLoadMoreComment = useCallback(() => {
-		if (!disabledLoadComment) {
+		if (!disabledLoadComment && !isLoadMore) {
 			setIsLoadMore(true);
-			!isLoadMore && setPageComment(prev => prev + 1);
+			setPageComment(prev => prev + 1);
 		}
 	}, [disabledLoadComment, isLoadMore]);
 

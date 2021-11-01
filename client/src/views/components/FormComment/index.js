@@ -21,7 +21,7 @@ function FormComment({
 	title = 'Bình luận',
 }) {
 	const socket = useContext(SocketContext);
-	const { isLogged } = useSelector(state => state.user);
+	const { isLogged, infoUser } = useSelector(state => state.user);
 	const [comment, setComment] = useState('');
 	const [submit, setSubMit] = useState(false);
 
@@ -70,14 +70,17 @@ function FormComment({
 				setSubMit(false);
 			}
 		}
-		return () => socket.off('comment:create');
+		return () => {
+			socket.off('comment:create');
+			socket.off('commentReply:create');
+		};
 	}, [submit, comment, socket, slug, id, isReply]);
 	return (
 		<React.Fragment>
 			{!isReply && <h2 className="title">{title}</h2>}
 			<ProtectedComponent dependency={isLogged}>
 				<div className={`form-comment ${isReply && 'form--reply'}`}>
-					<AvatarImg avatar="" />
+					<AvatarImg avatar={infoUser.avatar} />
 					<form onSubmit={handleSubMit}>
 						<div className="group-form">
 							<div className="group-element">

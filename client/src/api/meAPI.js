@@ -4,9 +4,10 @@ import { getItemStorage } from '../utils/localStorage';
 const routeName = '/me';
 
 const meAPI = {
-	addPost: data => {
+	addPost: (data, tokenAxios) => {
 		const url = `${routeName}/post`;
 		return axiosClient.post(url, data, {
+			cancelToken: tokenAxios,
 			headers: {
 				Authorization: 'Bearer ' + getItemStorage('accessToken'),
 			},

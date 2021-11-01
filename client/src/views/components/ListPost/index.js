@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, memo } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { useCancelToken } from '../../../hooks';
 import { ProtectedComponent } from '../../../utils/Protected';
 import postAPI from '../../../api/postAPI';
 import CardPost from '../CardPost';
@@ -17,19 +18,28 @@ function ListPost({
 	const [numberPage, setNumberPage] = useState(Number(page));
 	const [disabledLoad, setDisabledLoad] = useState(false);
 	const listRef = useRef();
+	const { newCancelToken } = useCancelToken();
 
 	/********** get all post **********/
 	useEffect(() => {
 		(async () => {
-			const res = await postAPI.getPosts(category, limit, numberPage);
-			if (res.data) {
-				setPosts(prev => [...prev, ...res.data]);
-				if (limit * numberPage >= res.countPost) {
-					setDisabledLoad(true);
+			try {
+				//=====< call api >=====
+				const res = await postAPI.getPosts(
+					category,
+					limit,
+					numberPage,
+					newCancelToken(),
+				);
+				if (res.data) {
+					setPosts(prev => [...prev, ...res.data]);
+					if (limit * numberPage >= res.countPost) {
+						setDisabledLoad(true);
+					}
 				}
-			}
+			} catch (err) {}
 		})();
-	}, [category, limit, numberPage]);
+	}, [category, limit, numberPage, newCancelToken]);
 
 	useEffect(() => {
 		if (!seemore) {

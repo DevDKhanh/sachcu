@@ -2,11 +2,12 @@ import { useState, useEffect, memo } from 'react';
 // import { BsFlagFill } from 'react-icons/bs';
 
 import AvatarImg from '../AvatarImg';
+import { useCancelToken } from '../../../hooks';
 import { ProtectedComponent } from '../../../utils/Protected';
+import { convertTime } from '../../../utils/convertTime';
 import CommentReply from './components/CommentReply';
 import CommentControl from './components/CommentControl';
 import CommentText from './components/CommentText';
-import { convertTime } from '../../../utils/convertTime';
 import usersAPI from '../../../api/usersAPI';
 import './style/style.scss';
 
@@ -15,6 +16,7 @@ function Comment({ content, idUser, time, isReply = false, slug, id }) {
 	const [commentsReply, setCommentsReply] = useState([]);
 	const [showReply, setShowReply] = useState(false);
 	const [user, setUser] = useState({});
+	const { newCancelToken } = useCancelToken();
 
 	/********** time create post **********/
 	useEffect(() => {
@@ -33,7 +35,10 @@ function Comment({ content, idUser, time, isReply = false, slug, id }) {
 		if (idUser) {
 			(async () => {
 				try {
-					const res = await usersAPI.getContact(idUser);
+					const res = await usersAPI.getContact(
+						idUser,
+						newCancelToken(),
+					);
 					if (res.status === 1) {
 						setUser(res.data);
 					}
@@ -42,7 +47,7 @@ function Comment({ content, idUser, time, isReply = false, slug, id }) {
 		}
 
 		return () => setUser({});
-	}, [idUser]);
+	}, [idUser, newCancelToken]);
 
 	return (
 		<div className={`comment-item ${isReply && 'comment--reply'}`}>

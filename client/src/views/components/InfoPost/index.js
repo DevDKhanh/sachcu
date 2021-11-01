@@ -2,18 +2,21 @@ import React, { useEffect, useState, memo } from 'react';
 import { BsClockHistory } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 
-import LoadingPlaceHolder from '../../../components/Effect/LoadingPlaceHolder';
-import AvatarImg from '../../../components/AvatarImg';
-import usersAPI from '../../../../api/usersAPI';
-import postAPI from '../../../../api/postAPI';
-import { convertTime } from '../../../../utils/convertTime';
-import listCategory from '../../../../constant/listCategory';
-import Rating from '../../../components/Rating/Rating';
-import FormRating from '../../../components/Rating/FormRating';
-import { ProtectedComponent } from '../../../../utils/Protected';
+import { useCancelToken } from '../../../hooks';
+import { convertTime } from '../../../utils/convertTime';
+import { ProtectedComponent } from '../../../utils/Protected';
+import LoadingPlaceHolder from '../../components/Effect/LoadingPlaceHolder';
+import AvatarImg from '../../components/AvatarImg';
+import usersAPI from '../../../api/usersAPI';
+import postAPI from '../../../api/postAPI';
+import listCategory from '../../../constant/listCategory';
+import Rating from '../../components/Rating/Rating';
+import FormRating from '../../components/Rating/FormRating';
+import './style/style.scss';
 
 function InfoPost({ post }) {
 	const { infoUser, isLogged } = useSelector(state => state.user);
+	const { newCancelToken } = useCancelToken();
 	const [category, setCategory] = useState({});
 	const [star, setStar] = useState();
 	const [timePost, setTimePost] = useState();
@@ -45,8 +48,8 @@ function InfoPost({ post }) {
 			(async () => {
 				try {
 					const [resUser, resReviews] = await Promise.all([
-						usersAPI.getContact(post.idUser),
-						postAPI.getReviews(post.slug),
+						usersAPI.getContact(post.idUser, newCancelToken()),
+						postAPI.getReviews(post.slug, newCancelToken()),
 					]);
 
 					//set info user post
@@ -72,7 +75,7 @@ function InfoPost({ post }) {
 		return () => {
 			setUser({});
 		};
-	}, [post.idUser, post.slug]);
+	}, [post.idUser, post.slug, newCancelToken]);
 
 	return (
 		<React.Fragment>
@@ -96,15 +99,15 @@ function InfoPost({ post }) {
 				</div>
 				<div className="info-post__text">
 					Thể loại: {category?.text}
-					<LoadingPlaceHolder dependency={!category?.text} />
+					<LoadingPlaceHolder dependency={!user.lastName} />
 				</div>
 				<div className="info-post__text">
 					Tác giả: {post.author}
-					<LoadingPlaceHolder dependency={!post.author} />
+					<LoadingPlaceHolder dependency={!user.lastName} />
 				</div>
 				<div className="info-post__content">
 					<p className="text">{post.content}</p>
-					<LoadingPlaceHolder dependency={!post.content} />
+					<LoadingPlaceHolder dependency={!user.lastName} />
 				</div>
 				<ProtectedComponent dependency={isLogged}>
 					<div className="info-post__contact">

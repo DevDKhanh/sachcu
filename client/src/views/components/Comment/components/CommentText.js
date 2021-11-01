@@ -12,7 +12,7 @@ function CommentText({ lastName, firstName, content }) {
 			</div>
 			<div className="text-content">
 				{content}
-				<LoadingPlaceHolder dependency={!content} />
+				<LoadingPlaceHolder dependency={!lastName} />
 			</div>
 		</div>
 	);
