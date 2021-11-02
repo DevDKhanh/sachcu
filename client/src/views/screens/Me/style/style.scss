@@ -90,3 +90,22 @@
 		}
 	}
 }
+
+.msg-my-page {
+	margin-top: 8vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	color: #fff;
+
+	h2 {
+		font-size: 2.7rem;
+	}
+
+	.btn {
+		margin-top: 2rem;
+		font-size: 2.2rem;
+		font-weight: 600;
+	}
+}

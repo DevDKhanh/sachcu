@@ -1,41 +1,4 @@
-@import '../../../../style/variables';
-
-.comment-item {
-	.comment-context {
-		display: flex;
-		.avatar {
-			position: relative;
-			display: inline-block;
-			width: 4.5rem;
-			height: 4.5rem;
-			border-radius: 50%;
-			overflow: hidden;
-
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-		}
-	}
-
-	.comment--reply {
-		border-left: 1px solid $colorDanger;
-		padding-left: 1.6rem;
-
-		.avatar {
-			width: 3.5rem;
-			height: 3.5rem;
-		}
-	}
-
-	.btn-see-reply {
-		border: none;
-		outline: none;
-		font-size: 1.5rem;
-		background-color: transparent;
-		margin-bottom: 0.5rem;
-		color: $secondaryText;
-		text-shadow: 0 0 1px $secondaryText;
-	}
-}
+@import './commentActions';
+@import './commentControl';
+@import './commentItem';
+@import './commentText';

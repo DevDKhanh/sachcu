@@ -1,6 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
+/********** custom hook cancel request axios **********/
 export const useCancelToken = () => {
 	const axiosSource = useRef(null);
 	const newCancelToken = useCallback(() => {

@@ -1,9 +1,8 @@
 import React from 'react';
 
 import LoadingPlaceHolder from '../../Effect/LoadingPlaceHolder';
-import '../style/commentText.scss';
 
-function CommentText({ lastName, firstName, content }) {
+function CommentsText({ lastName, firstName, content }) {
 	return (
 		<div className="content-group">
 			<div className="name-user">
@@ -18,4 +17,4 @@ function CommentText({ lastName, firstName, content }) {
 	);
 }
 
-export default CommentText;
+export default CommentsText;

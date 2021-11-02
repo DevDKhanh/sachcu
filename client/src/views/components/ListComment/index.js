@@ -4,7 +4,7 @@ import { ProtectedComponent } from '../../../utils/Protected';
 import Comment from '../Comment';
 import './style/style.scss';
 
-function ListComment({ comments }) {
+function ListComments({ comments, onSetComments }) {
 	return (
 		<React.Fragment>
 			<div className="list-comments">
@@ -17,6 +17,7 @@ function ListComment({ comments }) {
 								content={comment.comment}
 								slug={comment.slug}
 								id={comment._id}
+								onSetComments={onSetComments}
 							/>
 						</div>
 					))}
@@ -29,4 +30,4 @@ function ListComment({ comments }) {
 	);
 }
 
-export default memo(ListComment);
+export default memo(ListComments);

@@ -5,7 +5,6 @@ import { MdDoubleArrow } from 'react-icons/md';
 import { BsFilePost } from 'react-icons/bs';
 import { IoNewspaper } from 'react-icons/io5';
 import { AiOutlineLogout } from 'react-icons/ai';
-import { RiProfileLine } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
 import * as typeUser from '../../../actions/typeUser';
@@ -62,25 +61,13 @@ function TabMenu({ isShow, onShow, user }) {
 						<li className="menu-item">
 							<NavLink
 								className="menu-link"
-								to="/new-post"
+								to="/category/all"
 								onClick={() => onShow(false)}
 							>
 								<span className="icon">
 									<IoNewspaper />
 								</span>
 								<p>Bài viết mới</p>
-							</NavLink>
-						</li>
-						<li className="menu-item">
-							<NavLink
-								className="menu-link"
-								to="/all-post"
-								onClick={() => onShow(false)}
-							>
-								<span className="icon">
-									<RiProfileLine />
-								</span>
-								<p>Tất cả bài viết</p>
 							</NavLink>
 						</li>
 						<li className="menu-item">

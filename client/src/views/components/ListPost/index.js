@@ -12,11 +12,16 @@ function ListPost({
 	category = 'all',
 	limit = 8,
 	page = 1,
+	myPage = false,
 	seemore = true,
+	showMsg = false,
+	children,
 }) {
 	const [posts, setPosts] = useState([]);
 	const [numberPage, setNumberPage] = useState(Number(page));
 	const [disabledLoad, setDisabledLoad] = useState(false);
+	const [loadData, setLoadData] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const listRef = useRef();
 	const { newCancelToken } = useCancelToken();
 
@@ -29,17 +34,20 @@ function ListPost({
 					category,
 					limit,
 					numberPage,
+					myPage,
 					newCancelToken(),
 				);
 				if (res.data) {
 					setPosts(prev => [...prev, ...res.data]);
+					setLoading(false);
+					setLoadData(false);
 					if (limit * numberPage >= res.countPost) {
 						setDisabledLoad(true);
 					}
 				}
 			} catch (err) {}
 		})();
-	}, [category, limit, numberPage, newCancelToken]);
+	}, [category, limit, numberPage, myPage, newCancelToken]);
 
 	useEffect(() => {
 		if (!seemore) {
@@ -49,7 +57,10 @@ function ListPost({
 				const documentHeight = listRef.current?.clientHeight;
 
 				if (scrollTop + screenHeight > documentHeight - 150) {
-					!disabledLoad && nextPage();
+					if (!loading) {
+						!disabledLoad && nextPage();
+						setLoading(true);
+					}
 				}
 			};
 
@@ -63,24 +74,42 @@ function ListPost({
 				window.removeEventListener('scroll', handleScroll);
 			};
 		}
-	}, [seemore, disabledLoad]);
+	}, [seemore, disabledLoad, loading]);
 
 	return (
-		<ProtectedComponent dependency={posts.length > 0}>
-			<div className="list-posts" ref={listRef}>
-				<div className="list-posts-header">
-					<div className="title">{title}</div>
-					{seemore && (
-						<NavLink to={`/category/${category}`}>Xem thêm</NavLink>
-					)}
+		<React.Fragment>
+			<ProtectedComponent dependency={posts.length > 0}>
+				<div className="list-posts" ref={listRef}>
+					<div className="list-posts-header">
+						<div className="title">{title}</div>
+						{seemore && (
+							<NavLink to={`/category/${category}`}>
+								Xem thêm
+							</NavLink>
+						)}
+					</div>
+					<div className="list-posts-show">
+						{posts.map(post => (
+							<CardPost key={post._id} data={post} />
+						))}
+					</div>
 				</div>
-				<div className="list-posts-show">
-					{posts.map(post => (
-						<CardPost key={post._id} data={post} />
+			</ProtectedComponent>
+
+			<ProtectedComponent dependency={loadData}>
+				<div className="list-posts-show effect">
+					{['', '', '', ''].map((post, index) => (
+						<CardPost key={index} data={post} showStar={false} />
 					))}
 				</div>
-			</div>
-		</ProtectedComponent>
+			</ProtectedComponent>
+
+			<ProtectedComponent
+				dependency={showMsg && posts.length <= 0 && !loadData}
+			>
+				{children}
+			</ProtectedComponent>
+		</React.Fragment>
 	);
 }
 

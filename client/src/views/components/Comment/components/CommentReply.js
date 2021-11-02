@@ -6,16 +6,10 @@ import { SocketContext } from '../../../../context/socket';
 import { ProtectedComponent } from '../../../../utils/Protected';
 import Comment from '..';
 
-function CommentReply({
-	slug,
-	id,
-	comments,
-	showReply,
-	onSetShowReply,
-	onSetCommentsReply,
-}) {
+function CommentReply({ slug, id, showReply, onSetShowReply }) {
 	const socket = useContext(SocketContext);
 	const [countComment, setCountComment] = useState(0);
+	const [commentReply, setCommentReply] = useState([]);
 	const { newCancelToken } = useCancelToken();
 
 	//=====< handle join and leave room chat reply >=====
@@ -39,10 +33,10 @@ function CommentReply({
 			);
 			if (res && res.data) {
 				setCountComment(res.countComments);
-				onSetCommentsReply([...res.data]);
+				setCommentReply([...res.data]);
 			}
 		})();
-	}, [slug, socket, id, onSetCommentsReply, setCountComment, newCancelToken]);
+	}, [slug, socket, id, setCommentReply, setCountComment, newCancelToken]);
 
 	useEffect(() => {
 		//=====< update state comment reply if create comment >=====
@@ -50,14 +44,14 @@ function CommentReply({
 			'commentReply:successCreate',
 			({ data, idComment, count }) => {
 				if (idComment === id) {
-					onSetCommentsReply(prev => [data, ...prev]);
+					setCommentReply(prev => [data, ...prev]);
 					setCountComment(count);
 				}
 			},
 		);
 
 		return () => socket.off('commentReply:successCreate');
-	}, [id, onSetCommentsReply, socket]);
+	});
 
 	return (
 		<React.Fragment>
@@ -69,9 +63,12 @@ function CommentReply({
 				</button>
 			</ProtectedComponent>
 			<ProtectedComponent dependency={showReply}>
-				{comments.map(comment => (
+				{commentReply.map(comment => (
 					<Comment
+						onSetCommentReply={setCommentReply}
 						key={comment._id}
+						id={comment._id}
+						onSetCountCommentReply={setCountComment}
 						content={comment.comment}
 						idUser={comment.idUser}
 						time={comment.createdAt}

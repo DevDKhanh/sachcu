@@ -4,11 +4,22 @@ import { HiDotsHorizontal } from 'react-icons/hi';
 
 import { ProtectedComponent } from '../../../../utils/Protected';
 import FormComment from '../../FormComment/index';
-import '../style/commentControl.scss';
+import CommentActions from './CommentActions';
 
-function CommentControl({ isReply, timeComment, id, slug, onSetShowReply }) {
-	const { isLogged } = useSelector(state => state.user);
+function CommentControl({
+	isReply,
+	timeComment,
+	id,
+	slug,
+	idUser,
+	onSetShowReply,
+	onSetCommentReply,
+	onSetComments,
+	onSetCountCommentReply,
+}) {
+	const { isLogged, infoUser } = useSelector(state => state.user);
 	const [showForm, setShowForm] = useState(false);
+	const [showActions, setShowActions] = useState(false);
 
 	/********** show comment reply when form comment reply show **********/
 	useEffect(() => {
@@ -29,9 +40,27 @@ function CommentControl({ isReply, timeComment, id, slug, onSetShowReply }) {
 					</span>
 				</ProtectedComponent>
 				<span className="text">{timeComment}</span>
-				<ProtectedComponent dependency={isLogged && !isReply}>
-					<span role="button" className="btn--actions text">
-						<HiDotsHorizontal />
+				<ProtectedComponent
+					dependency={isLogged && idUser === infoUser.idUser}
+				>
+					<span className="text actions">
+						<span
+							role="button"
+							className="btn--actions"
+							onClick={() => setShowActions(!showActions)}
+						>
+							<HiDotsHorizontal />
+						</span>
+						<ProtectedComponent dependency={showActions}>
+							<CommentActions
+								onSetCountCommentReply={onSetCountCommentReply}
+								onSetCommentReply={onSetCommentReply}
+								onSetComments={onSetComments}
+								isReply={isReply}
+								id={id}
+								onClose={setShowActions}
+							/>
+						</ProtectedComponent>
 					</span>
 				</ProtectedComponent>
 			</div>

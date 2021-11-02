@@ -39,7 +39,11 @@ function PostPage() {
 	/********** handle connect room  **********/
 	useEffect(() => {
 		socket.emit('room:join', { slug });
+		socket.on('msg', ({ text }) => {
+			toast.error(text);
+		});
 		return () => {
+			socket.off('msg');
 			socket.off('room:join');
 			socket.emit('room:leave', { slug });
 		};
@@ -91,7 +95,7 @@ function PostPage() {
 					pageComment,
 					newCancelToken(),
 				);
-				if (resComment.data) {
+				if (resComment && resComment.data) {
 					setIsLoadMore(false);
 					setIsLoad(false);
 					setComments(prev => [...prev, ...resComment.data]);
@@ -106,10 +110,10 @@ function PostPage() {
 	}, [slug, pageComment, newCancelToken]);
 
 	/********** get this post data **********/
-	useLayoutEffect(() => {
+	useEffect(() => {
 		(async () => {
 			try {
-				const resPost = await postAPI.getPost(slug);
+				const resPost = await postAPI.getPost(slug, newCancelToken());
 				if (resPost.status === 1) {
 					setPost(resPost.data);
 				} else {
@@ -125,7 +129,7 @@ function PostPage() {
 		return () => {
 			setPost({});
 		};
-	}, [slug, history]);
+	}, [slug, history, newCancelToken]);
 
 	/********** Update comments when there are new comments **********/
 	useEffect(() => {
@@ -172,7 +176,10 @@ function PostPage() {
 									text="Đang tải bình luận..."
 								/>
 								<ProtectedComponent dependency={!isLoad}>
-									<ListComment comments={comments} />
+									<ListComment
+										comments={comments}
+										onSetComments={setComments}
+									/>
 								</ProtectedComponent>
 								<ProtectedComponent
 									dependency={!disabledLoadComment}

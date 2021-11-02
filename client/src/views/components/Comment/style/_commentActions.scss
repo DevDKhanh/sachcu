@@ -1,0 +1,36 @@
+@import '../../../../style/variables';
+
+.comment-list-action {
+	list-style: none;
+	background-color: #fff;
+	border-radius: 0.8rem;
+	padding: 0.5rem 0;
+	font-size: 1.5rem;
+	z-index: 10;
+	box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px;
+	opacity: 1;
+	position: absolute;
+	top: -2rem;
+	transition: 0.3s;
+	opacity: 0;
+	right: 2rem;
+	min-width: max-content;
+	.item {
+		padding: 0.5rem 3rem;
+		&:hover {
+			cursor: pointer;
+			background-color: $colorLightSecondary;
+			color: rgb(77, 77, 77);
+		}
+	}
+}
+
+.comment-list-action.show-top {
+	opacity: 1;
+	top: 2rem;
+}
+
+.comment-list-action.show-bottom {
+	opacity: 1;
+	top: -6rem;
+}

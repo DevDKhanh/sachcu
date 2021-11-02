@@ -11,9 +11,18 @@ import CommentText from './components/CommentText';
 import usersAPI from '../../../api/usersAPI';
 import './style/style.scss';
 
-function Comment({ content, idUser, time, isReply = false, slug, id }) {
+function Comment({
+	content,
+	idUser,
+	time,
+	isReply = false,
+	slug,
+	id,
+	onSetComments,
+	onSetCommentReply,
+	onSetCountCommentReply,
+}) {
 	const [timeComment, setTimeComment] = useState();
-	const [commentsReply, setCommentsReply] = useState([]);
 	const [showReply, setShowReply] = useState(false);
 	const [user, setUser] = useState({});
 	const { newCancelToken } = useCancelToken();
@@ -60,19 +69,21 @@ function Comment({ content, idUser, time, isReply = false, slug, id }) {
 						content={content}
 					/>
 					<CommentControl
-						isReply={isReply}
+						timeComment={timeComment}
 						id={id}
+						idUser={idUser}
+						isReply={isReply}
 						slug={slug}
 						onSetShowReply={setShowReply}
-						onSetCommentsReply={setCommentsReply}
-						timeComment={timeComment}
+						onSetCommentReply={onSetCommentReply}
+						onSetCountCommentReply={onSetCountCommentReply}
+						onSetComments={onSetComments}
 					/>
 					<ProtectedComponent dependency={!isReply}>
 						<CommentReply
-							comments={commentsReply}
 							showReply={showReply}
 							onSetShowReply={setShowReply}
-							onSetCommentsReply={setCommentsReply}
+							onSetComments={onSetComments}
 							id={id}
 						/>
 					</ProtectedComponent>

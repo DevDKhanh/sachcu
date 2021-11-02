@@ -15,8 +15,8 @@ const postSchame = new Schema(
 		content: { type: String, default: null, max: 255, required: true },
 		category: { type: String, default: null, max: 55, required: true },
 		author: { type: String, default: null, required: true },
-		image: { type: String, default: null, required: true }, // link img in cloud
-		idImage: { type: String, default: null, required: true }, // id img in cloud
+		image: { type: String, default: null, required: true }, // link img on cloud
+		idImage: { type: String, default: null, required: true }, // id img on cloud
 		status: { type: Number, default: 0, required: true }, //0=wait for confirmation, 1=active, 2=delete
 	},
 	{

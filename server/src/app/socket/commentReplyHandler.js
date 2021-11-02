@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const sanitizer = require('sanitizer');
 
 const dbCommentsReply = require('../model/replyComment');
+const dbComments = require('../model/comments');
 
 //Check xss
 const xss = str => {
@@ -14,7 +15,9 @@ module.exports = (io, socket) => {
 		try {
 			const token = socket.handshake.auth.token;
 			const user = await jwt.verify(token, process.env.JWT_SECRET);
-			if (user && socket.idUser) {
+			const isComment = await dbComments.findOne({ _id: idComment });
+
+			if (user && socket.idUser && isComment) {
 				if (idComment && comment) {
 					const newCommentReply = new dbCommentsReply({
 						idUser: socket.idUser,
@@ -48,5 +51,34 @@ module.exports = (io, socket) => {
 		}
 	};
 
+	const deleteCommentReply = async ({ id }) => {
+		try {
+			const token = socket.handshake.auth.token;
+			const user = await jwt.verify(token, process.env.JWT_SECRET);
+			const isCommentReply = await dbCommentsReply.findOne({
+				_id: id,
+				idUser: user.data.idUser,
+			});
+
+			if (user && socket.idUser && isCommentReply) {
+				if (id) {
+					await dbCommentsReply.deleteOne({
+						_id: id,
+					});
+					socket.emit('commentReply:deleteSuccess', id);
+				} else {
+					socket.emit('msg', {
+						text: 'Vui lòng thử lại sau',
+					});
+				}
+			} else {
+				socket.emit('msg', { text: 'Có lỗi đã xảy ra' });
+			}
+		} catch (err) {
+			socket.emit('msg', { text: 'Có lỗi đã xảy ra' });
+		}
+	};
+
 	socket.on('commentReply:create', createCommentReply);
+	socket.on('commentReply:delete', deleteCommentReply);
 };

@@ -1,5 +1,6 @@
 import axiosClient from '.';
 
+import { getItemStorage } from '../utils/localStorage';
 const routeName = '/posts';
 
 const meAPI = {
@@ -7,9 +8,14 @@ const meAPI = {
 		const url = `${routeName}/post?slug=${slug}`;
 		return axiosClient.get(url, { cancelToken: tokenAxios });
 	},
-	getPosts: (category, limit = 8, page = 1, tokenAxios) => {
-		const url = `${routeName}?category=${category}&limit=${limit}&page=${page}`;
-		return axiosClient.get(url, { cancelToken: tokenAxios });
+	getPosts: (category, limit = 8, page = 1, myPage = false, tokenAxios) => {
+		const url = `${routeName}?category=${category}&limit=${limit}&page=${page}&myPage=${myPage}`;
+		return axiosClient.get(url, {
+			cancelToken: tokenAxios,
+			headers: {
+				Authorization: 'Bearer ' + getItemStorage('accessToken'),
+			},
+		});
 	},
 	postReviews: (data, tokenAxios) => {
 		const url = `${routeName}/reviews`;

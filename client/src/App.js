@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './style/app.scss';
 
 function App() {
+	/********** get accesstoken **********/
 	const { token } = useSelector(state => state.user);
 
 	return (

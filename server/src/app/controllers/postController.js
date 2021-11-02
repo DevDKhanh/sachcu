@@ -50,27 +50,56 @@ class PostController {
 	//[GET] /api/v1/posts?category=...&limit=...
 	async getPosts(req, res, next) {
 		try {
-			const { category, limit, page } = req.query;
+			const { category, limit, page, myPage } = req.query;
 			const numberLimit = Number(limit) || 4;
+			const token = req.headers['authorization'].split(' ')[1];
 			let posts;
 			let countPost;
 
-			if (category === 'all') {
-				posts = await dbPosts
-					.find()
-					.skip(page * numberLimit - numberLimit)
-					.limit(numberLimit)
-					.sort({ createdAt: -1 });
-				countPost = await dbPosts.countDocuments();
-			} else if (category) {
-				posts = await dbPosts
-					.find({ category: category })
-					.skip(page * numberLimit - numberLimit)
-					.limit(numberLimit)
-					.sort({ createdAt: -1 });
-				countPost = await dbPosts.countDocuments({
-					category: category,
-				});
+			if (myPage == 'true') {
+				if (!token || token == 'null')
+					return res.status(401).json({
+						status: 0,
+						code: 401,
+						message:
+							'Failed to authenticate because of bad credentials or an invalid authorization header',
+					});
+				const user = await jwt.verify(token, process.env.JWT_SECRET);
+				if (user) {
+					posts = await dbPosts
+						.find({ idUser: user.data.idUser })
+						.skip(page * numberLimit - numberLimit)
+						.limit(numberLimit)
+						.sort({ createdAt: -1 });
+
+					countPost = await dbPosts.countDocuments({
+						idUser: user.data.idUser,
+					});
+				} else {
+					return res.status(403).json({
+						status: 0,
+						code: 403,
+						message: 'Forbidden',
+					});
+				}
+			} else {
+				if (category === 'all') {
+					posts = await dbPosts
+						.find()
+						.skip(page * numberLimit - numberLimit)
+						.limit(numberLimit)
+						.sort({ createdAt: -1 });
+					countPost = await dbPosts.countDocuments();
+				} else if (category) {
+					posts = await dbPosts
+						.find({ category: category })
+						.skip(page * numberLimit - numberLimit)
+						.limit(numberLimit)
+						.sort({ createdAt: -1 });
+					countPost = await dbPosts.countDocuments({
+						category: category,
+					});
+				}
 			}
 
 			if (posts) {

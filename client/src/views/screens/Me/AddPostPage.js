@@ -111,7 +111,7 @@ function AddPostPage() {
 										<InputText
 											name="title"
 											label="Tên bài đăng"
-											placeholder="VD: Cho mượn sách"
+											placeholder="VD: Sách tiếng anh"
 											handleChange={handleChange}
 										/>
 										<InputText
