@@ -4,7 +4,7 @@ import { ProtectedComponent } from '../../../utils/Protected';
 import Comment from '../Comment';
 import './style/style.scss';
 
-function ListComments({ comments, onSetComments }) {
+function ListComments({ comments }) {
 	return (
 		<React.Fragment>
 			<div className="list-comments">
@@ -17,7 +17,6 @@ function ListComments({ comments, onSetComments }) {
 								content={comment.comment}
 								slug={comment.slug}
 								id={comment._id}
-								onSetComments={onSetComments}
 							/>
 						</div>
 					))}

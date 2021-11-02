@@ -1,47 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { HiDotsHorizontal } from 'react-icons/hi';
 
 import { ProtectedComponent } from '../../../../utils/Protected';
-import FormComment from '../../FormComment/index';
+import FormComment from '../../FormComment';
 import CommentActions from './CommentActions';
 
-function CommentControl({
-	isReply,
-	timeComment,
-	id,
-	slug,
-	idUser,
-	onSetShowReply,
-	onSetCommentReply,
-	onSetComments,
-	onSetCountCommentReply,
-}) {
+function CommentControl(props) {
 	const { isLogged, infoUser } = useSelector(state => state.user);
-	const [showForm, setShowForm] = useState(false);
+	const [showFormReply, setShowFormReply] = useState(false);
+	const [showFormEdit, setShowFormEdit] = useState(false);
 	const [showActions, setShowActions] = useState(false);
 
 	/********** show comment reply when form comment reply show **********/
-	useEffect(() => {
-		if (showForm) {
-			onSetShowReply(true);
+	useLayoutEffect(() => {
+		if (showFormReply) {
+			props.onSetShowReply(true);
+			setShowFormEdit(false);
 		}
-	}, [showForm, onSetShowReply]);
+	}, [showFormReply, props]);
+
+	useLayoutEffect(() => {
+		if (showFormEdit) {
+			setShowFormReply(false);
+		}
+	}, [showFormEdit]);
 
 	return (
 		<>
 			<div className="control">
-				<ProtectedComponent dependency={isLogged && !isReply}>
+				<ProtectedComponent dependency={isLogged && !props.isReply}>
 					<span
 						className="btn-reply"
-						onClick={() => setShowForm(true)}
+						onClick={() => setShowFormReply(true)}
 					>
 						Trả lời
 					</span>
 				</ProtectedComponent>
-				<span className="text">{timeComment}</span>
+				<span className="text">{props.timeComment}</span>
 				<ProtectedComponent
-					dependency={isLogged && idUser === infoUser.idUser}
+					dependency={isLogged && props.idUser === infoUser.idUser}
 				>
 					<span className="text actions">
 						<span
@@ -53,25 +51,36 @@ function CommentControl({
 						</span>
 						<ProtectedComponent dependency={showActions}>
 							<CommentActions
-								onSetCountCommentReply={onSetCountCommentReply}
-								onSetCommentReply={onSetCommentReply}
-								onSetComments={onSetComments}
-								isReply={isReply}
-								id={id}
+								isReply={props.isReply}
+								id={props.id}
 								onClose={setShowActions}
+								onForm={setShowFormEdit}
 							/>
 						</ProtectedComponent>
 					</span>
 				</ProtectedComponent>
 			</div>
-			{showForm && (
+			{showFormReply && (
 				<FormComment
 					isReply={true}
-					id={id}
-					slug={slug}
-					onClose={setShowForm}
+					isStyleReply={true}
+					id={props.id}
+					slug={props.slug}
+					onClose={setShowFormReply}
 					placeholder="Viết trả lời..."
 					textSubmit="Trả lời"
+				/>
+			)}
+			{showFormEdit && (
+				<FormComment
+					isReply={props.isReply}
+					isStyleReply={true}
+					isEdit={true}
+					id={props.id}
+					valueCurrent={props.content}
+					slug={props.slug}
+					onClose={setShowFormEdit}
+					textSubmit="Sửa"
 				/>
 			)}
 		</>

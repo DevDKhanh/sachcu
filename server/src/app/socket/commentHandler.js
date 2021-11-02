@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const sanitizer = require('sanitizer');
 
 const dbComments = require('../model/comments');
-const dbPosts = require('../model/posts');
 const dbCommentsReply = require('../model/replyComment');
+const dbPosts = require('../model/posts');
 
 //Check xss
 const xss = str => {
@@ -79,6 +79,80 @@ module.exports = (io, socket) => {
 		}
 	};
 
+	const editComment = async ({ id, isReply, comment, slug }) => {
+		try {
+			let isComment;
+			const token = socket.handshake.auth.token;
+			const user = await jwt.verify(token, process.env.JWT_SECRET);
+
+			// Check comment in db
+			if (isReply) {
+				isComment = await dbCommentsReply.findOne({
+					_id: id,
+					idUser: user.data.idUser,
+				});
+			} else {
+				isComment = await dbComments.findOne({
+					_id: id,
+					idUser: user.data.idUser,
+				});
+			}
+
+			if (user && socket.idUser && isComment) {
+				if (id) {
+					if (isReply) {
+						await dbCommentsReply.updateOne(
+							{
+								_id: id,
+								idUser: user.data.idUser,
+							},
+							{ comment: xss(comment) },
+						);
+
+						/********** get data comment on database **********/
+						isComment = await dbCommentsReply.findOne({
+							_id: id,
+							idUser: user.data.idUser,
+						});
+
+						/********** send data to client **********/
+						io.sockets
+							.in(slug)
+							.emit('commentReply:editSuccess', isComment);
+					} else {
+						await dbComments.updateOne(
+							{
+								_id: id,
+								idUser: user.data.idUser,
+							},
+							{
+								comment: xss(comment),
+							},
+						);
+						/********** get data comment on database **********/
+						isComment = await dbComments.findOne({
+							_id: id,
+							idUser: user.data.idUser,
+						});
+
+						/********** send data to client **********/
+						io.sockets
+							.in(slug)
+							.emit('comment:editSuccess', isComment);
+					}
+				} else {
+					socket.emit('msg', {
+						text: 'Vui lòng thử lại sau',
+					});
+				}
+			} else {
+				socket.emit('msg', { text: 'Có lỗi đã xảy ra' });
+			}
+		} catch (err) {
+			socket.emit('msg', { text: 'Có lỗi đã xảy ra' });
+		}
+	};
 	socket.on('comment:create', createComment);
 	socket.on('comment:delete', deleteComment);
+	socket.on('comment:edit', editComment);
 };

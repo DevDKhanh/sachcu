@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, memo } from 'react';
+import React, { useState, useContext, useEffect, useRef, memo } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
@@ -17,12 +17,16 @@ function FormComment({
 	slug,
 	onClose,
 	isReply,
+	isEdit,
+	isStyleReply,
+	valueCurrent = '',
 	textSubmit = 'Bình luận',
-	title = 'Bình luận',
+	title,
 }) {
 	const socket = useContext(SocketContext);
+	const fromRef = useRef();
 	const { isLogged, infoUser } = useSelector(state => state.user);
-	const [comment, setComment] = useState('');
+	const [comment, setComment] = useState(valueCurrent);
 	const [submit, setSubMit] = useState(false);
 
 	/********** compartment form submit with event default **********/
@@ -47,12 +51,22 @@ function FormComment({
 	};
 
 	/********** clear content input when slug change **********/
-	useEffect(() => setComment(''), [slug]);
+	useEffect(() => {
+		return () => setComment('');
+	}, [slug]);
 
 	useEffect(() => {
 		if (submit) {
 			if (trimSpaces(comment).trim() !== '') {
-				if (isReply) {
+				if (isEdit) {
+					socket.emit('comment:edit', {
+						id,
+						isReply,
+						slug,
+						comment: trimSpaces(comment),
+					});
+					onClose(false);
+				} else if (isReply) {
 					socket.emit('commentReply:create', {
 						idComment: id,
 						slug,
@@ -74,17 +88,20 @@ function FormComment({
 			socket.off('comment:create');
 			socket.off('commentReply:create');
 		};
-	}, [submit, comment, socket, slug, id, isReply]);
+	}, [submit, comment, socket, slug, id, isReply, isEdit, onClose]);
 	return (
 		<React.Fragment>
-			{!isReply && <h2 className="title">{title}</h2>}
+			<h2 className="title">{title}</h2>
 			<ProtectedComponent dependency={isLogged}>
-				<div className={`form-comment ${isReply && 'form--reply'}`}>
+				<div
+					className={`form-comment ${isStyleReply && 'form--reply'}`}
+				>
 					<AvatarImg avatar={infoUser.avatar} />
 					<form onSubmit={handleSubMit}>
 						<div className="group-form">
 							<div className="group-element">
 								<ContentEditable
+									ref={fromRef}
 									html={comment}
 									onChange={handleChange}
 									onPaste={pasteAsPlainText}

@@ -11,17 +11,7 @@ import CommentText from './components/CommentText';
 import usersAPI from '../../../api/usersAPI';
 import './style/style.scss';
 
-function Comment({
-	content,
-	idUser,
-	time,
-	isReply = false,
-	slug,
-	id,
-	onSetComments,
-	onSetCommentReply,
-	onSetCountCommentReply,
-}) {
+function Comment(props) {
 	const [timeComment, setTimeComment] = useState();
 	const [showReply, setShowReply] = useState(false);
 	const [user, setUser] = useState({});
@@ -30,22 +20,22 @@ function Comment({
 	/********** time create post **********/
 	useEffect(() => {
 		let timeoutId;
-		if (time) {
-			const timer = new Date(time);
+		if (props.time) {
+			const timer = new Date(props.time);
 			timeoutId = setInterval(() => {
 				setTimeComment(convertTime(timer));
 			}, 100);
 		}
 		return () => clearTimeout(timeoutId);
-	}, [time]);
+	}, [props]);
 
 	/********** get user info from id **********/
 	useEffect(() => {
-		if (idUser) {
+		if (props.idUser) {
 			(async () => {
 				try {
 					const res = await usersAPI.getContact(
-						idUser,
+						props.idUser,
 						newCancelToken(),
 					);
 					if (res.status === 1) {
@@ -56,35 +46,33 @@ function Comment({
 		}
 
 		return () => setUser({});
-	}, [idUser, newCancelToken]);
+	}, [props, newCancelToken]);
 
 	return (
-		<div className={`comment-item ${isReply && 'comment--reply'}`}>
+		<div className={`comment-item ${props.isReply && 'comment--reply'}`}>
 			<div className="comment-context">
 				<AvatarImg avatar={user.avatar} className="comment-avatar" />
 				<div className="content">
 					<CommentText
 						lastName={user.lastName}
 						firstName={user.firstName}
-						content={content}
+						content={props.content}
 					/>
 					<CommentControl
 						timeComment={timeComment}
-						id={id}
-						idUser={idUser}
-						isReply={isReply}
-						slug={slug}
+						id={props.id}
+						idUser={props.idUser}
+						isReply={props.isReply}
+						slug={props.slug}
 						onSetShowReply={setShowReply}
-						onSetCommentReply={onSetCommentReply}
-						onSetCountCommentReply={onSetCountCommentReply}
-						onSetComments={onSetComments}
+						content={props.content}
 					/>
-					<ProtectedComponent dependency={!isReply}>
+					<ProtectedComponent dependency={!props.isReply}>
 						<CommentReply
 							showReply={showReply}
+							slug={props.slug}
 							onSetShowReply={setShowReply}
-							onSetComments={onSetComments}
-							id={id}
+							id={props.id}
 						/>
 					</ProtectedComponent>
 				</div>

@@ -137,8 +137,26 @@ function PostPage() {
 			setComments(prev => [data, ...prev]);
 		});
 
+		socket.on('comment:deleteSuccess', id => {
+			setComments(prev => prev.filter(comment => comment._id !== id));
+		});
+
+		socket.on('comment:editSuccess', data => {
+			setComments(prev =>
+				prev.map(comment => {
+					if (comment._id === data._id) {
+						return data;
+					} else {
+						return comment;
+					}
+				}),
+			);
+		});
+
 		return () => {
 			socket.off('comment:successCreate');
+			socket.off('comment:deleteSuccess');
+			socket.off('comment:editSuccess');
 		};
 	}, [socket, slug]);
 
@@ -168,6 +186,7 @@ function PostPage() {
 							</div>
 							<div className="comment">
 								<FormComment
+									title="Bình luận"
 									slug={slug}
 									placeholder="Viết bình luận của bạn"
 								/>
@@ -176,10 +195,7 @@ function PostPage() {
 									text="Đang tải bình luận..."
 								/>
 								<ProtectedComponent dependency={!isLoad}>
-									<ListComment
-										comments={comments}
-										onSetComments={setComments}
-									/>
+									<ListComment comments={comments} />
 								</ProtectedComponent>
 								<ProtectedComponent
 									dependency={!disabledLoadComment}

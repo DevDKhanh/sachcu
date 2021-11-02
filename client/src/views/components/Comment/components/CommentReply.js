@@ -50,7 +50,30 @@ function CommentReply({ slug, id, showReply, onSetShowReply }) {
 			},
 		);
 
-		return () => socket.off('commentReply:successCreate');
+		socket.on('commentReply:deleteSuccess', id => {
+			setCountComment(prev => prev - 1);
+			setCommentReply(prev => {
+				return prev.filter(comment => comment._id !== id);
+			});
+		});
+
+		socket.on('commentReply:editSuccess', data => {
+			setCommentReply(prev =>
+				prev.map(comment => {
+					if (comment._id === data._id) {
+						return data;
+					} else {
+						return comment;
+					}
+				}),
+			);
+		});
+
+		return () => {
+			socket.off('commentReply:deleteSuccess');
+			socket.off('commentReply:successCreate');
+			socket.off('commentReply:editSuccess');
+		};
 	});
 
 	return (
@@ -68,6 +91,7 @@ function CommentReply({ slug, id, showReply, onSetShowReply }) {
 						onSetCommentReply={setCommentReply}
 						key={comment._id}
 						id={comment._id}
+						slug={slug}
 						onSetCountCommentReply={setCountComment}
 						content={comment.comment}
 						idUser={comment.idUser}
