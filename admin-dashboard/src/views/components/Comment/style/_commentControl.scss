@@ -1,0 +1,69 @@
+@import '../../../../style/variables';
+
+.comment-item {
+	.control {
+		display: flex;
+		align-items: center;
+		padding-top: 0.3rem;
+		padding-bottom: 1rem;
+
+		.btn-reply {
+			color: $colorDanger;
+			font-size: 1.4rem;
+			&:hover {
+				cursor: pointer;
+				text-decoration: underline;
+			}
+		}
+		.text {
+			position: relative;
+			padding-left: 1rem;
+			margin-left: 0.8rem;
+			color: #7e7e7e;
+			font-size: 1.4rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			&::after {
+				position: absolute;
+				content: '';
+				width: 5px;
+				height: 5px;
+				background-color: #7e7e7e;
+				left: 0;
+				top: 50%;
+				border-radius: 50%;
+				transform: translateY(-50%);
+			}
+		}
+
+		.text.actions {
+			&::after {
+				display: none;
+			}
+		}
+
+		.btn--actions {
+			position: relative;
+			width: 2.7rem;
+			height: 2.7rem;
+			font-size: 2rem;
+			transition: 0.4s;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border-radius: 50%;
+			opacity: 0;
+			&:hover {
+				color: rgb(68, 68, 68);
+				cursor: pointer;
+				background-color: rgb(219, 219, 219);
+			}
+		}
+	}
+	&:hover {
+		.btn--actions {
+			opacity: 1;
+		}
+	}
+}

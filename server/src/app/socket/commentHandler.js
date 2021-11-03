@@ -62,7 +62,7 @@ module.exports = (io, socket) => {
 						_id: id,
 						idUser: user.data.idUser,
 					});
-					dbCommentsReply.deleteMany({
+					await dbCommentsReply.deleteMany({
 						idComment: id,
 					});
 					socket.emit('comment:deleteSuccess', id);

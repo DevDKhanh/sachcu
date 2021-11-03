@@ -9,7 +9,7 @@ console.log(process.env.HOST_FRONT_END);
 
 const io = require('socket.io')(server, {
 	cors: {
-		origin: process.env.HOST_FRONT_END,
+		origin: [process.env.HOST_FRONT_END, process.env.HOST_FRONT_END_ADMIN],
 		methods: ['GET', 'POST', 'PUT', 'DELETE'],
 		allowedHeaders: ['authorization'],
 	},

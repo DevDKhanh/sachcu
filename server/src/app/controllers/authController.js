@@ -5,6 +5,7 @@ const validator = require('validator');
 const pbkdf2 = require('pbkdf2');
 const jwt = require('jsonwebtoken');
 const sanitizer = require('sanitizer');
+const { listAvatar } = require('../../constant/listAvatarDefault');
 
 //Check xss
 const xss = str => {
@@ -15,8 +16,10 @@ class AuthController {
 	//[POST] /api/v1/auth/register
 	async register(req, res, next) {
 		try {
+			const indexAvatarDefault = Math.ceil(
+				Math.random() * listAvatar.length,
+			);
 			const lengthName = 20;
-
 			const firstName = xss(req.body.firstName, {});
 			const lastName = xss(req.body.lastName, {});
 			const emailUser = xss(req.body.email, {});
@@ -105,6 +108,7 @@ class AuthController {
 						);
 
 						const newUser = new dbUsers({
+							avatar: listAvatar[indexAvatarDefault],
 							firstName,
 							lastName,
 							email: emailUser,

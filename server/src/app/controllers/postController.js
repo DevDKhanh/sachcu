@@ -12,6 +12,32 @@ const xss = str => {
 };
 
 class PostController {
+	async countPosts(req, res, next) {
+		try {
+			const count = await dbPosts.countDocuments({ isDelete: false });
+
+			if (count) {
+				return res.status(200).json({
+					status: 1,
+					code: 200,
+					data: count,
+				});
+			} else {
+				return res.status(200).json({
+					status: 0,
+					code: 200,
+					message: 'Not found post',
+				});
+			}
+		} catch (err) {
+			return res.status(500).json({
+				status: 0,
+				code: 500,
+				message: 'Error server',
+			});
+		}
+	}
+
 	//[GET] /api/v1/posts/post?slug=...
 	async getPost(req, res, next) {
 		try {

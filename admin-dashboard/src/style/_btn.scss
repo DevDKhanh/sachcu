@@ -1,0 +1,66 @@
+@import './variables';
+
+.btn {
+	display: inline-block;
+	text-align: center;
+	border: 0;
+	font-size: 1.6rem;
+	padding: 0.8rem 1.6rem;
+	width: auto;
+	cursor: pointer;
+	outline: none;
+	border-radius: 0.8rem;
+	transition: 0.2s;
+
+	&:hover {
+		opacity: 0.8;
+	}
+
+	&--round {
+		border-radius: 4rem;
+	}
+
+	&--no-drop {
+		cursor: no-drop;
+		background-color: #ccc;
+		color: #fff;
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	&--root2 {
+		background-color: $colorRoot2;
+		color: #fff;
+	}
+
+	&--secondary {
+		background-color: $colorSecondary;
+		color: #fff;
+	}
+
+	&--o-secondary {
+		border: 2px solid $colorSecondary;
+		color: $colorSecondary;
+		background-color: #fff;
+		&:hover {
+			background-color: $colorSecondary;
+			color: #fff;
+		}
+	}
+
+	&--primary {
+		background-color: $colorPrimary;
+		color: #fff;
+	}
+
+	&--o-primary {
+		border: 2px solid $colorPrimary;
+		color: $colorPrimary;
+		background-color: #fff;
+		&:hover {
+			background-color: $colorPrimary;
+			color: #fff;
+		}
+	}
+}

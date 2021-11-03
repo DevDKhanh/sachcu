@@ -7,6 +7,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"serverDev": "npm run dev --prefix server",
 		"client": "npm run start --prefix client",
-		"dev": "concurrently \"npm run serverDev\" \"npm run client\""
+		"dashboard": "npm run start --prefix admin-dashboard",
+		"dev": "concurrently \"npm run serverDev\" \"npm run client\" \"npm run dashboard\""
 	}
 }
