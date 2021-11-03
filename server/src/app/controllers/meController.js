@@ -93,6 +93,86 @@ class MeController {
 			});
 		}
 	}
+
+	//[PUT] /api/v1/me/status
+	async updateStatus(req, res, next) {
+		try {
+			const token = req.headers['authorization'].split(' ')[1];
+			const { id, status } = req.body;
+			const user = await jwt.verify(token, process.env.JWT_SECRET);
+			if (!id) {
+				return res.status(400).json({
+					status: 0,
+					code: 400,
+					message: 'Not found id',
+				});
+			} else {
+				const updateStatus = await dbPosts.updateOne(
+					{ _id: id, idUser: user.data.idUser },
+					{ status },
+				);
+				if (updateStatus) {
+					return res.status(200).json({
+						status: 1,
+						code: 200,
+						message: 'Update status successfully',
+					});
+				} else {
+					return res.status(200).json({
+						status: 1,
+						code: 200,
+						message: 'Not found data with this id',
+					});
+				}
+			}
+		} catch (err) {
+			return res.status(500).json({
+				status: 0,
+				code: 500,
+				message: 'Error server',
+			});
+		}
+	}
+
+	//[DELETE] /api/v1/me/post
+	async deletePost(req, res, next) {
+		try {
+			const token = req.headers['authorization'].split(' ')[1];
+			const { id } = req.query;
+			const user = await jwt.verify(token, process.env.JWT_SECRET);
+			if (!id) {
+				return res.status(400).json({
+					status: 0,
+					code: 400,
+					message: 'Not found id',
+				});
+			} else {
+				const deletePost = await dbPosts.updateOne(
+					{ _id: id, idUser: user.data.idUser },
+					{ isDelete: true },
+				);
+				if (deletePost) {
+					return res.status(200).json({
+						status: 1,
+						code: 200,
+						message: 'Delete post successfully',
+					});
+				} else {
+					return res.status(200).json({
+						status: 1,
+						code: 200,
+						message: 'Not found data with this id',
+					});
+				}
+			}
+		} catch (err) {
+			return res.status(500).json({
+				status: 0,
+				code: 500,
+				message: 'Error server',
+			});
+		}
+	}
 }
 
 module.exports = new MeController();

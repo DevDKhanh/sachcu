@@ -1,5 +1,8 @@
 @import '../../../../style//variables';
 
+$colorActive: #208be3;
+$colorUnActive: red;
+
 .card {
 	max-width: 30rem;
 	margin-bottom: 2rem;
@@ -33,6 +36,14 @@
 			height: 100%;
 			object-fit: cover;
 		}
+	}
+
+	&-link {
+		position: relative;
+		background-color: #fff;
+		display: block;
+		font-size: 1.6rem;
+		color: #000;
 	}
 
 	&-info {
@@ -100,10 +111,68 @@
 			overflow: hidden;
 			text-overflow: ellipsis;
 			word-break: break-word;
+
+			.status {
+				color: $colorUnActive;
+				text-shadow: 0 0 1px $colorUnActive;
+			}
+			.status.isActive {
+				color: $colorActive;
+				text-shadow: 0 0 1px $colorActive;
+			}
 		}
 
 		p + p {
 			margin-top: 0.2rem;
+		}
+
+		.btn--delete {
+			position: absolute;
+			z-index: 1;
+			top: 1rem;
+			left: 1rem;
+			width: 3.5rem;
+			height: 3.5rem;
+		}
+
+		.btn--change-status {
+			position: absolute;
+			z-index: 1;
+			bottom: 1rem;
+			right: 1rem;
+			min-width: 6rem;
+			min-height: 1.5rem;
+			border-radius: 4rem;
+			outline: none;
+			border: none;
+			background-color: rgb(190, 190, 190);
+
+			&::after {
+				content: '';
+				position: absolute;
+				width: 2.7rem;
+				height: 2.7rem;
+				border-radius: 50%;
+				transition: 0.3s;
+				background-color: rgb(0, 119, 255);
+				top: 50%;
+				left: 0;
+				transform: translateY(-50%);
+			}
+		}
+
+		.btn--change-status.delete {
+			&::after {
+				content: '';
+				position: absolute;
+				width: 2.7rem;
+				height: 2.7rem;
+				border-radius: 50%;
+				background-color: rgb(255, 0, 55);
+				top: 50%;
+				left: 3.5rem;
+				transform: translateY(-50%);
+			}
 		}
 	}
 

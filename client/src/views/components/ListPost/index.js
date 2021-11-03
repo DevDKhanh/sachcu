@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, memo } from 'react';
+import React, { useEffect, useCallback, useState, useRef, memo } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { useCancelToken } from '../../../hooks';
@@ -15,6 +15,7 @@ function ListPost({
 	myPage = false,
 	seemore = true,
 	showMsg = false,
+	isEdit = false,
 	children,
 }) {
 	const [posts, setPosts] = useState([]);
@@ -76,6 +77,10 @@ function ListPost({
 		}
 	}, [seemore, disabledLoad, loading]);
 
+	const handleDeletePost = useCallback(id => {
+		setPosts(prev => prev.filter(post => post._id !== id));
+	}, []);
+
 	return (
 		<React.Fragment>
 			<ProtectedComponent dependency={posts.length > 0}>
@@ -90,7 +95,12 @@ function ListPost({
 					</div>
 					<div className="list-posts-show">
 						{posts.map(post => (
-							<CardPost key={post._id} data={post} />
+							<CardPost
+								key={post._id}
+								data={post}
+								isEdit={isEdit}
+								onDelete={handleDeletePost}
+							/>
 						))}
 					</div>
 				</div>

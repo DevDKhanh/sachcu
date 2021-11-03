@@ -13,6 +13,14 @@ const meAPI = {
 			},
 		});
 	},
+	updateStatus: (data, tokenAxios) => {
+		const url = `${routeName}/status`;
+		return axiosClient.put(url, data, { cancelToken: tokenAxios });
+	},
+	deletePost: (id, tokenAxios) => {
+		const url = `${routeName}/post?id=${id}`;
+		return axiosClient.delete(url, { cancelToken: tokenAxios });
+	},
 };
 
 export default meAPI;

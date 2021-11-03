@@ -16,7 +16,7 @@ class PostController {
 	async getPost(req, res, next) {
 		try {
 			const { slug } = req.query;
-			const post = await dbPosts.findOne({ slug });
+			const post = await dbPosts.findOne({ slug, isDelete: false });
 			if (!slug) {
 				return res.status(200).json({
 					status: 0,
@@ -57,17 +57,10 @@ class PostController {
 			let countPost;
 
 			if (myPage == 'true') {
-				if (!token || token == 'null')
-					return res.status(401).json({
-						status: 0,
-						code: 401,
-						message:
-							'Failed to authenticate because of bad credentials or an invalid authorization header',
-					});
 				const user = await jwt.verify(token, process.env.JWT_SECRET);
 				if (user) {
 					posts = await dbPosts
-						.find({ idUser: user.data.idUser })
+						.find({ idUser: user.data.idUser, isDelete: false })
 						.skip(page * numberLimit - numberLimit)
 						.limit(numberLimit)
 						.sort({ createdAt: -1 });
@@ -85,17 +78,17 @@ class PostController {
 			} else {
 				if (category === 'all') {
 					posts = await dbPosts
-						.find()
+						.find({ isDelete: false })
 						.skip(page * numberLimit - numberLimit)
 						.limit(numberLimit)
-						.sort({ createdAt: -1 });
+						.sort({ status: 1, createdAt: -1 });
 					countPost = await dbPosts.countDocuments();
 				} else if (category) {
 					posts = await dbPosts
-						.find({ category: category })
+						.find({ category: category, isDelete: false })
 						.skip(page * numberLimit - numberLimit)
 						.limit(numberLimit)
-						.sort({ createdAt: -1 });
+						.sort({ status: 1, createdAt: -1 });
 					countPost = await dbPosts.countDocuments({
 						category: category,
 					});
@@ -131,7 +124,7 @@ class PostController {
 			const { star, idUser, slug } = req.body;
 			if (star && idUser && slug) {
 				const [isHadReviews, isHadUser, isHadPost] = await Promise.all([
-					dbStarReviews.findOne({ idUser, slug }),
+					dbStarReviews.findOne({ idUser, slug, isDelete: false }),
 					dbUsers.findOne({ _id: idUser }),
 					dbPosts.findOne({ slug: slug }),
 				]);
@@ -215,7 +208,10 @@ class PostController {
 					message: 'Not found slug query',
 				});
 			} else {
-				const getStar = await dbStarReviews.find({ slug });
+				const getStar = await dbStarReviews.find({
+					slug,
+					isDelete: false,
+				});
 				if (getStar.length > 0) {
 					return res.status(200).json({
 						status: 1,

@@ -16,6 +16,7 @@ function MyPostPage() {
 						myPage={true}
 						seemore={false}
 						showMsg={true}
+						isEdit={true}
 					>
 						<div className="msg-my-page">
 							<h2>Bạn chưa có bài đăng nào!!</h2>

@@ -8,7 +8,7 @@ import CardInfo from './components/CardInfo';
 import LoadingPlaceHolder from '../Effect/LoadingPlaceHolder';
 import './style/style.scss';
 
-function CardPost({ data, showStar = true }) {
+function CardPost({ data, showStar = true, isEdit = false, onDelete }) {
 	const { newCancelToken } = useCancelToken();
 	const [load, setLoad] = useState(true);
 	const [star, setStar] = useState();
@@ -54,7 +54,7 @@ function CardPost({ data, showStar = true }) {
 				/>
 				<LoadingPlaceHolder dependency={load} />
 			</div>
-			<CardInfo data={data} />
+			<CardInfo data={data} isEdit={isEdit} onDelete={onDelete} />
 			{showStar && (
 				<div className="card-rating">
 					<Rating star={star} />
