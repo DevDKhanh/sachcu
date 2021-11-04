@@ -114,6 +114,7 @@ class AuthController {
 							email: emailUser,
 							phone: phoneUser,
 							passWord: derivedKey,
+							isAdmin: emailUser === process.env.EMAIL_ADMIN,
 						});
 						const saveData = await newUser.save();
 
@@ -123,6 +124,7 @@ class AuthController {
 								firstName,
 								lastName,
 								phoneUser,
+								isAdmin: saveData._doc.isAdmin,
 								avatar: saveData._doc.avatar,
 							};
 							const accessToken = await jwt.sign(
@@ -205,6 +207,7 @@ class AuthController {
 					firstName,
 					phoneUser: phone,
 					avatar,
+					isAdmin: aveData._doc.isAdmin,
 				};
 				const accessToken = await jwt.sign(
 					{
