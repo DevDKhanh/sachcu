@@ -1,3 +1,5 @@
+@import '../../../../style/variables';
+
 .btn--toggle {
 	position: relative;
 	min-width: 6rem;
@@ -16,6 +18,20 @@
 		background-color: rgb(190, 190, 190);
 		top: 50%;
 		left: 0;
+		transition: 0.4s;
 		transform: translateY(-50%);
+	}
+}
+
+.btn--toggle.active {
+	&::after {
+		background-color: $colorPrimary;
+	}
+}
+
+.btn--toggle.un-active {
+	&::after {
+		background-color: $colorDanger;
+		left: 3.7rem;
 	}
 }

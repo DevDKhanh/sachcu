@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { MdDoubleArrow } from 'react-icons/md';
+import { FaRegTimesCircle } from 'react-icons/fa';
 import { BsFilePost } from 'react-icons/bs';
 import { IoNewspaper } from 'react-icons/io5';
-import { AiOutlineLogout } from 'react-icons/ai';
+import { AiOutlineLogout, AiFillDashboard } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 
 import * as typeUser from '../../../actions/typeUser';
@@ -14,6 +14,7 @@ import './style/style.scss';
 
 function TabMenu({ isShow, onShow, user }) {
 	const dispatch = useDispatch();
+	const { infoUser } = useSelector(state => state.user);
 
 	/********** Logout user **********/
 	const handleLogout = () => {
@@ -29,7 +30,7 @@ function TabMenu({ isShow, onShow, user }) {
 			<div role="menubar" className={`table-menu ${!isShow && 'closed'}`}>
 				<div className="table-menu__header">
 					<span className="btn-close" onClick={() => onShow(false)}>
-						<MdDoubleArrow />
+						<FaRegTimesCircle />
 					</span>
 					<div className="info-user">
 						<AvatarImg avatar={user.avatar} />
@@ -46,6 +47,20 @@ function TabMenu({ isShow, onShow, user }) {
 						</div>
 					</div>
 					<ul className="menu">
+						<ProtectedComponent dependency={infoUser}>
+							<li className="menu-item">
+								<NavLink
+									className="menu-link"
+									to="/dashboard/posts"
+									onClick={() => onShow(false)}
+								>
+									<span className="icon">
+										<AiFillDashboard />
+									</span>
+									<p>Trang quản trị</p>
+								</NavLink>
+							</li>
+						</ProtectedComponent>
 						<li className="menu-item">
 							<NavLink
 								className="menu-link"
