@@ -1,0 +1,50 @@
+.card-notify {
+	display: block;
+	min-height: 50px;
+	padding: 1rem;
+	display: flex;
+	justify-content: space-between;
+	border-radius: 0.8rem;
+	align-items: center;
+	color: rgb(56, 56, 56);
+	&:hover {
+		cursor: pointer;
+		background-color: rgb(241, 241, 241);
+	}
+	.icon {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 4rem !important;
+	}
+
+	.text {
+		flex: 1;
+		margin-left: 1.6rem;
+		p {
+			font-size: 1.6rem;
+			font-weight: 600;
+		}
+		.timer {
+			font-size: 1.4rem;
+			color: rgb(241, 0, 40);
+		}
+	}
+}
+
+.card-notify.accpet {
+	.icon {
+		color: rgb(0, 207, 79);
+	}
+}
+
+.card-notify.not-accpet {
+	.icon {
+		color: rgb(224, 0, 75);
+	}
+}
+
+.card-notify + .card-notify {
+	margin-top: 1rem;
+}

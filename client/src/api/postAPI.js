@@ -10,7 +10,12 @@ const meAPI = {
 	},
 	getPost: (slug, tokenAxios) => {
 		const url = `${routeName}/post?slug=${slug}`;
-		return axiosClient.get(url, { cancelToken: tokenAxios });
+		return axiosClient.get(url, {
+			cancelToken: tokenAxios,
+			headers: {
+				Authorization: 'Bearer ' + getItemStorage('accessToken'),
+			},
+		});
 	},
 	getPosts: (category, limit = 8, page = 1, myPage = false, tokenAxios) => {
 		const url = `${routeName}?category=${category}&limit=${limit}&page=${page}&myPage=${myPage}`;

@@ -106,14 +106,6 @@ function ListPost({
 				</div>
 			</ProtectedComponent>
 
-			<ProtectedComponent dependency={loadData}>
-				<div className="list-posts-show effect">
-					{['', '', '', ''].map((post, index) => (
-						<CardPost key={index} data={post} showStar={false} />
-					))}
-				</div>
-			</ProtectedComponent>
-
 			<ProtectedComponent
 				dependency={showMsg && posts.length <= 0 && !loadData}
 			>

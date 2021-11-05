@@ -1,6 +1,7 @@
 require('dotenv').config();
 const dbUsers = require('../model/users');
 const dbPosts = require('../model/posts');
+const dbMessage = require('../model/message');
 
 const cloudinary = require('../../utils/cloudinary');
 const validator = require('validator');
@@ -75,7 +76,7 @@ class MeController {
 					code: 201,
 					slug: savePost._doc.slug,
 					message: 'Create successfully',
-					message_vn: 'Đăng thành công',
+					message_vn: 'Tạo thành công, bài viết đang được kiểm duyệt',
 				});
 			} else {
 				return res.status(400).json({
@@ -119,7 +120,7 @@ class MeController {
 					});
 				} else {
 					return res.status(200).json({
-						status: 1,
+						status: 0,
 						code: 200,
 						message: 'Not found data with this id',
 					});
@@ -159,9 +160,47 @@ class MeController {
 					});
 				} else {
 					return res.status(200).json({
-						status: 1,
+						status: 0,
 						code: 200,
 						message: 'Not found data with this id',
+					});
+				}
+			}
+		} catch (err) {
+			return res.status(500).json({
+				status: 0,
+				code: 500,
+				message: 'Error server',
+			});
+		}
+	}
+
+	async getMessage(req, res) {
+		try {
+			const token = req.headers['authorization'].split(' ')[1];
+			const { limit, page, type } = req.query;
+			const user = await jwt.verify(token, process.env.JWT_SECRET);
+			if (user) {
+				const messageList = await dbMessage
+					.find({ idUser: user.data.idUser, type: type })
+					.skip(page * limit - limit)
+					.limit(Number(limit))
+					.sort({ read: -1, createdAt: -1 });
+				const countMessage = await dbMessage.countDocuments({
+					idUser: user.data.idUser,
+					type: type,
+				});
+				if (messageList) {
+					return res.status(200).json({
+						status: 1,
+						code: 200,
+						data: { messageList, countMessage },
+					});
+				} else {
+					return res.status(400).json({
+						status: 0,
+						code: 400,
+						message: 'Not found data',
 					});
 				}
 			}

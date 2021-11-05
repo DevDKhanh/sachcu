@@ -16,6 +16,8 @@ import DashboardUsers from '../views/screens/Admin/DashboardUsers';
 function Routers() {
 	const { isLogged, infoUser } = useSelector(state => state.user);
 
+	console.log(infoUser.isAdmin);
+
 	return (
 		<Switch>
 			{/********** category route **********/}

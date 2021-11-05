@@ -81,7 +81,7 @@ function AddPostPage() {
 					const res = await meAPI.addPost(formData, newCancelToken());
 					setLoading(false);
 					if (res.status === 1) {
-						history.push(`/post/${res.slug}`);
+						history.push(`/me/my-post`);
 						toast.success(res.message_vn);
 					} else {
 						toast.error(res.message_vn);

@@ -47,7 +47,7 @@ function TabMenu({ isShow, onShow, user }) {
 						</div>
 					</div>
 					<ul className="menu">
-						<ProtectedComponent dependency={infoUser}>
+						<ProtectedComponent dependency={infoUser.isAdmin}>
 							<li className="menu-item">
 								<NavLink
 									className="menu-link"

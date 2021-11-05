@@ -1,9 +1,10 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
-const registerCommentHandlers = require('./commentHandler');
-const registerCommentReplyHandlers = require('./commentReplyHandler');
-const registerRoomHandlers = require('./roomHandler');
+const registerCommentHandler = require('./commentHandler');
+const registerCommentReplyHandler = require('./commentReplyHandler');
+const registerRoomHandler = require('./roomHandler');
+const registerMessageHandler = require('./messageHandler');
 
 module.exports.start = io => {
 	io.on('connection', async socket => {
@@ -13,9 +14,10 @@ module.exports.start = io => {
 			if (user) {
 				socket.idUser = user.data.idUser;
 				socket.join(socket.idUser);
-				registerCommentHandlers(io, socket);
-				registerRoomHandlers(io, socket);
-				registerCommentReplyHandlers(io, socket);
+				registerCommentHandler(io, socket);
+				registerRoomHandler(io, socket);
+				registerCommentReplyHandler(io, socket);
+				registerMessageHandler(io, socket);
 			}
 		} catch (err) {
 			socket.emit('error');

@@ -2,30 +2,16 @@ import { memo, useEffect, useState, useCallback } from 'react';
 
 import adminAPI from '../../../../api/adminAPI';
 import { useCancelToken } from '../../../../hooks';
-import InfoPost from './InfoPost';
+import InfoPostCensorship from './InfoPostCensorship';
 import HeadTable from './HeadTable';
 import Pagination from '../../../components/Pagination';
 
 function TableShowPost() {
-	const limit = 10;
+	const limit = 5;
 	const { newCancelToken } = useCancelToken();
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [countPosts, setCountPosts] = useState(0);
-
-	const handleCallApi = useCallback(() => {
-		(async () => {
-			const res = await adminAPI.getPosts(limit, page, newCancelToken());
-			if (res) {
-				setPosts(prev => [...res.data]);
-				setCountPosts(prev => res.count);
-			}
-		})();
-	}, [newCancelToken, page]);
-
-	const handleDeletePost = useCallback(id => {
-		setPosts(prev => prev.filter(post => post._id !== id));
-	}, []);
 
 	const listTitle = [
 		'',
@@ -33,11 +19,23 @@ function TableShowPost() {
 		'Tên sách',
 		'Thể loại',
 		'Tác giả',
-		'Trạng thái',
 		'Ngày đăng',
-		'Ẩn - Hiện',
 		'',
 	];
+
+	const handleCallApi = useCallback(() => {
+		(async () => {
+			const res = await adminAPI.getPostsCensorship(
+				limit,
+				page,
+				newCancelToken(),
+			);
+			if (res) {
+				setPosts([...res.data]);
+				setCountPosts(res.count);
+			}
+		})();
+	}, [newCancelToken, page]);
 
 	useEffect(() => {
 		handleCallApi();
@@ -48,15 +46,15 @@ function TableShowPost() {
 			<button className="btn btn--primary" onClick={handleCallApi}>
 				Tải mới
 			</button>
-			<h2>Danh sách tất cả bài viết</h2>
+			<h2>Danh sách bài viết chưa được phê duyệt</h2>{' '}
 			<table className="table">
 				<HeadTable list={listTitle} />
 				<tbody>
 					{posts.map(post => (
-						<InfoPost
+						<InfoPostCensorship
 							key={post._id}
 							props={post}
-							onDeletePost={handleDeletePost}
+							onSetPosts={setPosts}
 						/>
 					))}
 				</tbody>

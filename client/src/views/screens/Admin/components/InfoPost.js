@@ -1,4 +1,5 @@
 import { memo, useMemo, useState, useEffect, useCallback } from 'react';
+import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { useCancelToken } from '../../../../hooks';
@@ -13,25 +14,29 @@ function InfoPost({ props, onDeletePost }) {
 	const [toggle, setToggle] = useState(props.isDelete);
 	const [category, setCategory] = useState({});
 	const [user, setUser] = useState({});
-	const [post, setPost] = useState(props);
+	const [post, setPost] = useState({});
 
 	useEffect(() => {
-		if (post.category) {
+		setPost(props);
+	}, [props]);
+
+	useEffect(() => {
+		if (props.category) {
 			setCategory(
-				...listCategory.filter(item => item.value === post.category),
+				...listCategory.filter(item => item.value === props.category),
 			);
 		}
 		return () => setCategory({});
-	}, [post.category]);
+	}, [props.category]);
 
 	/********** get user info from id **********/
 	useEffect(() => {
-		if (post.idUser) {
+		if (props.idUser) {
 			(async () => {
 				try {
 					/********** call api **********/
 					const res = await usersAPI.getContact(
-						post.idUser,
+						props.idUser,
 						newCancelToken(),
 					);
 					if (res.status === 1) {
@@ -44,7 +49,7 @@ function InfoPost({ props, onDeletePost }) {
 		return () => {
 			setUser({});
 		};
-	}, [post.idUser, newCancelToken]);
+	}, [props.idUser, newCancelToken]);
 
 	const handleActivePost = useCallback(() => {
 		(async () => {
@@ -92,11 +97,12 @@ function InfoPost({ props, onDeletePost }) {
 	}, [onDeletePost, newCancelToken, props._id]);
 
 	const classTag = useMemo(() => {
+		if (!post.isReady) return { class: 'not-ready', text: 'Chưa duyệt' };
 		if (post.isDelete) return { class: 'delete', text: 'Đã ẩn' };
 		if (post.status === 0)
 			return { class: 'active', text: 'Đang sẵn sàng' };
 		else return { class: 'un-active', text: 'Đã cho mượn' };
-	}, [post.isDelete, post.status]);
+	}, [post.isDelete, post.status, post.isReady]);
 
 	return (
 		<tr>
@@ -104,17 +110,24 @@ function InfoPost({ props, onDeletePost }) {
 				<AvatarImg avatar={user.avatar} />
 			</td>
 			<td>{user.lastName + ' ' + user.firstName}</td>
-			<td>{post.title}</td>
+			<td>
+				<NavLink to={`/post/${post.slug}`}>{post.title}</NavLink>
+			</td>
 			<td>{category.text}</td>
 			<td>{post.author}</td>
 			<td>
 				<span className={`tag ${classTag.class}`}>{classTag.text}</span>
 			</td>
 			<td>
+				<span>
+					{new Date(post.createdAt).toLocaleDateString('en-GB')}
+				</span>
+			</td>
+			<td>
 				<ButtonToggle toggle={!toggle} onClick={handleActivePost} />
 			</td>
 			<td>
-				<button className="btn--delete-user" onClick={handleDelete}>
+				<button className="btn--delete" onClick={handleDelete}>
 					Xóa bài đăng
 				</button>
 			</td>

@@ -14,7 +14,10 @@ const xss = str => {
 class PostController {
 	async countPosts(req, res, next) {
 		try {
-			const count = await dbPosts.countDocuments({ isDelete: false });
+			const count = await dbPosts.countDocuments({
+				isDelete: false,
+				isReady: true,
+			});
 
 			if (count) {
 				return res.status(200).json({
@@ -42,7 +45,36 @@ class PostController {
 	async getPost(req, res, next) {
 		try {
 			const { slug } = req.query;
-			const post = await dbPosts.findOne({ slug, isDelete: false });
+			const token = req?.headers['authorization'].split(' ')[1];
+			const user = await jwt.verify(token, process.env.JWT_SECRET);
+
+			/********** check if admin **********/
+			if (token && user.data.isAdmin) {
+				const post = await dbPosts.findOne({
+					slug,
+				});
+				if (post) {
+					return res.status(200).json({
+						status: 1,
+						code: 200,
+						data: post,
+					});
+				} else {
+					return res.status(200).json({
+						status: 0,
+						code: 200,
+						message: 'Not found post',
+					});
+				}
+			}
+
+			/********** user **********/
+			const post = await dbPosts.findOne({
+				slug,
+				isDelete: false,
+				isReady: true,
+			});
+
 			if (!slug) {
 				return res.status(200).json({
 					status: 0,
@@ -86,7 +118,11 @@ class PostController {
 				const user = await jwt.verify(token, process.env.JWT_SECRET);
 				if (user) {
 					posts = await dbPosts
-						.find({ idUser: user.data.idUser, isDelete: false })
+						.find({
+							idUser: user.data.idUser,
+							isDelete: false,
+							isReady: true,
+						})
 						.skip(page * numberLimit - numberLimit)
 						.limit(numberLimit)
 						.sort({ createdAt: -1 });
@@ -104,14 +140,18 @@ class PostController {
 			} else {
 				if (category === 'all') {
 					posts = await dbPosts
-						.find({ isDelete: false })
+						.find({ isDelete: false, isReady: true })
 						.skip(page * numberLimit - numberLimit)
 						.limit(numberLimit)
 						.sort({ status: 1, createdAt: -1 });
 					countPost = await dbPosts.countDocuments();
 				} else if (category) {
 					posts = await dbPosts
-						.find({ category: category, isDelete: false })
+						.find({
+							category: category,
+							isDelete: false,
+							isReady: true,
+						})
 						.skip(page * numberLimit - numberLimit)
 						.limit(numberLimit)
 						.sort({ status: 1, createdAt: -1 });
@@ -150,7 +190,12 @@ class PostController {
 			const { star, idUser, slug } = req.body;
 			if (star && idUser && slug) {
 				const [isHadReviews, isHadUser, isHadPost] = await Promise.all([
-					dbStarReviews.findOne({ idUser, slug, isDelete: false }),
+					dbStarReviews.findOne({
+						idUser,
+						slug,
+						isDelete: false,
+						isReady: true,
+					}),
 					dbUsers.findOne({ _id: idUser }),
 					dbPosts.findOne({ slug: slug }),
 				]);
@@ -237,6 +282,7 @@ class PostController {
 				const getStar = await dbStarReviews.find({
 					slug,
 					isDelete: false,
+					isReady: true,
 				});
 				if (getStar.length > 0) {
 					return res.status(200).json({
