@@ -4,6 +4,7 @@ const sanitizer = require('sanitizer');
 
 const dbComments = require('../model/comments');
 const dbCommentsReply = require('../model/replyComment');
+const dbMessages = require('../model/message');
 const dbPosts = require('../model/posts');
 
 //Check xss
@@ -19,11 +20,26 @@ module.exports = (io, socket) => {
 			const isPost = await dbPosts.findOne({ slug: slug });
 			if (user && socket.idUser && isPost) {
 				if (slug && comment) {
+					const msg = 'Bài viết của bạn có 1 bình luận mới';
+					const content = `${user.data.lastName} ${user.data.firstName} đã bình luận về bài viết của bạn!`;
+
 					const newComment = new dbComments({
 						idUser: socket.idUser,
 						slug,
 						comment: xss(comment),
 					});
+
+					if (isPost.idUser !== socket.idUser) {
+						const newMessages = new dbMessages({
+							idUser: isPost.idUser,
+							slug,
+							type: 'comment',
+							message: msg,
+							content,
+						});
+						await newMessages.save();
+					}
+
 					const saveComment = await newComment.save();
 					if (saveComment) {
 						io.sockets

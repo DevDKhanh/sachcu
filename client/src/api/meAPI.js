@@ -40,6 +40,15 @@ const meAPI = {
 			},
 		});
 	},
+	readMessageNotAccpet: ({ id }, tokenAxios) => {
+		const url = `${routeName}/message/read-not-accpet?id=${id}`;
+		return axiosClient.get(url, {
+			cancelToken: tokenAxios,
+			headers: {
+				Authorization: 'Bearer ' + getItemStorage('accessToken'),
+			},
+		});
+	},
 };
 
 export default meAPI;

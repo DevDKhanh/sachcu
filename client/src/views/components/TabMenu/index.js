@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { BsFilePost } from 'react-icons/bs';
 import { IoNewspaper } from 'react-icons/io5';
+import { RiChatFollowUpLine } from 'react-icons/ri';
 import { AiOutlineLogout, AiFillDashboard } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 
@@ -83,6 +84,18 @@ function TabMenu({ isShow, onShow, user }) {
 									<IoNewspaper />
 								</span>
 								<p>Bài viết mới</p>
+							</NavLink>
+						</li>
+						<li className="menu-item">
+							<NavLink
+								className="menu-link"
+								to="/me/notify-comment"
+								onClick={() => onShow(false)}
+							>
+								<span className="icon">
+									<RiChatFollowUpLine />
+								</span>
+								<p>Theo dõi bình luận</p>
 							</NavLink>
 						</li>
 						<li className="menu-item">

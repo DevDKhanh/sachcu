@@ -1,0 +1,36 @@
+.read-mail {
+	max-width: 800px;
+	margin: 0 auto;
+	background-color: #fff;
+	border-radius: 0.8rem;
+	overflow: hidden;
+
+	.img-mail {
+		max-height: 250px;
+		overflow: hidden;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.title {
+		padding: 1.6rem;
+	}
+
+	.content {
+		margin: 1.6rem;
+		padding: 1rem;
+		border: dotted 2px #ccc;
+		font-size: 1.6rem;
+		border-radius: 0.8rem;
+	}
+
+	.actions {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 1.6rem;
+	}
+}

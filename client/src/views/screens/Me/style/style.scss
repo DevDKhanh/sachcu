@@ -109,3 +109,14 @@
 		font-weight: 600;
 	}
 }
+
+h1 {
+	color: #fff;
+}
+
+.list-notify {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	margin-top: 2.6rem;
+}

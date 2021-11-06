@@ -1,13 +1,15 @@
-import React from 'react';
+import { memo } from 'react';
+
+import TableUser from './components/TableUser';
 
 function DashboardUsers() {
 	return (
 		<div className="page-main">
 			<div className="grid wide">
-				<h1>Users admin</h1>
+				<TableUser />
 			</div>
 		</div>
 	);
 }
 
-export default DashboardUsers;
+export default memo(DashboardUsers);

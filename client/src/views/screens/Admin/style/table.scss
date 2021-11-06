@@ -113,3 +113,34 @@
 		padding: 0.5rem 0;
 	}
 }
+
+.form-send-msg {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	max-width: 500px;
+	min-width: 450px;
+	background-color: #fff;
+	padding: 1.6rem;
+	box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 8px;
+	border-radius: 1rem;
+
+	.input-element {
+		min-height: 200px;
+		padding: 1rem;
+		border: 1px #ccc solid;
+		margin-bottom: 1.6rem;
+		outline: none;
+		&:empty::after {
+			content: attr(placeholder);
+			color: rgb(187, 187, 187);
+		}
+	}
+
+	.group-btn {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+}

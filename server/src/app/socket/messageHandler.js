@@ -15,7 +15,7 @@ const xss = str => {
 module.exports = (io, socket) => {
 	const messageAccpetPost = async ({ idUser, slug, title }) => {
 		try {
-			const msg = 'Bài viết của bạn đã được quản trị viên chấp thuận';
+			const msg = 'Bài viết của bạn đã được phê duyệt';
 			const newMessages = new dbMessages({
 				idUser,
 				slug,
@@ -33,5 +33,69 @@ module.exports = (io, socket) => {
 			});
 		}
 	};
+
+	const messageNotAccpetPost = async ({ idUser, slug, title, content }) => {
+		try {
+			const msg = 'Bài viết của bạn đã bị từ chối';
+			const newMessages = new dbMessages({
+				idUser,
+				slug,
+				title,
+				type: 'post',
+				content: xss(content),
+				message: msg,
+				style: 'not-accpet',
+			});
+
+			const saveMessage = await newMessages.save();
+			await dbPosts.deleteOne({ slug, idUser });
+			io.sockets.in(idUser).emit('message:send', { data: saveMessage });
+		} catch (err) {
+			socket.emit('msg', {
+				text: 'Không thể gửi tin tới người dùng này',
+			});
+		}
+	};
+
+	const readMessage = async ({ id, type, readAll }) => {
+		try {
+			if (readAll) {
+				await dbMessages.updateMany(
+					{ type, idUser: socket.idUser },
+					{ read: 1 },
+				);
+				if (type === 'post') {
+					const countMessageNotRead = await dbMessages.countDocuments(
+						{
+							type,
+							idUser: socket.idUser,
+							read: 0,
+						},
+					);
+				}
+			} else {
+				await dbMessages.updateOne(
+					{ _id: id, type, idUser: socket.idUser },
+					{ read: 1 },
+				);
+				if (type === 'post') {
+					const countMessageNotRead = await dbMessages.countDocuments(
+						{
+							type,
+							idUser: socket.idUser,
+							read: 0,
+						},
+					);
+				}
+			}
+		} catch (err) {
+			socket.emit('msg', {
+				text: 'Có lỗi đã xảy ra',
+			});
+		}
+	};
+
 	socket.on('message:accpectPost', messageAccpetPost);
+	socket.on('message:notAccpectPost', messageNotAccpetPost);
+	socket.on('message:read', readMessage);
 };

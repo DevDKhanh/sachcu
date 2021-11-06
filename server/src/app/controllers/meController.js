@@ -185,7 +185,7 @@ class MeController {
 					.find({ idUser: user.data.idUser, type: type })
 					.skip(page * limit - limit)
 					.limit(Number(limit))
-					.sort({ read: -1, createdAt: -1 });
+					.sort({ read: 1, createdAt: -1 });
 				const countMessage = await dbMessage.countDocuments({
 					idUser: user.data.idUser,
 					type: type,
@@ -195,6 +195,45 @@ class MeController {
 						status: 1,
 						code: 200,
 						data: { messageList, countMessage },
+					});
+				} else {
+					return res.status(400).json({
+						status: 0,
+						code: 400,
+						message: 'Not found data',
+					});
+				}
+			}
+		} catch (err) {
+			return res.status(500).json({
+				status: 0,
+				code: 500,
+				message: 'Error server',
+			});
+		}
+	}
+
+	async ReadMessageNotAccpet(req, res) {
+		try {
+			const token = req?.headers['authorization'].split(' ')[1];
+			const { id } = req.query;
+			const user = await jwt.verify(token, process.env.JWT_SECRET);
+			if (user) {
+				const message = await dbMessage.findOne({
+					idUser: user.data.idUser,
+					_id: id,
+					type: 'post',
+					style: 'not-accpet',
+				});
+				if (message) {
+					await dbMessage.updateOne(
+						{ idUser: user.data.idUser, _id: id },
+						{ read: 1 },
+					);
+					return res.status(200).json({
+						status: 1,
+						code: 200,
+						data: { ...message._doc },
 					});
 				} else {
 					return res.status(400).json({

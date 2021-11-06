@@ -12,6 +12,8 @@ import AddPostPage from '../views/screens/Me/AddPostPage';
 import MyPostPage from '../views/screens/Me/MyPostPage';
 import DashboardPosts from '../views/screens/Admin/DashboardPosts';
 import DashboardUsers from '../views/screens/Admin/DashboardUsers';
+import ReadMessage from '../views/screens/Me/ReadMessage';
+import NotifyCommentPage from '../views/screens/Me/NotifyCommentPage';
 
 function Routers() {
 	const { isLogged, infoUser } = useSelector(state => state.user);
@@ -48,6 +50,22 @@ function Routers() {
 			</ProtectedRoute>
 
 			{/********** me route **********/}
+			<ProtectedRoute
+				path="/me/message/not-accpet/:id"
+				redirect="/login"
+				dependency={isLogged}
+			>
+				<ReadMessage />
+			</ProtectedRoute>
+
+			<ProtectedRoute
+				path="/me/notify-comment"
+				redirect="/login"
+				dependency={isLogged}
+			>
+				<NotifyCommentPage />
+			</ProtectedRoute>
+
 			<ProtectedRoute
 				path="/me/add-post"
 				redirect="/login"

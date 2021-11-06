@@ -14,5 +14,6 @@ router.post('/post', upload.single('file'), meController.meAddPost);
 router.put('/status', meController.updateStatus);
 router.delete('/post', meController.deletePost);
 router.get('/message', meController.getMessage);
+router.get('/message/read-not-accpet', meController.ReadMessageNotAccpet);
 
 module.exports = router;
