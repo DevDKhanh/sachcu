@@ -26,6 +26,14 @@ module.exports = (io, socket) => {
 			});
 
 			const saveMessage = await newMessages.save();
+
+			const countMessageNotRead = await dbMessages.countDocuments({
+				type: 'post',
+				idUser,
+				read: 0,
+			});
+
+			io.sockets.in(idUser).emit('message:count', countMessageNotRead);
 			io.sockets.in(idUser).emit('message:send', { data: saveMessage });
 		} catch (err) {
 			socket.emit('msg', {
@@ -48,7 +56,16 @@ module.exports = (io, socket) => {
 			});
 
 			const saveMessage = await newMessages.save();
+
+			const countMessageNotRead = await dbMessages.countDocuments({
+				type: 'post',
+				idUser,
+				read: 0,
+			});
+
 			await dbPosts.deleteOne({ slug, idUser });
+
+			io.sockets.in(idUser).emit('message:count', countMessageNotRead);
 			io.sockets.in(idUser).emit('message:send', { data: saveMessage });
 		} catch (err) {
 			socket.emit('msg', {
@@ -64,29 +81,20 @@ module.exports = (io, socket) => {
 					{ type, idUser: socket.idUser },
 					{ read: 1 },
 				);
-				if (type === 'post') {
-					const countMessageNotRead = await dbMessages.countDocuments(
-						{
-							type,
-							idUser: socket.idUser,
-							read: 0,
-						},
-					);
-				}
 			} else {
 				await dbMessages.updateOne(
 					{ _id: id, type, idUser: socket.idUser },
 					{ read: 1 },
 				);
-				if (type === 'post') {
-					const countMessageNotRead = await dbMessages.countDocuments(
-						{
-							type,
-							idUser: socket.idUser,
-							read: 0,
-						},
-					);
-				}
+			}
+
+			if (type === 'post') {
+				const countMessageNotRead = await dbMessages.countDocuments({
+					type,
+					idUser: socket.idUser,
+					read: 0,
+				});
+				socket.emit('message:count', countMessageNotRead);
 			}
 		} catch (err) {
 			socket.emit('msg', {

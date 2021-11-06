@@ -15,7 +15,7 @@ function TableShowPost() {
 
 	const handleCallApi = useCallback(() => {
 		(async () => {
-			const res = await adminAPI.getPosts(limit, page, newCancelToken());
+			const res = await adminAPI.getUsers(limit, page, newCancelToken());
 			if (res) {
 				setPosts(prev => [...res.data]);
 				setCountPosts(prev => res.count);

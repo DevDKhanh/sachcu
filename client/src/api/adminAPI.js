@@ -4,6 +4,24 @@ import { getItemStorage } from '../utils/localStorage';
 const routeName = '/admin';
 
 const authAPI = {
+	getUsers: (limit, page, tokenAxios) => {
+		const url = `${routeName}/users?limit=${limit}&page=${page}`;
+		return axiosClient.get(url, {
+			cancelToken: tokenAxios,
+			headers: {
+				Authorization: 'Bearer ' + getItemStorage('accessToken'),
+			},
+		});
+	},
+	deleteUser: (id, tokenAxios) => {
+		const url = `${routeName}/users/user?id=${id}`;
+		return axiosClient.delete(url, {
+			cancelToken: tokenAxios,
+			headers: {
+				Authorization: 'Bearer ' + getItemStorage('accessToken'),
+			},
+		});
+	},
 	getPostsCensorship: (limit, page, tokenAxios) => {
 		const url = `${routeName}/posts/censorship?limit=${limit}&page=${page}`;
 		return axiosClient.get(url, {

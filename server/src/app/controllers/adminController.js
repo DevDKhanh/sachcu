@@ -13,6 +13,31 @@ const xss = str => {
 };
 
 class AdminController {
+	async getUsers(req, res, next) {
+		try {
+			const { limit, page } = req.query;
+			const data = await dbUsers
+				.find({})
+				.skip(page * limit - limit)
+				.limit(Number(limit))
+				.sort({ createdAt: -1 });
+			const count = await dbUsers.countDocuments({});
+			res.status(200).json({ data, count });
+		} catch (err) {
+			res.status(500).json('Error');
+		}
+	}
+
+	async deleteUser(req, res, next) {
+		try {
+			const { id } = req.query;
+			await dbUsers.deleteOne({ _id: id });
+			res.status(200).json(id);
+		} catch (err) {
+			res.status(500).json('Error');
+		}
+	}
+
 	async getPostsCensorship(req, res, next) {
 		try {
 			const { limit, page } = req.query;

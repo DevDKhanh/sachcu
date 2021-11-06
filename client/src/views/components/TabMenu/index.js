@@ -95,7 +95,7 @@ function TabMenu({ isShow, onShow, user }) {
 								<span className="icon">
 									<RiChatFollowUpLine />
 								</span>
-								<p>Theo dõi bình luận</p>
+								<p>Theo dõi bài viết</p>
 							</NavLink>
 						</li>
 						<li className="menu-item">
