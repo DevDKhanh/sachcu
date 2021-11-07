@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
 import { ProtectedRoute } from '../utils/Protected';
+import SearchPage from '../views/screens/Search';
 import ForgotPassPage from '../views/screens/Auth/ForgotPassPage';
 import LoginPage from '../views/screens/Auth/LoginPage';
 import VerifyMail from '../views/screens/Auth/VerifyMail';
@@ -24,6 +25,11 @@ function Routers() {
 
 	return (
 		<Switch>
+			{/********** search route **********/}
+			<Route exact path="/search">
+				<SearchPage />
+			</Route>
+
 			{/********** category route **********/}
 			<Route exact path="/category/:role">
 				<CategoryPage />

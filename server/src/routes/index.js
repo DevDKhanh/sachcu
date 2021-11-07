@@ -6,25 +6,18 @@ const Me = require('./apiMe');
 const User = require('./apiUser');
 const Comments = require('./apiComments');
 const middlewaresAuth = require('../middlewares/auth');
-const delayRoute = require('../middlewares/delayRoute');
 
 async function route(app) {
+	app.use(`${process.env.BASE_API}/admin`, middlewaresAuth.isAdmin, Admin);
+	app.use(`${process.env.BASE_API}/auth`, Auth);
+	app.use(`${process.env.BASE_API}/posts`, Post);
+	app.use(`${process.env.BASE_API}/users`, User);
 	app.use(
-		`${process.env.BASE_API}/admin`,
-		middlewaresAuth.isAdmin,
-		delayRoute.start,
-		Admin,
-	);
-	app.use(`${process.env.BASE_API}/auth`, delayRoute.start, Auth);
-	app.use(`${process.env.BASE_API}/posts`, delayRoute.start, Post);
-	app.use(`${process.env.BASE_API}/users`, delayRoute.start, User);
-	app.use(`${process.env.BASE_API}/comments`, delayRoute.start, Comments);
-	app.use(
-		`${process.env.BASE_API}/me`,
+		`${process.env.BASE_API}/comments`,
 		middlewaresAuth.authVerify,
-		delayRoute.start,
-		Me,
+		Comments,
 	);
+	app.use(`${process.env.BASE_API}/me`, middlewaresAuth.authVerify, Me);
 }
 
 module.exports = route;

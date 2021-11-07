@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import AvatarImg from '../../AvatarImg';
 import BellNotify from '../../BellNotify';
 import TabMenu from '../../TabMenu';
+import Search from '../../Search';
 
 function MeControl({ user }) {
 	const [showMenu, setShowMenu] = useState(false);
 
 	return (
 		<React.Fragment>
+			<Search />
 			<div className="nav-control">
 				<div className="item">
 					<BellNotify />

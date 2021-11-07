@@ -306,6 +306,54 @@ class PostController {
 			});
 		}
 	}
+
+	//[GET] /api/v1/posts/search?key=...
+	async searchPost(req, res, next) {
+		try {
+			const { key, limit, page } = req.query;
+			if (!key) {
+				return res.status(400).json({
+					status: 0,
+					code: 400,
+					message: 'Not found key query',
+				});
+			} else {
+				const posts = await dbPosts
+					.find({
+						$text: { $search: '"' + key + '"' },
+					})
+					.skip(page * limit - limit)
+					.limit(Number(limit))
+					.sort({ status: 1, createdAt: -1 });
+
+				const count = await dbPosts.countDocuments({
+					$text: { $search: '"' + key + '"' },
+				});
+
+				if (posts) {
+					return res.status(200).json({
+						status: 1,
+						code: 200,
+						data: [...posts],
+						count,
+					});
+				} else {
+					return res.status(200).json({
+						status: 0,
+						code: 200,
+						message: 'Not found posts',
+					});
+				}
+			}
+		} catch (err) {
+			console.log(err);
+			return res.status(500).json({
+				status: 0,
+				code: 500,
+				message: 'Error server',
+			});
+		}
+	}
 }
 
 module.exports = new PostController();

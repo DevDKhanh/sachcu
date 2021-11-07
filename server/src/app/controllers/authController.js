@@ -138,7 +138,8 @@ class AuthController {
 								status: 1,
 								code: 201,
 								message: 'Create successfully!',
-								message_vn: 'Tạo tài khoản thành công',
+								message_vn:
+									'Tạo tài khoản thành công, Kiểm tra mail để xác thực',
 							});
 						} else {
 							return res.status(500);

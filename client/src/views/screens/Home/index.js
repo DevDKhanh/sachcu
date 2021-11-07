@@ -1,8 +1,8 @@
 import { memo, useState, useLayoutEffect } from 'react';
 
 import ListPost from '../../components/ListPost';
-
 import postAPI from '../../../api/postAPI';
+import MenuCategory from '../../components/MenuCategory';
 
 function HomePage() {
 	const [isEmpty, setIsEmpty] = useState(false);
@@ -19,6 +19,7 @@ function HomePage() {
 	return (
 		<div className="page-main">
 			<div className="grid wide">
+				<MenuCategory />
 				<ListPost title="Mới nhất" limit={4} />
 				<ListPost title="Công nghệ thông tin" category="cntt" />
 				<ListPost title="Sách văn" category="van" />

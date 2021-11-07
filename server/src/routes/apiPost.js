@@ -7,5 +7,6 @@ router.get('/count', postController.countPosts);
 router.get('/post', postController.getPost);
 router.post('/reviews', postController.postReviews);
 router.get('/reviews', postController.getStarReviews);
+router.get('/search', postController.searchPost);
 
 module.exports = router;

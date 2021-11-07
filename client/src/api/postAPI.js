@@ -34,6 +34,12 @@ const meAPI = {
 		const url = `${routeName}/reviews?slug=${slug}`;
 		return axiosClient.get(url, { cancelToken: tokenAxios });
 	},
+	search: ({ query, limit, page }, tokenAxios) => {
+		const url = `${routeName}/search${query}&limit=${limit || 8}&page=${
+			page || 1
+		}`;
+		return axiosClient.get(url, { cancelToken: tokenAxios });
+	},
 };
 
 export default meAPI;

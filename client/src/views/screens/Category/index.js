@@ -1,5 +1,7 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { useParams } from 'react-router';
+
+import MenuCategory from '../../components/MenuCategory';
 import listCategory from '../../../constant/listCategory';
 import ListPost from '../../components/ListPost';
 
@@ -17,6 +19,8 @@ function CategoryPage() {
 	return (
 		<div className="page-main">
 			<div className="grid wide">
+				<MenuCategory />
+				<h2>{category?.text || 'Tất cả bài viết'}</h2>
 				<ListPost
 					title={category ? `Sách ${category.text}` : 'Mới nhất'}
 					category={role}

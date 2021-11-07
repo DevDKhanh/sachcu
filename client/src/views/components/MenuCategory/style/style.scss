@@ -1,0 +1,60 @@
+@import '../../../../style/variables';
+
+.menu-category {
+	position: fixed;
+	top: $heightHeader;
+	height: calc(100vh - $heightHeader);
+	width: 5rem;
+	left: 0;
+	background-color: $colorRoot1;
+
+	.menu-item {
+		padding: 1rem 0;
+		border-bottom: 1px solid #fff;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		.menu-link {
+			position: relative;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: #fff;
+			width: 4rem;
+			height: 4rem;
+
+			.icon {
+				width: 4rem;
+				height: 4rem;
+				border-radius: 50%;
+				background-color: #fff;
+				overflow: hidden;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				position: absolute;
+				transition: 0.4s;
+			}
+
+			&:hover {
+				.icon {
+					left: 70%;
+				}
+			}
+
+			&:hover::after {
+				position: absolute;
+				content: attr(title);
+				white-space: nowrap;
+				top: 0;
+				left: 5rem;
+				transition: 0.3s;
+				font-weight: 500;
+				font-size: 1.5rem;
+				padding: 0.4rem;
+				color: $secondaryText;
+				background-color: #fff;
+			}
+		}
+	}
+}
