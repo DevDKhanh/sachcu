@@ -46,7 +46,11 @@ function ReadMessage() {
 					<div className="content">
 						<p>Lý do từ chối:</p>
 						<br />
-						<p>{message.content}</p>
+						<p
+							dangerouslySetInnerHTML={{
+								__html: message.content,
+							}}
+						></p>
 					</div>
 					<div className="actions">
 						<NavLink

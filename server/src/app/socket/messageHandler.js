@@ -50,7 +50,7 @@ module.exports = (io, socket) => {
 				slug,
 				title,
 				type: 'post',
-				content: xss(content),
+				content: content,
 				message: msg,
 				style: 'not-accpet',
 			});

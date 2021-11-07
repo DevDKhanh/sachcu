@@ -12,6 +12,7 @@ export default function CurrentUser({ children }) {
 	useEffect(() => {
 		const unLock = () => {
 			dispatch({ type: typeSite.SITE_UNLOCK_LOAD });
+			console.clear();
 		};
 		const setLogin = res => {
 			dispatch({ type: typeUser.USER_CURRENT, payload: res.user });

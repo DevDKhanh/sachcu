@@ -15,6 +15,14 @@ const authAPI = {
 		const url = `${routeName}/current-user`;
 		return axiosClient.get(url);
 	},
+	verifyUser: query => {
+		const url = `${routeName}/verifyMail${query}`;
+		return axiosClient.get(url);
+	},
+	sendMail: data => {
+		const url = `${routeName}/sendMail`;
+		return axiosClient.post(url, data);
+	},
 };
 
 export default authAPI;

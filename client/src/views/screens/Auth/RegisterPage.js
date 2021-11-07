@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingOverlay from 'react-loading-overlay';
 
-import * as typeUser from '../../../actions/typeUser';
 import authAPI from '../../../api/authAPI';
 import Input from './components/Input';
 import './style/style.scss';
 
 function RegisterPage() {
-	const dispatch = useDispatch();
+	const history = useHistory();
 	const [dataForm, setDataForm] = useState({});
 	const [loading, setLoading] = useState(false);
 
@@ -29,15 +28,8 @@ function RegisterPage() {
 				const res = await authAPI.register(dataForm);
 				setLoading(false);
 				if (res.status === 1) {
-					/********** update state user login then create user successfully **********/
-					dispatch({
-						type: typeUser.USER_REGISTER,
-						payload: {
-							...res.data,
-							accessToken: res.accessToken,
-						},
-					});
-					toast.success(res.message_vn, { autoClose: 3000 });
+					toast.success(res.message_vn, { autoClose: 6000 });
+					history.push('/');
 				} else {
 					toast.error(res.message_vn, { autoClose: 3000 });
 				}

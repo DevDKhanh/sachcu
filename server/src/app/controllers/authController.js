@@ -1,6 +1,7 @@
 require('dotenv').config();
 const dbUsers = require('../model/users');
 
+const mail = require('../../utils/mail');
 const validator = require('validator');
 const pbkdf2 = require('pbkdf2');
 const jwt = require('jsonwebtoken');
@@ -107,8 +108,17 @@ class AuthController {
 							'sha512',
 						);
 
+						const accessToken = await jwt.sign(
+							{
+								data: { email: emailUser, phone: phoneUser },
+							},
+							process.env.JWT_SECRET,
+							{ expiresIn: '15m' },
+						);
+
 						const newUser = new dbUsers({
 							avatar: listAvatar[indexAvatarDefault],
+							token: accessToken,
 							firstName,
 							lastName,
 							email: emailUser,
@@ -119,27 +129,15 @@ class AuthController {
 						const saveData = await newUser.save();
 
 						if (saveData) {
-							const sendDate = {
-								idUser: saveData._doc._id,
-								firstName,
-								lastName,
-								phoneUser,
-								isAdmin: saveData._doc.isAdmin,
-								avatar: saveData._doc.avatar,
-							};
-							const accessToken = await jwt.sign(
-								{
-									data: { ...sendDate },
-								},
-								process.env.JWT_SECRET,
-								{ expiresIn: '100y' },
+							await mail.sendMailVerify(
+								emailUser,
+								saveData._doc.token,
 							);
+
 							return res.status(201).json({
 								status: 1,
 								code: 201,
 								message: 'Create successfully!',
-								data: { ...sendDate },
-								accessToken,
 								message_vn: 'Tạo tài khoản thành công',
 							});
 						} else {
@@ -169,7 +167,6 @@ class AuthController {
 		try {
 			const emailUser = xss(req.body.email, {});
 			const passWord = xss(req.body.passWord, {});
-
 			if (
 				!emailUser ||
 				!passWord ||
@@ -197,6 +194,15 @@ class AuthController {
 				email: emailUser,
 				passWord: derivedKey,
 			});
+
+			if (!dataUser.isReady) {
+				return res.status(200).json({
+					status: 0,
+					code: 200,
+					message: 'Account not authenticated',
+					message_vn: 'Tài khoản chưa được xác thực',
+				});
+			}
 
 			if (dataUser) {
 				const { _id, lastName, firstName, phone, avatar, isAdmin } =
@@ -229,7 +235,8 @@ class AuthController {
 					status: 0,
 					code: 200,
 					message: 'Login failure',
-					message_vn: 'Tài khoản hoặc mật khẩu không chính xác',
+					message_vn:
+						'Tài khoản hoặc mật khẩu không chính xác, Vui lòng kiểm tra email xác thực',
 				});
 			}
 		} catch (err) {
@@ -283,6 +290,166 @@ class AuthController {
 				status: 0,
 				code: 500,
 				message: 'Error',
+			});
+		}
+	}
+
+	async verifyMail(req, res) {
+		const { email, token } = req.query;
+
+		if (email && token) {
+			const user = await dbUsers.findOne({ email, token });
+
+			if (user) {
+				const verifyToken = await jwt.verify(
+					token,
+					process.env.JWT_SECRET,
+				);
+				if (verifyToken) {
+					await dbUsers.updateOne(
+						{ email, token },
+						{ isReady: true },
+					);
+
+					const { _id, lastName, firstName, phone, avatar, isAdmin } =
+						user._doc;
+
+					const sendDate = {
+						idUser: _id,
+						lastName,
+						firstName,
+						phoneUser: phone,
+						avatar,
+						isAdmin,
+					};
+
+					const accessToken = await jwt.sign(
+						{
+							data: { ...sendDate },
+						},
+						process.env.JWT_SECRET,
+						{ expiresIn: '100y' },
+					);
+
+					return res.status(200).json({
+						status: 1,
+						code: 201,
+						message: 'Login success',
+						message_vn: 'Đăng nhập thành công',
+						data: { ...sendDate },
+						accessToken,
+					});
+				} else {
+					return res.status(403).json({
+						status: 0,
+						code: 403,
+						message: 'Forbidden - Token time out',
+					});
+				}
+			} else {
+				return res.status(403).json({
+					status: 0,
+					code: 403,
+					message: 'Forbidden - Not found user',
+				});
+			}
+		} else {
+			return res.status(403).json({
+				status: 0,
+				code: 403,
+				message: 'Forbidden - Not found email and token',
+			});
+		}
+	}
+
+	async sendMailVerify(req, res) {
+		try {
+			const { email, codeVerify, pass } = req.body;
+
+			if (!codeVerify) {
+				const code = Math.floor(Math.random() * 999999) + 100000;
+				const user = await dbUsers.findOne({
+					email: email,
+				});
+
+				if (user) {
+					const token = await jwt.sign(
+						{ email, code },
+						process.env.JWT_SECRET,
+						{ expiresIn: '5m' },
+					);
+					await dbUsers.updateOne({ email: email }, { token: token });
+					await mail.sendMail(
+						email,
+						'Mã xác thực',
+						`Mã xác thực của bạn là: ${code}`,
+					);
+					return res.json({
+						status: 1,
+						code: 200,
+						msg: 'success',
+					});
+				} else {
+					return res.json({
+						code: 200,
+						msg: 'Email chưa chính xác',
+					});
+				}
+			} else {
+				const user = await dbUsers.findOne({
+					email: email,
+				});
+
+				if (user) {
+					const token = await jwt.verify(
+						user.token,
+						process.env.JWT_SECRET,
+					);
+
+					if (token) {
+						if (token.code == codeVerify) {
+							const derivedKey = pbkdf2.pbkdf2Sync(
+								pass,
+								'salt',
+								1,
+								32,
+								'sha512',
+							);
+
+							const updatePass = await dbUsers.updateOne(
+								{ email: email },
+								{ password: derivedKey },
+							);
+							if (updatePass) {
+								return res.json({
+									status: 1,
+									code: 200,
+									msg: 'success',
+								});
+							} else {
+								return res.json({
+									code: 500,
+									msg: 'Error',
+								});
+							}
+						} else {
+							return res.json({
+								code: 200,
+								msg: 'Mã xác nhận không chính xác',
+							});
+						}
+					} else {
+						return res.json({
+							code: 400,
+							msg: 'Mã xác thực hết hiệu lực',
+						});
+					}
+				}
+			}
+		} catch (err) {
+			return res.json({
+				code: 500,
+				msg: 'Có lỗi đã xảy ra',
 			});
 		}
 	}

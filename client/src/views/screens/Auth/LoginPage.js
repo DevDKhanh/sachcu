@@ -77,9 +77,9 @@ function LoginPage() {
 							<NavLink to="/register">
 								Bạn chưa có tài khoản?
 							</NavLink>
-							<a href="/#" id="forgot-pass">
+							<NavLink to="/auth/forgotpass" id="forgot-pass">
 								Quên mật khẩu
-							</a>
+							</NavLink>
 						</div>
 						<div className="group-form">
 							<button className="btn btn--root2 btn-auth">

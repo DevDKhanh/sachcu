@@ -12,32 +12,26 @@ const transporter = nodeMailer.createTransport({
 	},
 });
 
-module.exports.sendMail = (to, subject, pass) => {
+module.exports.sendMail = (to, subject, text) => {
 	const options = {
 		from: adminEmail,
 		to: to,
 		subject: subject,
-		html: resetpass(pass),
+		html: text,
 	};
 	return transporter.sendMail(options);
 };
 
-module.exports.sendMailVerify = (to, subject, token, domain) => {
+module.exports.sendMailVerify = (email, token) => {
 	const options = {
 		from: adminEmail,
-		to: to,
-		subject: subject,
-		html: verify(token, to, domain),
-	};
-	return transporter.sendMail(options);
-};
-
-module.exports.sendMailForgotPass = (to, subject, number) => {
-	const options = {
-		from: adminEmail,
-		to: to,
-		subject: subject,
-		html: forgotpass(number),
+		to: email,
+		subject: 'Mail xác thực',
+		html: `<h1>Xin chào, cảm ơn bạn đã tham gia</h1>
+		<br/>
+		<h3>Đây là mail xác thực của bạn</h3>
+		<br/>
+		<a href="${process.env.HOST_FRONT_END}/auth/verify?email=${email}&token=${token}">Xác thực tài khoản của bạn</a>`,
 	};
 	return transporter.sendMail(options);
 };

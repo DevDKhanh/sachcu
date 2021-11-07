@@ -3,7 +3,9 @@ import { useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
 import { ProtectedRoute } from '../utils/Protected';
+import ForgotPassPage from '../views/screens/Auth/ForgotPassPage';
 import LoginPage from '../views/screens/Auth/LoginPage';
+import VerifyMail from '../views/screens/Auth/VerifyMail';
 import RegisterPage from '../views/screens/Auth/RegisterPage';
 import HomePage from '../views/screens/Home';
 import CategoryPage from '../views/screens/Category';
@@ -83,6 +85,22 @@ function Routers() {
 			</ProtectedRoute>
 
 			{/********** auth route **********/}
+			<ProtectedRoute
+				path="/auth/forgotpass"
+				redirect="/"
+				dependency={!isLogged}
+			>
+				<ForgotPassPage />
+			</ProtectedRoute>
+
+			<ProtectedRoute
+				path="/auth/verify"
+				redirect="/"
+				dependency={!isLogged}
+			>
+				<VerifyMail />
+			</ProtectedRoute>
+
 			<ProtectedRoute path="/login" redirect="/" dependency={!isLogged}>
 				<LoginPage />
 			</ProtectedRoute>
