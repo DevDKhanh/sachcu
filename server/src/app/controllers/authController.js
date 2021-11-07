@@ -196,16 +196,16 @@ class AuthController {
 				passWord: derivedKey,
 			});
 
-			if (!dataUser.isReady) {
-				return res.status(200).json({
-					status: 0,
-					code: 200,
-					message: 'Account not authenticated',
-					message_vn: 'Tài khoản chưa được xác thực',
-				});
-			}
-
 			if (dataUser) {
+				if (!dataUser.isReady) {
+					return res.status(200).json({
+						status: 0,
+						code: 200,
+						message: 'Account not authenticated',
+						message_vn: 'Tài khoản chưa được xác thực',
+					});
+				}
+
 				const { _id, lastName, firstName, phone, avatar, isAdmin } =
 					dataUser._doc;
 				const sendDate = {
@@ -236,11 +236,11 @@ class AuthController {
 					status: 0,
 					code: 200,
 					message: 'Login failure',
-					message_vn:
-						'Tài khoản hoặc mật khẩu không chính xác, Vui lòng kiểm tra email xác thực',
+					message_vn: 'Tài khoản hoặc mật khẩu không chính xác',
 				});
 			}
 		} catch (err) {
+			console.log(err);
 			return res.status(500).json({
 				status: 0,
 				code: 500,

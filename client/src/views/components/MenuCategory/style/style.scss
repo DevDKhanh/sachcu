@@ -2,6 +2,7 @@
 
 .menu-category {
 	position: fixed;
+	z-index: 5;
 	top: $heightHeader;
 	height: calc(100vh - $heightHeader);
 	width: 5rem;

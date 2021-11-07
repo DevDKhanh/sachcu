@@ -5,6 +5,7 @@ import React, {
 	useState,
 	useCallback,
 } from 'react';
+import { useSelector } from 'react-redux';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
@@ -24,6 +25,7 @@ import FormComment from '../../components/FormComment';
 import './style/style.scss';
 
 function PostPage() {
+	const { isLogged } = useSelector(state => state.user);
 	const history = useHistory();
 	const socket = useContext(SocketContext);
 	const { slug } = useParams();
@@ -60,28 +62,30 @@ function PostPage() {
 
 	/********** get posts suggest **********/
 	useEffect(() => {
-		(async () => {
-			const res = await postAPI.getPosts(
-				post.category,
-				3,
-				1,
-				newCancelToken(),
-			);
-			if (res && res.data) {
-				let count = 0;
+		if (isLogged) {
+			(async () => {
+				const res = await postAPI.getPosts(
+					post.category,
+					3,
+					1,
+					newCancelToken(),
+				);
+				if (res && res.data) {
+					let count = 0;
 
-				//=====< Filter get 2 post >=====
-				const filter = [...res.data].filter(value => {
-					if (value._id !== post._id && count < 2) {
-						count++;
-						return value;
-					}
-					return null;
-				});
-				setPosts(filter);
-			}
-		})();
-	}, [post.category, post._id, newCancelToken]);
+					//=====< Filter get 2 post >=====
+					const filter = [...res.data].filter(value => {
+						if (value._id !== post._id && count < 2) {
+							count++;
+							return value;
+						}
+						return null;
+					});
+					setPosts(filter);
+				}
+			})();
+		}
+	}, [post.category, post._id, newCancelToken, isLogged]);
 
 	/********** Call api get comment **********/
 	useLayoutEffect(() => {
@@ -121,7 +125,7 @@ function PostPage() {
 					history.push('/');
 				}
 			} catch (err) {
-				toast.error('Đã xảy ra lỗi');
+				toast.error('Đã xảy ra lỗi', err);
 				history.push('/');
 			}
 		})();
@@ -185,8 +189,9 @@ function PostPage() {
 								</div>
 							</div>
 							<div className="comment">
+								<h3>Bình luận</h3>
 								<FormComment
-									title="Bình luận"
+									title=""
 									slug={slug}
 									placeholder="Viết bình luận của bạn"
 								/>

@@ -12,11 +12,7 @@ async function route(app) {
 	app.use(`${process.env.BASE_API}/auth`, Auth);
 	app.use(`${process.env.BASE_API}/posts`, Post);
 	app.use(`${process.env.BASE_API}/users`, User);
-	app.use(
-		`${process.env.BASE_API}/comments`,
-		middlewaresAuth.authVerify,
-		Comments,
-	);
+	app.use(`${process.env.BASE_API}/comments`, Comments);
 	app.use(`${process.env.BASE_API}/me`, middlewaresAuth.authVerify, Me);
 }
 

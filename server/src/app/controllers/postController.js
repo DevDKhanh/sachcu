@@ -44,12 +44,15 @@ class PostController {
 	//[GET] /api/v1/posts/post?slug=...
 	async getPost(req, res, next) {
 		try {
+			let user;
 			const { slug } = req.query;
 			const token = req?.headers['authorization'].split(' ')[1];
-			const user = await jwt.verify(token, process.env.JWT_SECRET);
+			if (token !== 'null') {
+				user = await jwt.verify(token, process.env.JWT_SECRET);
+			}
 
 			/********** check if admin **********/
-			if (token && user.data.isAdmin) {
+			if (token && user?.data?.isAdmin) {
 				const post = await dbPosts.findOne({
 					slug,
 				});
@@ -97,6 +100,7 @@ class PostController {
 				});
 			}
 		} catch (err) {
+			console.log(err);
 			return res.status(500).json({
 				status: 0,
 				code: 500,
@@ -321,6 +325,8 @@ class PostController {
 				const posts = await dbPosts
 					.find({
 						$text: { $search: '"' + key + '"' },
+						isDelete: false,
+						isReady: true,
 					})
 					.skip(page * limit - limit)
 					.limit(Number(limit))
