@@ -5,7 +5,6 @@ import { baseList } from '../../../constant/listCategory';
 import './style/style.scss';
 
 function MenuCategory() {
-	console.log('ok');
 	return (
 		<ul className="menu-category">
 			{baseList.map(item => {

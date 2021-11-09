@@ -82,7 +82,7 @@ function LoginPage() {
 							</NavLink>
 						</div>
 						<div className="group-form">
-							<button className="btn btn--root2 btn-auth">
+							<button className="btn btn--root1 btn-auth">
 								Đăng nhập
 							</button>
 						</div>

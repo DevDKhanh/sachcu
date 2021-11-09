@@ -1,7 +1,9 @@
+@import '../../../../style/variables';
+
 .list-posts {
 	padding: 3rem 0;
 	padding-bottom: 4rem;
-	border-top: 1px solid #fff;
+	border-top: 1px solid $colorRoot1;
 
 	&-header {
 		margin-bottom: 2.6rem;
@@ -10,15 +12,32 @@
 		align-items: center;
 		.title {
 			text-transform: uppercase;
-			color: #fff;
+			color: $colorRoot1;
 			font-size: 2.5rem;
 		}
 		a {
-			color: #fff;
+			position: relative;
+			color: rgb(49, 49, 49);
 			font-size: 1.8rem;
+			margin-right: 1.1rem;
+			z-index: 1;
+			background-color: $colorPrimary;
+			color: #fff;
+			display: inline-block;
+			padding: 0.5rem 1.4rem;
 			&:hover {
 				cursor: pointer;
-				text-decoration: underline;
+				opacity: 0.8;
+			}
+
+			&::after {
+				content: '';
+				position: absolute;
+				right: -1.1rem;
+				width: 2.1rem;
+				height: 2.1rem;
+				background-color: $colorPrimary;
+				transform: rotate(45deg);
 			}
 		}
 	}

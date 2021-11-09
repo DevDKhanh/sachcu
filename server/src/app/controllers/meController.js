@@ -189,6 +189,7 @@ class MeController {
 				const countMessage = await dbMessage.countDocuments({
 					idUser: user.data.idUser,
 					type: type,
+					read: 0,
 				});
 				if (messageList) {
 					return res.status(200).json({

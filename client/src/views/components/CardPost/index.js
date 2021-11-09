@@ -54,12 +54,14 @@ function CardPost({ data, showStar = true, isEdit = false, onDelete }) {
 				/>
 				<LoadingPlaceHolder dependency={load} />
 			</div>
-			<CardInfo data={data} isEdit={isEdit} onDelete={onDelete} />
-			{showStar && (
-				<div className="card-rating">
-					<Rating star={star} />
-				</div>
-			)}
+			<div className="card-des">
+				<CardInfo data={data} isEdit={isEdit} onDelete={onDelete} />
+				{showStar && (
+					<div className="card-rating">
+						<Rating star={star} />
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

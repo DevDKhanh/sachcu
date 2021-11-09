@@ -90,7 +90,7 @@ function ForgotPassPage() {
 									placeholder="Nhập mật khẩu mới"
 								/>
 								<div className="group-btn">
-									<button className="btn btn--round">
+									<button className="btn btn--round btn--root1">
 										Đổi mật khẩu
 									</button>
 								</div>
@@ -113,7 +113,7 @@ function ForgotPassPage() {
 									placeholder="Nhập tài khoản email của bạn"
 								/>
 								<div className="group-btn">
-									<button className="btn btn--round">
+									<button className="btn btn--round btn--root1">
 										Gửi mã xác nhận
 									</button>
 								</div>

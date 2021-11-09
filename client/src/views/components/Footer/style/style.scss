@@ -3,6 +3,66 @@
 footer {
 	position: relative;
 	z-index: 10;
-	min-height: 200px;
 	background-color: $colorRoot1;
+	padding: 2rem 0;
+	.col.l-3 + .col.l-3 {
+		border-left: 1px solid rgb(255, 255, 255);
+	}
+
+	.col:nth-child(1) {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+
+		p {
+			font-size: 1.6rem;
+			text-align: center;
+		}
+	}
+
+	.col:nth-child(3) {
+		p {
+			padding-top: 1rem;
+		}
+	}
+
+	ul {
+		list-style: none;
+
+		a {
+			padding-top: 1rem;
+			display: block;
+			color: #fff;
+			font-size: 1.3rem;
+			&:hover {
+				cursor: pointer;
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.title {
+		font-size: 2rem;
+		color: rgb(255, 251, 0);
+	}
+
+	p {
+		color: #fff;
+		line-height: 2rem;
+		font-size: 1.3rem;
+	}
+
+	input {
+		border: none;
+		outline: none;
+		border-bottom: 1px solid #fff;
+		padding: 1rem;
+		width: 100%;
+		background-color: transparent;
+		color: #fff;
+
+		&::placeholder {
+			color: #ccc;
+		}
+	}
 }

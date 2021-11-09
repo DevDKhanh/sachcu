@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef, memo } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { useCancelToken } from '../../../hooks';
 import { ProtectedComponent } from '../../../utils/Protected';
@@ -18,6 +19,7 @@ function ListPost({
 	isEdit = false,
 	children,
 }) {
+	const { role } = useParams();
 	const [posts, setPosts] = useState([]);
 	const [numberPage, setNumberPage] = useState(Number(page));
 	const [disabledLoad, setDisabledLoad] = useState(false);
@@ -27,6 +29,8 @@ function ListPost({
 	const { newCancelToken } = useCancelToken();
 
 	/********** get all post **********/
+	useEffect(() => () => setPosts([]), [role]);
+
 	useEffect(() => {
 		(async () => {
 			try {

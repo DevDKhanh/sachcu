@@ -10,6 +10,7 @@
 	display: flex;
 	flex-direction: column;
 	border-radius: 1rem;
+	border: 1px dotted #ccc;
 
 	.msg {
 		text-align: center;
@@ -35,6 +36,7 @@
 
 	.card-info {
 		position: relative;
+		border: solid 1px #ccc;
 		&::before {
 			content: '';
 			position: absolute;

@@ -6,6 +6,7 @@
 	align-items: center;
 	padding: 1rem;
 	border-radius: 0.6rem;
+	background-color: rgb(243, 243, 243);
 
 	.dot {
 		position: absolute;
@@ -19,7 +20,7 @@
 
 	&:hover {
 		cursor: pointer;
-		background-color: rgb(240, 240, 240);
+		background-color: rgb(233, 233, 233);
 	}
 
 	.icon {
