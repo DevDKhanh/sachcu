@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect, memo } from 'react';
 import { useSelector } from 'react-redux';
 import { HiDotsHorizontal } from 'react-icons/hi';
 
@@ -14,26 +14,22 @@ function CommentControl(props) {
 
 	/********** show comment reply when form comment reply show **********/
 	useLayoutEffect(() => {
-		if (showFormReply) {
-			props.onSetShowReply(true);
-			setShowFormEdit(false);
-		}
-	}, [showFormReply, props]);
-
-	useLayoutEffect(() => {
 		if (showFormEdit) {
 			setShowFormReply(false);
 		}
 	}, [showFormEdit]);
 
+	const handleShowformReply = () => {
+		setShowFormReply(true);
+		props.onSetShowReply(true);
+		setShowFormEdit(false);
+	};
+
 	return (
 		<>
 			<div className="control">
 				<ProtectedComponent dependency={isLogged && !props.isReply}>
-					<span
-						className="btn-reply"
-						onClick={() => setShowFormReply(true)}
-					>
+					<span className="btn-reply" onClick={handleShowformReply}>
 						Trả lời
 					</span>
 				</ProtectedComponent>
@@ -87,4 +83,4 @@ function CommentControl(props) {
 	);
 }
 
-export default CommentControl;
+export default memo(CommentControl);

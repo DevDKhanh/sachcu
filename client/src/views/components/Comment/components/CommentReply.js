@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect, memo } from 'react';
+import React, {
+	useCallback,
+	useState,
+	useContext,
+	useEffect,
+	memo,
+} from 'react';
 
 import { useCancelToken } from '../../../../hooks';
 import commentsAPI from '../../../../api/commentsAPI';
@@ -13,13 +19,13 @@ function CommentReply({ slug, id, showReply, onSetShowReply }) {
 	const { newCancelToken } = useCancelToken();
 
 	//=====< handle join and leave room chat reply >=====
-	const handleShowReply = () => {
+	const handleShowReply = useCallback(() => {
 		if (!showReply) {
 			onSetShowReply(true);
 		} else {
 			onSetShowReply(false);
 		}
-	};
+	}, [showReply, onSetShowReply]);
 
 	useEffect(() => {
 		//=====< Get data comment reply >=====

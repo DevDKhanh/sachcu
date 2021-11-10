@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { NavLink } from 'react-router-dom';
+import { MdEmail, MdPhone, MdOutlineLocationOn } from 'react-icons/md';
 
 import { baseList } from '../../../constant/listCategory';
 import './style/style.scss';
@@ -62,9 +63,16 @@ function Footer() {
 					</div>
 					<div className="col l-3">
 						<h4 className="title">Liên Hệ</h4>
-						<p>buidongtung@gmail.com</p>
-						<p>0327 265 569</p>
-						<p>526, Minh Khai, Vĩnh Tuy, Hai bà Trưng, Hà Nội</p>
+						<p>
+							<MdEmail /> buidongtung@gmail.com
+						</p>
+						<p>
+							<MdPhone /> 0327 265 569
+						</p>
+						<p>
+							<MdOutlineLocationOn /> 526, Minh Khai, Vĩnh Tuy,
+							Hai bà Trưng, Hà Nội
+						</p>
 					</div>
 					<div className="col l-3">
 						<h4 className="title">Email</h4>

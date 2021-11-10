@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 
 import LoadingPlaceHolder from '../../Effect/LoadingPlaceHolder';
 
@@ -17,4 +17,4 @@ function CommentsText({ lastName = '', firstName = '', content = '' }) {
 	);
 }
 
-export default CommentsText;
+export default memo(CommentsText);
