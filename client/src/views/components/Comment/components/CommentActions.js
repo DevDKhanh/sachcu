@@ -3,11 +3,13 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 // import { toast } from 'react-toastify';
 
 import { SocketContext } from '../../../../context/socket';
+import Dialog from '../../Dialog';
 
 function CommentsActions({ onClose, id, isReply, onForm }) {
 	const socket = useContext(SocketContext);
 	const menuRef = useRef();
 	const [isTopCurent, setIsTopCurent] = useState(null);
+	const [showDialog, setShowDialog] = useState(false);
 
 	useEffect(() => {
 		if (menuRef.current) {
@@ -42,6 +44,14 @@ function CommentsActions({ onClose, id, isReply, onForm }) {
 
 	return (
 		<React.Fragment>
+			<Dialog
+				active={showDialog}
+				txtBtnSubmit="Xóa"
+				title="Bạn muốn xóa bình luận này?"
+				styleDialog="primary"
+				onSubmit={handleDelete}
+				onClose={() => setShowDialog(false)}
+			/>
 			<ul
 				ref={menuRef}
 				className={`comment-list-action ${
@@ -52,7 +62,7 @@ function CommentsActions({ onClose, id, isReply, onForm }) {
 						: null
 				}`}
 			>
-				<li className="item" onClick={handleDelete}>
+				<li className="item" onClick={() => setShowDialog(true)}>
 					<FaTrash /> Xóa bình luận
 				</li>
 				<li className="item" onClick={handleShowFromEdit}>

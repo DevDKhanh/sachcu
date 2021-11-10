@@ -98,7 +98,7 @@ function InfoPost({ post }) {
 					</div>
 				</div>
 				<div className="info-post__text">
-					Thể loại: {category?.text}
+					Thể loại: {category?.text}
 					<LoadingPlaceHolder dependency={!user.lastName} />
 				</div>
 				<div className="info-post__text">

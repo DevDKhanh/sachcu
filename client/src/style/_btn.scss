@@ -63,4 +63,19 @@
 			color: #fff;
 		}
 	}
+
+	&--danger {
+		background-color: $colorDanger;
+		color: #fff;
+	}
+
+	&--o-danger {
+		border: 2px solid $colorDanger;
+		color: $colorDanger;
+		background-color: #fff;
+		&:hover {
+			background-color: $colorDanger;
+			color: #fff;
+		}
+	}
 }

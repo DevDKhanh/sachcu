@@ -8,6 +8,7 @@ import adminAPI from '../../../../api/adminAPI';
 import AvatarImg from '../../../components/AvatarImg';
 import listCategory from '../../../../constant/listCategory';
 import ButtonToggle from '../../../components/ButtonToggle';
+import Dialog from '../../../components/Dialog';
 
 function InfoPost({ props, onDeletePost }) {
 	const { newCancelToken } = useCancelToken();
@@ -15,6 +16,7 @@ function InfoPost({ props, onDeletePost }) {
 	const [category, setCategory] = useState({});
 	const [user, setUser] = useState({});
 	const [post, setPost] = useState({});
+	const [showDialog, setShowDialog] = useState(false);
 
 	useEffect(() => {
 		setPost(props);
@@ -105,33 +107,48 @@ function InfoPost({ props, onDeletePost }) {
 	}, [post.isDelete, post.status, post.isReady]);
 
 	return (
-		<tr>
-			<td>
-				<AvatarImg avatar={user.avatar} />
-			</td>
-			<td>{user.lastName + ' ' + user.firstName}</td>
-			<td>
-				<NavLink to={`/post/${post.slug}`}>{post.title}</NavLink>
-			</td>
-			<td>{category.text}</td>
-			<td>{post.author}</td>
-			<td>
-				<span className={`tag ${classTag.class}`}>{classTag.text}</span>
-			</td>
-			<td>
-				<span>
-					{new Date(post.createdAt).toLocaleDateString('en-GB')}
-				</span>
-			</td>
-			<td>
-				<ButtonToggle toggle={!toggle} onClick={handleActivePost} />
-			</td>
-			<td>
-				<button className="btn--delete" onClick={handleDelete}>
-					Xóa bài đăng
-				</button>
-			</td>
-		</tr>
+		<>
+			<Dialog
+				active={showDialog}
+				txtBtnSubmit="Xóa bài viết"
+				title="Bạn chắc chắn muốn xóa bài viết này?"
+				styleDialog="danger"
+				onSubmit={handleDelete}
+				onClose={() => setShowDialog(false)}
+			/>
+			<tr>
+				<td>
+					<AvatarImg avatar={user.avatar} />
+				</td>
+				<td>{user.lastName + ' ' + user.firstName}</td>
+				<td>
+					<NavLink to={`/post/${post.slug}`}>{post.title}</NavLink>
+				</td>
+				<td>{category.text}</td>
+				<td>{post.author}</td>
+				<td>
+					<span className={`tag ${classTag.class}`}>
+						{classTag.text}
+					</span>
+				</td>
+				<td>
+					<span>
+						{new Date(post.createdAt).toLocaleDateString('en-GB')}
+					</span>
+				</td>
+				<td>
+					<ButtonToggle toggle={!toggle} onClick={handleActivePost} />
+				</td>
+				<td>
+					<button
+						className="btn--delete"
+						onClick={() => setShowDialog(true)}
+					>
+						Xóa bài đăng
+					</button>
+				</td>
+			</tr>
+		</>
 	);
 }
 

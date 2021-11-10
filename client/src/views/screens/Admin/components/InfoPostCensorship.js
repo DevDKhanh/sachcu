@@ -11,6 +11,7 @@ import usersAPI from '../../../../api/usersAPI';
 import adminAPI from '../../../../api/adminAPI';
 import AvatarImg from '../../../components/AvatarImg';
 import listCategory from '../../../../constant/listCategory';
+import Dialog from '../../../components/Dialog';
 
 function InfoPost({ props, onSetPosts }) {
 	const socket = useContext(SocketContext);
@@ -19,6 +20,7 @@ function InfoPost({ props, onSetPosts }) {
 	const [user, setUser] = useState({});
 	const [message, setMessage] = useState('');
 	const [showForm, setShowForm] = useState(false);
+	const [showDialog, setShowDialog] = useState(false);
 
 	useEffect(() => {
 		if (props.category) {
@@ -111,7 +113,10 @@ function InfoPost({ props, onSetPosts }) {
 					</span>
 				</td>
 				<td>
-					<button className="btn--accept" onClick={handleAccept}>
+					<button
+						className="btn--accept"
+						onClick={() => setShowDialog(true)}
+					>
 						Phê duyệt
 					</button>
 				</td>
@@ -124,6 +129,14 @@ function InfoPost({ props, onSetPosts }) {
 					</button>
 				</td>
 			</tr>
+			<Dialog
+				active={showDialog}
+				txtBtnSubmit="Duyệt bài"
+				title="Bạn muốn phê duyệt bài viết này?"
+				styleDialog="primary"
+				onSubmit={handleAccept}
+				onClose={() => setShowDialog(false)}
+			/>
 			<ProtectedComponent dependency={showForm}>
 				<div className="form-send-msg">
 					<ContentEditable

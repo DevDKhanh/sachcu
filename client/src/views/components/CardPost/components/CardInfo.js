@@ -15,11 +15,13 @@ import Title from './Title';
 import AvatarImg from '../../AvatarImg';
 import LoadingPlaceHolder from '../../Effect/LoadingPlaceHolder';
 import listCategory from '../../../../constant/listCategory';
+import Dialog from '../../Dialog';
 
 function CardInfo({ data, isEdit, onDelete }) {
 	const { newCancelToken } = useCancelToken();
 	const { infoUser } = useSelector(state => state.user);
 	const [category, setCategory] = useState({});
+	const [showDialog, setShowDialog] = useState(false);
 	const [timePost, setTimePost] = useState();
 	const [user, setUser] = useState({});
 	const [isActive, setIsActive] = useState(data.status === 0);
@@ -110,12 +112,20 @@ function CardInfo({ data, isEdit, onDelete }) {
 
 	return (
 		<span className="card-info">
+			<Dialog
+				active={showDialog}
+				txtBtnSubmit="Xóa bài viết"
+				title="Bạn chắc chắn muốn xóa bài viết này?"
+				styleDialog="danger"
+				onSubmit={handleDeletePost}
+				onClose={() => setShowDialog(false)}
+			/>
 			<ProtectedComponent
 				dependency={infoUser.idUser === data.idUser && isEdit}
 			>
 				<ButtonClose
 					className="btn--delete"
-					onClick={handleDeletePost}
+					onClick={() => setShowDialog(true)}
 				/>
 				<ButtonToggle
 					onClick={handleActive}

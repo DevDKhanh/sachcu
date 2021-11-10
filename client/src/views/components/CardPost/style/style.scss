@@ -4,6 +4,7 @@ $colorActive: #208be3;
 $colorUnActive: red;
 
 .card {
+	position: relative;
 	max-width: 30rem;
 	margin-bottom: 2rem;
 	color: $secondaryText;
@@ -53,7 +54,6 @@ $colorUnActive: red;
 
 	&-info {
 		position: relative;
-		z-index: 1;
 		background-color: #fff;
 		display: block;
 		font-size: 1.6rem;
