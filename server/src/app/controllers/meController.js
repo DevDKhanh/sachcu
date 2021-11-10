@@ -175,6 +175,7 @@ class MeController {
 		}
 	}
 
+	//[GET] /api/v1/me/message?limit=...&page=...&type=...
 	async getMessage(req, res) {
 		try {
 			const token = req.headers['authorization'].split(' ')[1];
@@ -214,6 +215,7 @@ class MeController {
 		}
 	}
 
+	//[GET] /api/v1/me/message/read-not-accpet?id=...
 	async ReadMessageNotAccpet(req, res) {
 		try {
 			const token = req?.headers['authorization'].split(' ')[1];

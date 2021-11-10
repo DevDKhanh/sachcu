@@ -5,7 +5,7 @@ function Logo() {
 	return (
 		<div className="nav-logo">
 			<NavLink to="/" exact>
-				<h3 className="text">SACHCU.VN</h3>
+				<h3 className="text">TRAODOISACH</h3>
 			</NavLink>
 		</div>
 	);

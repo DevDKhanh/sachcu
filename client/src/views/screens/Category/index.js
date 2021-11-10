@@ -19,14 +19,22 @@ function CategoryPage() {
 	return (
 		<div className="page-main">
 			<div className="grid wide">
-				<MenuCategory />
 				<h2>{category?.text || 'Tất cả bài viết'}</h2>
-				<ListPost
-					title={category ? `Sách ${category.text}` : 'Mới nhất'}
-					category={role}
-					limit={4}
-					seemore={false}
-				/>
+				<div className="row">
+					<div className="col l-3">
+						<MenuCategory />
+					</div>
+					<div className="col l-9">
+						<ListPost
+							title={
+								category ? `Sách ${category.text}` : 'Mới nhất'
+							}
+							category={role}
+							limit={4}
+							seemore={false}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

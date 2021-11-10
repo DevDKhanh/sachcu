@@ -7,6 +7,7 @@ import './style/style.scss';
 function MenuCategory() {
 	return (
 		<ul className="menu-category">
+			<h3>Thể loại</h3>
 			{baseList.map(item => {
 				return (
 					<li key={item.value} className="menu-item">
@@ -15,9 +16,7 @@ function MenuCategory() {
 							className="menu-link"
 							title={item.text}
 						>
-							<div className="icon">
-								<img src={item.icon} alt="category" />
-							</div>
+							{item.text}
 						</NavLink>
 					</li>
 				);

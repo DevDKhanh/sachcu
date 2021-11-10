@@ -18,7 +18,7 @@ class AuthController {
 	async register(req, res, next) {
 		try {
 			const indexAvatarDefault = Math.ceil(
-				Math.random() * listAvatar.length,
+				Math.random() * (listAvatar.length - 1),
 			);
 			const lengthName = 20;
 			const firstName = xss(req.body.firstName, {});
@@ -206,6 +206,7 @@ class AuthController {
 					});
 				}
 
+				/********** Get data user **********/
 				const { _id, lastName, firstName, phone, avatar, isAdmin } =
 					dataUser._doc;
 				const sendDate = {
@@ -295,6 +296,7 @@ class AuthController {
 		}
 	}
 
+	//[GET] /api/v1/auth/verifyMail?email=...&token=...
 	async verifyMail(req, res) {
 		const { email, token } = req.query;
 
@@ -363,6 +365,7 @@ class AuthController {
 		}
 	}
 
+	//[POST] /api/v1/auth/sendMail
 	async sendMailVerify(req, res) {
 		try {
 			const { email, codeVerify, pass } = req.body;

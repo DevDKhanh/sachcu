@@ -19,12 +19,18 @@ function HomePage() {
 	return (
 		<div className="page-main">
 			<div className="grid wide">
-				<MenuCategory />
-				<ListPost title="Mới nhất" limit={4} />
-				<ListPost title="Công nghệ thông tin" category="cntt" />
-				<ListPost title="Sách văn" category="van" />
-				<ListPost title="Sách Toán" category="toan" />
-				{isEmpty && <h1>Không có bài viết nào</h1>}
+				<div className="row">
+					<div className="col l-3">
+						<MenuCategory />
+					</div>
+					<div className="col l-9">
+						<ListPost title="Mới nhất" limit={4} />
+						<ListPost title="Công nghệ thông tin" category="cntt" />
+						<ListPost title="Sách văn" category="van" />
+						<ListPost title="Sách Toán" category="toan" />
+						{isEmpty && <h1>Không có bài viết nào</h1>}
+					</div>
+				</div>
 			</div>
 		</div>
 	);

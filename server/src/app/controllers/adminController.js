@@ -2,9 +2,6 @@ require('dotenv').config();
 const dbUsers = require('../model/users');
 const dbPosts = require('../model/posts');
 
-const validator = require('validator');
-const pbkdf2 = require('pbkdf2');
-const jwt = require('jsonwebtoken');
 const sanitizer = require('sanitizer');
 
 //Check xss
@@ -13,6 +10,7 @@ const xss = str => {
 };
 
 class AdminController {
+	//[GET] /api/v1/admin/users?limit=...&page=...
 	async getUsers(req, res, next) {
 		try {
 			const { limit, page } = req.query;
@@ -28,6 +26,7 @@ class AdminController {
 		}
 	}
 
+	//[DELETE] /api/v1/admin/users/user
 	async deleteUser(req, res, next) {
 		try {
 			const { id } = req.query;
@@ -38,6 +37,7 @@ class AdminController {
 		}
 	}
 
+	//[GET] /api/v1/admin/posts/censorship?limit=...&page=...
 	async getPostsCensorship(req, res, next) {
 		try {
 			const { limit, page } = req.query;
@@ -53,6 +53,7 @@ class AdminController {
 		}
 	}
 
+	//[GET] /api/v1/admin/posts?limit=...&page=...&isReady=...
 	async getPosts(req, res, next) {
 		try {
 			const { limit, page, isReady } = req.query;
@@ -68,6 +69,7 @@ class AdminController {
 		}
 	}
 
+	//[PUT] /api/v1/admin/posts/post/active
 	async updateActivePost(req, res, next) {
 		try {
 			const { id, toggle } = req.body;
@@ -79,6 +81,7 @@ class AdminController {
 		}
 	}
 
+	//[DELETE] /api/v1/admin/posts/post?id=...
 	async deletePost(req, res, next) {
 		try {
 			const { id } = req.query;
@@ -89,6 +92,7 @@ class AdminController {
 		}
 	}
 
+	//[PUT] /api/v1/admin/posts/post/accpe
 	async accpetPost(req, res, next) {
 		try {
 			const { id } = req.body;
