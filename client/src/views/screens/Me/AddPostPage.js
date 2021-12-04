@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import LoadingOverlay from 'react-loading-overlay';
 
 import { useCancelToken } from '../../../hooks';
+import { SocketContext } from '../../../context/socket';
 import meAPI from '../../../api/meAPI';
 import listCategory from '../../../constant/listCategory';
 import InputText from './components/InputText';
@@ -18,6 +19,7 @@ import {
 import './style/style.scss';
 
 function AddPostPage() {
+	const socket = useContext(SocketContext);
 	const { newCancelToken } = useCancelToken();
 	const history = useHistory();
 	const [loading, setLoading] = useState(false);
@@ -83,6 +85,7 @@ function AddPostPage() {
 					if (res.status === 1) {
 						history.push(`/me/my-post`);
 						toast.success(res.message_vn);
+						socket.emit('post:newSuccess');
 					} else {
 						toast.error(res.message_vn);
 					}

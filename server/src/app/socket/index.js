@@ -5,6 +5,7 @@ const registerCommentHandler = require('./commentHandler');
 const registerCommentReplyHandler = require('./commentReplyHandler');
 const registerRoomHandler = require('./roomHandler');
 const registerMessageHandler = require('./messageHandler');
+const registerPostHandler = require('./postHandler');
 
 module.exports.start = io => {
 	io.on('connection', async socket => {
@@ -18,6 +19,7 @@ module.exports.start = io => {
 				registerRoomHandler(io, socket);
 				registerCommentReplyHandler(io, socket);
 				registerMessageHandler(io, socket);
+				registerPostHandler(io, socket);
 			}
 		} catch (err) {
 			socket.emit('error');

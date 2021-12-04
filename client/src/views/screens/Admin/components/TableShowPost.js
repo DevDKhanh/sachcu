@@ -1,12 +1,14 @@
-import { memo, useEffect, useState, useCallback } from 'react';
+import { memo, useEffect, useState, useCallback, useContext } from 'react';
 
 import adminAPI from '../../../../api/adminAPI';
+import { SocketContext } from '../../../../context/socket';
 import { useCancelToken } from '../../../../hooks';
 import InfoPost from './InfoPost';
 import HeadTable from './HeadTable';
 import Pagination from '../../../components/Pagination';
 
 function TableShowPost() {
+	const socket = useContext(SocketContext);
 	const limit = 10;
 	const { newCancelToken } = useCancelToken();
 	const [posts, setPosts] = useState([]);
@@ -17,8 +19,8 @@ function TableShowPost() {
 		(async () => {
 			const res = await adminAPI.getPosts(limit, page, newCancelToken());
 			if (res) {
-				setPosts(prev => [...res.data]);
-				setCountPosts(prev => res.count);
+				setPosts([...res.data]);
+				setCountPosts(res.count);
 			}
 		})();
 	}, [newCancelToken, page]);
@@ -38,6 +40,13 @@ function TableShowPost() {
 		'Ẩn - Hiện',
 		'',
 	];
+
+	useEffect(() => {
+		socket.on('post:new', () => {
+			console.log('ok');
+			handleCallApi();
+		});
+	}, [socket, handleCallApi]);
 
 	useEffect(() => {
 		handleCallApi();

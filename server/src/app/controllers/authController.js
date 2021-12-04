@@ -422,8 +422,9 @@ class AuthController {
 
 							const updatePass = await dbUsers.updateOne(
 								{ email: email },
-								{ password: derivedKey },
+								{ passWord: derivedKey },
 							);
+
 							if (updatePass) {
 								return res.json({
 									status: 1,

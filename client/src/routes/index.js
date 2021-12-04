@@ -21,8 +21,6 @@ import NotifyCommentPage from '../views/screens/Me/NotifyCommentPage';
 function Routers() {
 	const { isLogged, infoUser } = useSelector(state => state.user);
 
-	console.log(infoUser.isAdmin);
-
 	return (
 		<Switch>
 			{/********** search route **********/}

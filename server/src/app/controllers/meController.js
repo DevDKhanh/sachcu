@@ -4,8 +4,6 @@ const dbPosts = require('../model/posts');
 const dbMessage = require('../model/message');
 
 const cloudinary = require('../../utils/cloudinary');
-const validator = require('validator');
-const pbkdf2 = require('pbkdf2');
 const jwt = require('jsonwebtoken');
 const sanitizer = require('sanitizer');
 

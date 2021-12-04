@@ -1,12 +1,14 @@
-import { memo, useEffect, useState, useCallback } from 'react';
+import { memo, useEffect, useState, useCallback, useContext } from 'react';
 
 import adminAPI from '../../../../api/adminAPI';
+import { SocketContext } from '../../../../context/socket';
 import { useCancelToken } from '../../../../hooks';
 import InfoPostCensorship from './InfoPostCensorship';
 import HeadTable from './HeadTable';
 import Pagination from '../../../components/Pagination';
 
 function TableShowPost() {
+	const socket = useContext(SocketContext);
 	const limit = 5;
 	const { newCancelToken } = useCancelToken();
 	const [posts, setPosts] = useState([]);
@@ -38,14 +40,18 @@ function TableShowPost() {
 	}, [newCancelToken, page]);
 
 	useEffect(() => {
+		socket.on('post:new', () => {
+			console.log('ok');
+			handleCallApi();
+		});
+	}, [socket, handleCallApi]);
+
+	useEffect(() => {
 		handleCallApi();
 	}, [handleCallApi]);
 
 	return (
 		<div className="list-post">
-			<button className="btn btn--primary" onClick={handleCallApi}>
-				Tải mới
-			</button>
 			<h2>Danh sách bài viết chưa được phê duyệt</h2>{' '}
 			<table className="table">
 				<HeadTable list={listTitle} />
